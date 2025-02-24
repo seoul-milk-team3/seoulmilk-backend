@@ -37,4 +37,5 @@ out/
 .vscode/
 
 ### server info ###
-src/main/resources/*.yml
+.src/main/resources/*.yml
+.src/main/generated
