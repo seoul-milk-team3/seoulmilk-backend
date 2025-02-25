@@ -37,6 +37,7 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 
+
 	//hibernate
 	implementation 'org.hibernate:hibernate-spatial:6.4.1.Final'
 
