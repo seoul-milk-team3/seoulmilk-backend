@@ -31,7 +31,7 @@ public class UserInitializer implements ApplicationRunner {
             List<User> list = new ArrayList<>();
 
             User dummyUser1 = User.builder()
-                    .role(Role.USER)
+                    .role(Role.BRANCH)
                     .employeeId("1")
                     .email("test1@gmail.com")
                     .password(passwordEncoder.encode("1234"))
@@ -39,7 +39,7 @@ public class UserInitializer implements ApplicationRunner {
                     .build();
 
             User dummyUser2 = User.builder()
-                    .role(Role.USER)
+                    .role(Role.BRANCH)
                     .employeeId("2")
                     .email("test2@gmail.com")
                     .password(passwordEncoder.encode("5678"))
