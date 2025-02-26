@@ -9,32 +9,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "USER_ID")
     private Long id;
 
-    @Column(name = "name" , nullable = false)
+    @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "employee_id" , nullable = false)
+    @Column(name = "EMPLOYEE_ID", nullable = false)
     private String employeeId;
 
-    @Column(name = "password" , nullable = false)
+    @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @Column(name = "email" , nullable = false)
+    @Column(name = "EMAIL", nullable = false)
     private String email;
 
-    @Column(name = "is_deleted" , nullable = false)
+    @Column(name = "IS_DELETED", nullable = false)
     private Boolean isDeleted;
 
-    @Column(name = "role" , nullable = false)
+    @Column(name = "ROLE", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
