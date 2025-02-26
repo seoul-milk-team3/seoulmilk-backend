@@ -5,15 +5,13 @@ import com.seoulmilk.be.tax.domain.type.*;
 import com.seoulmilk.be.user.domain.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Entity
 @Table(name = "NTS_TAX")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 @Getter
 public class NtsTax extends BaseTimeEntity {
 
@@ -206,8 +204,8 @@ public class NtsTax extends BaseTimeEntity {
         this.issueId = issueId;
         this.arap = arap;
         this.issueDt = issueDt;
-        this.bukrs = bukrs != null ? bukrs : "1000";  // default 회사 코드 1000
-        this.bupla = bupla != null ? bupla : "1000";  // default 사업장 코드 1000
+        this.bukrs = "1000";    //default 회사 코드 1000 고정
+        this.bupla = "1000";    //default  사업장 코드 1000 고정
         this.issueDate = issueDate;
         this.interNo = interNo;
         this.aspCode = aspCode;
