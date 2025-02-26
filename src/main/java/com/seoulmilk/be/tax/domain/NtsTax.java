@@ -23,9 +23,11 @@ public class NtsTax extends BaseTimeEntity {
     @JoinColumn(name = "USER_ID")
     private User user;  // 사용자
 
+    @NotNull
     @Column(name = "ISSUE_ID", length = 24, nullable = false)
     private String issueId;  // 승인번호
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "ARAP", length = 2, nullable = false)
     private Arap arap;  // 매출매입구분
@@ -33,12 +35,15 @@ public class NtsTax extends BaseTimeEntity {
     @Column(name = "ISSUE_DT", length = 24)
     private String issueDt;  // 서명일자 발행일자
 
+    @NotNull
     @Column(name = "BUKRS", length = 4, nullable = false)
     private String bukrs;  // 회사코드
 
+    @NotNull
     @Column(name = "BUPLA", length = 4, nullable = false)
     private String bupla;  // 사업장
 
+    @NotNull
     @Column(name = "ISSUE_DATE", length = 8, nullable = false)
     private String issueDate;  // 전자세금계산서 작성일자
 
