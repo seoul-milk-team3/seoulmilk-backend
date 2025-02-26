@@ -36,10 +36,10 @@ public class NtsTax extends BaseTimeEntity {
     private String issueDt;  // 서명일자 발행일자
 
     @Column(name = "BUKRS", length = 4, nullable = false)
-    private String bukrs;  // 회사코드 (고정값)
+    private String bukrs;  // 회사코드
 
     @Column(name = "BUPLA", length = 4, nullable = false)
-    private String bupla;  // 사업장 (고정값)
+    private String bupla;  // 사업장
 
     @Column(name = "ISSUE_DATE", length = 8, nullable = false)
     private String issueDate;  // 전자세금계산서 작성일자
@@ -206,8 +206,8 @@ public class NtsTax extends BaseTimeEntity {
         this.issueId = issueId;
         this.arap = arap;
         this.issueDt = issueDt;
-        this.bukrs = bukrs;
-        this.bupla = bupla;
+        this.bukrs = bukrs != null ? bukrs : "1000";  // default 회사 코드 1000
+        this.bupla = bupla != null ? bupla : "1000";  // default 사업장 코드 1000
         this.issueDate = issueDate;
         this.interNo = interNo;
         this.aspCode = aspCode;
