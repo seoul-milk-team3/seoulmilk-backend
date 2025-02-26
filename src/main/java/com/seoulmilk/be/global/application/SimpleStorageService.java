@@ -55,7 +55,7 @@ public class SimpleStorageService {
 
     // 파일 삭제
     public void deleteFile(String path) {
-        String fileName = path.replace("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/", "");
+        String fileName = path.replace("https://" + bucket + ".s3." + amazonS3.getRegionName() + ".amazonaws.com/", "");
 
         try {
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));

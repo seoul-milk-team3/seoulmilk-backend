@@ -25,6 +25,7 @@ class SimpleStorageServiceTest {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    // 업로드와 삭제를 한번에 확인하기 위해 테스트를 하나로 합쳤습니다.
     @Test
     void uploadFile() throws IOException {
         // given
