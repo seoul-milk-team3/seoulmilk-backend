@@ -5,6 +5,8 @@ import com.seoulmilk.be.global.exception.errorcode.GlobalErrorCode;
 import com.seoulmilk.be.global.exception.response.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,9 @@ import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger("ErrorLogger");
+
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(
             @NonNull MethodArgumentNotValidException e,
@@ -26,6 +31,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             @NonNull HttpStatusCode status,
             @NonNull WebRequest request) {
         return handleExceptionInternal(e);
+    }
+
+    @ExceptionHandler(FileConvertFailException.class)
+    public ResponseEntity<Object> handleFileConvertFail(FileConvertFailException e, HttpServletRequest request) {
+        log.info(String.valueOf(e.getErrorCode()), request);
+        return handleExceptionInternal(e.getErrorCode());
     }
 
     @ExceptionHandler(Exception.class)
