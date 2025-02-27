@@ -20,5 +20,6 @@ public class globalController implements globalApi {
     @Override
     public ResponseEntity<String> healthcheck() {
         return ResponseEntity.ok(env);
+
     }
 }
