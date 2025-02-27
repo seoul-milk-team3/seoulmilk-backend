@@ -11,7 +11,6 @@ import lombok.*;
 @Entity
 @Table(name = "NTS_TAX")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RequiredArgsConstructor
 @Getter
 public class NtsTax extends BaseTimeEntity {
 
