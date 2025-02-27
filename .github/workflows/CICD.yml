@@ -2,7 +2,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: ["develop"]
+    branches: ["test"]  # 확인을 위한 test 브랜치
 
 permissions:
   contents: read
