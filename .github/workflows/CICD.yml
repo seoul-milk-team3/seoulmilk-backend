@@ -21,6 +21,11 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
+      # 디렉토리 생성 (디렉토리가 없으면 파일을 생성할 수 없음)
+      - name: Create resources directory
+        run: |
+          mkdir -p ./src/main/resources         
+
       - name: application yml setting
         run: |
           echo ${{ env.APPLICATION_PROD }} | base64 --decode > ./src/main/resources/application-prod.yml
@@ -48,10 +53,10 @@ jobs:
     steps:
       - name: Set target IP
         run: |
-          STATUS=$(curl -o /dev/null -w "%{http_code}" "http://${{ secrets.SERVER_DOMAIN }}/global/health-check")
+          STATUS=$(curl -o /dev/null -w "%{http_code}" "http://${{ secrets.LIVE_SERVER_IP }}/global/health-check")
           echo $STATUS
           if [ $STATUS = 200 ]; then
-            CURRENT_UPSTREAM=$(curl -s "http://${{ secrets.SERVER_DOMAIN }}/global/health-check")
+            CURRENT_UPSTREAM=$(curl -s "http://${{ secrets.LIVE_SERVER_IP }}/global/health-check")
           else
             CURRENT_UPSTREAM=green
           fi
@@ -70,7 +75,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           username: ubuntu
-          host: ${{ secrets.SERVER_DOMAIN }}
+          host: ${{ secrets.LIVE_SERVER_IP }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script_stop: true
           script: |
@@ -81,14 +86,14 @@ jobs:
         uses: jtalk/url-health-check-action@v4
         with:
           url: http://${{ secrets.LIVE_SERVER_IP }}:${{ env.STOPPED_PORT }}/global/health-check
-          max-attempts: 5
+          max-attempts: 3
           retry-delay: 10s
 
       - name: Change nginx upstream
         uses: appleboy/ssh-action@master
         with:
           username: ubuntu
-          host: ${{ secrets.SERVER_DOMAIN }}
+          host: ${{ secrets.LIVE_SERVER_IP }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script_stop: true
           script: |
@@ -98,7 +103,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           username: ubuntu
-          host: ${{ secrets.SERVER_DOMAIN }}
+          host: ${{ secrets.LIVE_SERVER_IP }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script_stop: true
           script: |
