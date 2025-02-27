@@ -2,7 +2,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: ["test"]  # 확인을 위한 test 브랜치
+    branches: ["develop"]
 
 permissions:
   contents: read
@@ -21,7 +21,7 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      # 디렉토리 생성 (디렉토리가 없으면 파일을 생성할 수 없음)
+      # 디렉토리 생성
       - name: Create resources directory
         run: |
           mkdir -p ./src/main/resources         
@@ -86,7 +86,7 @@ jobs:
         uses: jtalk/url-health-check-action@v4
         with:
           url: http://${{ secrets.LIVE_SERVER_IP }}:${{ env.STOPPED_PORT }}/global/health-check
-          max-attempts: 3
+          max-attempts: 5
           retry-delay: 10s
 
       - name: Change nginx upstream
