@@ -3,6 +3,10 @@ package com.seoulmilk.be.tax.domain.type;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 @Getter
 @RequiredArgsConstructor
 public enum TypeCode {
@@ -26,13 +30,15 @@ public enum TypeCode {
     private final String code;
     private final String content;
 
-    public static TypeCode findByCode(String code) {
-        for (TypeCode typeCode : TypeCode.values()) {
-            if (typeCode.getCode().equals(code)) {
-                return typeCode;
-            }
+    private static final Map<String, TypeCode> CODE_MAP = new HashMap<>();
+    static {
+        for (TypeCode typeCode : values()) {
+            CODE_MAP.put(typeCode.getCode(), typeCode);
         }
-        return null;
+    }
+
+    public static Optional<TypeCode> findByCode(String code) {
+        return Optional.ofNullable(CODE_MAP.get(code));
     }
 }
 

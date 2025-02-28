@@ -3,6 +3,11 @@ package com.seoulmilk.be.tax.domain.type;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Getter
 public enum AmendCode {
@@ -17,12 +22,14 @@ public enum AmendCode {
     private final String code;
     private final String content;
 
-    public static AmendCode findByCode(String code) {
-        for (AmendCode amendCode : AmendCode.values()) {
-            if (amendCode.getCode().equals(code)) {
-                return amendCode;
-            }
+    private static final Map<String, AmendCode> CODE_MAP = new HashMap<>();
+    static {
+        for (AmendCode amendCode : values()) {
+            CODE_MAP.put(amendCode.getCode(), amendCode);
         }
-        return null;
+    }
+
+    public static Optional<AmendCode> findByCode(String code) {
+        return Optional.ofNullable(CODE_MAP.get(code));
     }
 }
