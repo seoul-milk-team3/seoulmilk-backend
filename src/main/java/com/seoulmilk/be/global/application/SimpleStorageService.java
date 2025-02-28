@@ -38,7 +38,7 @@ public class SimpleStorageService {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
             amazonS3.putObject(new PutObjectRequest(bucket, filePath, file.getInputStream(), metadata));
-//                    .withCannedAcl(CannedAccessControlList.PublicRead));
+//                    .withCannedAcl(CannedAccessControlList.PublicRead));  // TODO: S3 ACL 공개 설정 여부 메서드로 관리
 
             return amazonS3.getUrl(bucket, filePath).toString();
         } catch (IOException e) {
@@ -58,6 +58,7 @@ public class SimpleStorageService {
         try {
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
         } catch (Exception e) {
+            //TODO: 추후에 예외 처리 진행
             log.error("파일 삭제 실패: {}", e.getMessage());
         }
     }
