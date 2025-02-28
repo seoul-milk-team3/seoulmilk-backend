@@ -3,8 +3,6 @@ package com.seoulmilk.be.auth.dto.request;
 import com.seoulmilk.be.user.domain.User;
 import com.seoulmilk.be.user.domain.type.Role;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Builder
