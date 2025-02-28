@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum GlobalErrorCode implements ErrorCode {
 
+    FILE_CONVERT_FAIL(HttpStatus.BAD_REQUEST, "Fail to convert file"),
     INVALID_PARAMETER(HttpStatus.BAD_REQUEST, "Invalid parameter included"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
     ;
