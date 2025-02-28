@@ -2,7 +2,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: ["test"]
+    branches: ["develop"]
 
 permissions:
   contents: read
@@ -21,13 +21,9 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      # 디렉토리 생성
-      - name: Create resources directory
-        run: |
-          mkdir -p ./src/main/resources         
-
       - name: application yml setting
         run: |
+          mkdir -p ./src/main/resources/
           echo ${{ env.APPLICATION_PROD }} | base64 --decode > ./src/main/resources/application-prod.yml
 
       - name: Grant execute permission to gradlew
