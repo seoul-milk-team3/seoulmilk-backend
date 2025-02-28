@@ -189,8 +189,8 @@ public class NtsTax extends BaseTimeEntity {
     @Column(name = "TRANS_DATE", length = 12, nullable = false)
     private String transDate;  // 국세청 전송일자
 
-    @Column(name = "IS_NOMAL", length = 1)
-    private String isNomal;  // 정상 여부
+    @Column(name = "IS_NORMAL", length = 1)
+    private String isNormal;  // 정상 여부
 
     @Column(name = "IMAGE_URL", length = 2000)
     private String imageUrl;  // 이미지 URL
@@ -203,7 +203,7 @@ public class NtsTax extends BaseTimeEntity {
     private String payDate;  // 지급일자
 
     @Builder
-    public NtsTax(User user, String issueId, Arap arap, String issueDt, String bukrs, String bupla, String issueDate, String interNo, String aspCode, TypeCode typeCode, PurpCode purpCode, AmendCode amendCode, String descText1, String descText2, String descText3, String suId, String suMin, String suName, String suRepres, String suAddr, String suBustype, String suIndtype, String suDeptname, String suPersname, String suTelno, String suHpno, String suEmail, IpTypeCode ipTypecode, String ipId, String ipMin, String ipName, String ipRepres, String ipAddr, String ipBustype, String ipIndtype, String ipDeptname1, String ipPersname1, String ipTelno1, String ipHpno1, String ipEmail1, String ipDeptname2, String ipPersname2, String ipTelno2, String ipHpno2, String ipEmail2, Long chargeTotal, Long taxTotal, Long grandTotal, String ernam, String transDate, String isNomal, String imageUrl, PayStatus payStatus, String payDate) {
+    public NtsTax(User user, String issueId, Arap arap, String issueDt, String bukrs, String bupla, String issueDate, String interNo, String aspCode, TypeCode typeCode, PurpCode purpCode, AmendCode amendCode, String descText1, String descText2, String descText3, String suId, String suMin, String suName, String suRepres, String suAddr, String suBustype, String suIndtype, String suDeptname, String suPersname, String suTelno, String suHpno, String suEmail, IpTypeCode ipTypecode, String ipId, String ipMin, String ipName, String ipRepres, String ipAddr, String ipBustype, String ipIndtype, String ipDeptname1, String ipPersname1, String ipTelno1, String ipHpno1, String ipEmail1, String ipDeptname2, String ipPersname2, String ipTelno2, String ipHpno2, String ipEmail2, Long chargeTotal, Long taxTotal, Long grandTotal, String ernam, String transDate, String isNormal, String imageUrl, PayStatus payStatus, String payDate) {
         this.user = user;
         this.issueId = issueId;
         this.arap = arap;
@@ -254,7 +254,7 @@ public class NtsTax extends BaseTimeEntity {
         this.grandTotal = grandTotal;
         this.ernam = ernam;
         this.transDate = transDate;
-        this.isNomal = isNomal;
+        this.isNormal = isNormal;
         this.imageUrl = imageUrl;
         this.payStatus = payStatus;
         this.payDate = payDate;

@@ -27,7 +27,6 @@ public class SimpleStorageService {
 
     private final AmazonS3 amazonS3;
 
-    // 파일 업로드
     public String uploadFile(MultipartFile file, String path) {
         String fileName = UUID.randomUUID() + "_" + Objects.requireNonNull(file.getOriginalFilename());
         if (path.lastIndexOf("/") != path.length() - 1) {
@@ -53,7 +52,6 @@ public class SimpleStorageService {
                 .toList();
     }
 
-    // 파일 삭제
     public void deleteFile(String path) {
         String fileName = path.replace("https://" + bucket + ".s3." + amazonS3.getRegionName() + ".amazonaws.com/", "");
 
