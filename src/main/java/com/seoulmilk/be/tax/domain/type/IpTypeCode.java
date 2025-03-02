@@ -3,6 +3,10 @@ package com.seoulmilk.be.tax.domain.type;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 @Getter
 @RequiredArgsConstructor
 public enum IpTypeCode {
@@ -14,12 +18,14 @@ public enum IpTypeCode {
     private final String code;
     private final String content;
 
-    public static IpTypeCode findByCode(String code) {
-        for (IpTypeCode ipTypeCode : IpTypeCode.values()) {
-            if (ipTypeCode.getCode().equals(code)) {
-                return ipTypeCode;
-            }
+    private static final Map<String, IpTypeCode> CODE_MAP = new HashMap<>();
+    static {
+        for (IpTypeCode ipTypeCode : values()) {
+            CODE_MAP.put(ipTypeCode.getCode(), ipTypeCode);
         }
-        return null;
+    }
+
+    public static Optional<IpTypeCode> findByCode(String code) {
+        return Optional.ofNullable(CODE_MAP.get(code));
     }
 }
