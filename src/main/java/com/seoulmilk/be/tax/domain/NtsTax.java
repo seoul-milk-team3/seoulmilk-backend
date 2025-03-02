@@ -4,7 +4,6 @@ import com.seoulmilk.be.global.domain.BaseTimeEntity;
 import com.seoulmilk.be.tax.domain.type.*;
 import com.seoulmilk.be.user.domain.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 
@@ -22,11 +21,9 @@ public class NtsTax extends BaseTimeEntity {
     @JoinColumn(name = "USER_ID")
     private User user;  // 사용자
 
-    @NotNull
     @Column(name = "ISSUE_ID", length = 24, nullable = false)
     private String issueId;  // 승인번호
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "ARAP", length = 2, nullable = false)
     private Arap arap;  // 매출매입구분
@@ -34,43 +31,33 @@ public class NtsTax extends BaseTimeEntity {
     @Column(name = "ISSUE_DT", length = 24)
     private String issueDt;  // 서명일자 발행일자
 
-    @NotNull
     @Column(name = "BUKRS", length = 4, nullable = false)
     private String bukrs;  // 회사코드
 
-    @NotNull
     @Column(name = "BUPLA", length = 4, nullable = false)
     private String bupla;  // 사업장
 
-    @NotNull
     @Column(name = "ISSUE_DATE", length = 8, nullable = false)
     private String issueDate;  // 전자세금계산서 작성일자
 
-    @NotNull
     @Column(name = "SU_ID", length = 13, nullable = false)
     private String suId;  // 공급자 사업자등록번호
 
-    @NotNull
     @Column(name = "IP_ID", length = 13, nullable = false)
     private String ipId;  // 공급받는자 사업자등록번호
 
-    @NotNull
     @Column(name = "CHARGETOTAL", nullable = false)
     private Long chargeTotal;  // 총 공급가액 합계
 
-    @NotNull
     @Column(name = "TAXTOTAL", nullable = false)
     private Long taxTotal;  // 총 세액 합계
 
-    @NotNull
     @Column(name = "GRANDTOTAL", nullable = false)
     private Long grandTotal;  // 총액 (공급가액 + 세액)
 
-    @NotNull
     @Column(name = "ERNAM", length = 12, nullable = false)
     private String ernam;  // 생성자
 
-    @NotNull
     @Column(name = "TRANS_DATE", length = 12, nullable = false)
     private String transDate;  // 국세청 전송일자
 
