@@ -24,6 +24,12 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private static final String[] WHITE_LIST = {
+            "/auth/login", "/auth/sign-up", "/swagger-ui/**",
+            "/v3/api-docs/**", "/swagger-resources/**",
+            "/swagger-ui.html", "/webjars/**"
+    };
+
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final RefreshTokenService refreshTokenService;
@@ -39,9 +45,7 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/auth/login", "/auth/sign-up", "/swagger-ui/**",
-                                "/v3/api-docs/**", "/swagger-resources/**",
-                                "/swagger-ui.html", "/webjars/**")
+                        .requestMatchers(WHITE_LIST)
                         .permitAll()
                         .anyRequest().authenticated()
                 );
