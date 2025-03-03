@@ -17,6 +17,16 @@ public record TaxInvoicesSaveRequest(
 
     public NtsTax toNtsTax(TaxInvoicesSaveRequest request, String imageUrl) {
         return NtsTax.builder()
+                .suName(request.fields().stream()
+                        .filter(field -> "공급자명".equals(field.name()))
+                        .map(Field::inferText)
+                        .findFirst()
+                        .orElse("empty"))
+                .suAddr(request.fields().stream()
+                        .filter(field -> "공급자 주소".equals(field.name()))
+                        .map(Field::inferText)
+                        .findFirst()
+                        .orElse("empty"))
                 .suId(request.fields().stream()
                         .filter(field -> "공급자 등록번호".equals(field.name()))
                         .map(Field::inferText)
@@ -44,7 +54,7 @@ public record TaxInvoicesSaveRequest(
                         .findFirst()
                         .orElse("empty"))
                 .imageUrl(imageUrl)
-                //TODO: 추후에는 실제 데이터로 변경해야 함
+                //TODO: 추후에는 실제 데이터로 변경해야 함 : 개발에는 필요없는 회사 데이터 이므로 임시로 dummy 값으로 설정
                 .taxTotal(100L)
                 .grandTotal(100L)
                 .ernam("dummy")
