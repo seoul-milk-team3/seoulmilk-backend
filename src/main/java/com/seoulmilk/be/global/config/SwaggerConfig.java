@@ -27,12 +27,12 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         SecurityScheme securityScheme = new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
+                .type(SecurityScheme.Type.HTTP).scheme("Bearer").bearerFormat("JWT")
                 .in(SecurityScheme.In.HEADER).name("Authorization");
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList("BearerAuth");
 
         return new OpenAPI()
-                .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
+                .components(new Components().addSecuritySchemes("BearerAuth", securityScheme))
                 .security(Collections.singletonList(securityRequirement));
     }
 }
