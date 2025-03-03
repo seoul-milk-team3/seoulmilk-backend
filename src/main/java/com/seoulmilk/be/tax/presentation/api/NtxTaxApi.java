@@ -15,8 +15,8 @@ import java.util.List;
 
 public interface NtxTaxApi {
     @Operation(
-            summary = "clova ocr",
-            description = "OCR 을 통해 이미지를 텍스트로 변환합니다."
+            summary = "세금 계산서 분석하기",
+            description = "OCR 을 통해 세금계산서를 텍스트로 변환합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -30,8 +30,8 @@ public interface NtxTaxApi {
 
 
     @Operation(
-            summary = "세금 계산서 이미지와 분석 결과를 저장",
-            description = "세금 계산서 이미지와 분석 결과를 단일 저장합니다. -> 다중 삭제 완료시 추후 삭제합니다."
+            summary = "세금 계산서 이미지와 분석 결과를 단일 저장하기",
+            description = "세금 계산서 이미지와 분석 결과를 단일 저장합니다. \n" + "기획 과정에서 단일 기능 다중 기능 여부에 따라 선택 사용하시면 될 것 같아요"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -63,18 +63,17 @@ public interface NtxTaxApi {
     );
 
     @Operation(
-            summary = "clova ocr",
-            description = "OCR 을 통해 이미지를 텍스트로 변환합니다."
+            summary = "세금 계산서 이미지와 분석 결과를 다중 저장하기",
+            description = "세금 계산서 이미지와 분석 결과를 다중 저장합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "OCR 이 성공적으로 완료되었습니다."
+                    description = "세금 계산서 이미지와 분석 결과가 성공적으로 저장되었습니다."
             )
     })
     ResponseEntity<?> saveTaxInvoicesList(
             @RequestPart TaxInvoicesSaveRequestList requestList,
             @RequestPart List<MultipartFile> files
     );
-
 }
