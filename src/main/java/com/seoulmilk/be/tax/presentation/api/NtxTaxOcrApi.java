@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface NtxTaxOcrApi {
     @Operation(
             summary = "clova ocr",
@@ -19,7 +21,9 @@ public interface NtxTaxOcrApi {
                     description = "OCR 이 성공적으로 완료되었습니다."
             )
     })
-    ResponseEntity<?> analyzeTaxInvoices(@RequestPart MultipartFile file);
+    ResponseEntity<?> analyzeTaxInvoices(
+            @RequestPart List<MultipartFile> file
+    );
 
 
     @Operation(

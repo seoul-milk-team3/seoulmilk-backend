@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 public class NtsTaxOcrController implements NtxTaxOcrApi {
@@ -22,9 +24,9 @@ public class NtsTaxOcrController implements NtxTaxOcrApi {
     @Override
     @PostMapping(value = "/analyze", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> analyzeTaxInvoices(
-            @RequestPart MultipartFile file
+            @RequestPart List<MultipartFile> files
     ) {
-        ClovaOcrResponse response = ntsTaxOcrService.analyzeTaxInvoices(file);
+        List<ClovaOcrResponse> response = ntsTaxOcrService.analyzeTaxInvoices(files);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

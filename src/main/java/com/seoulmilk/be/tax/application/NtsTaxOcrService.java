@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,12 +28,30 @@ public class NtsTaxOcrService {
     private final ClovaOcrClient clovaOcrClient;
     private final ClovaOcrProperties clovaOcrProperties;
 
-    public ClovaOcrResponse analyzeTaxInvoices(MultipartFile file) {
-        return clovaOcrClient.getOcrResult(
-                clovaOcrProperties.secrets(),
-                ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)
-        );
+//    public ClovaOcrResponse analyzeTaxInvoices(MultipartFile file) {
+//
+//            return clovaOcrClient.getOcrResult(
+//                    clovaOcrProperties.secrets(),
+//                    ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)
+//            );
+//
+//    }
+
+    public List<ClovaOcrResponse> analyzeTaxInvoices(List<MultipartFile> files) {
+        List<ClovaOcrResponse> responses = new ArrayList<>();
+
+        files.forEach(file -> {
+            ClovaOcrResponse ocrResult = clovaOcrClient.getOcrResult(
+                    clovaOcrProperties.secrets(),
+                    ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)
+            );
+
+            responses.add(ocrResult);
+        });
+
+        return responses;
     }
+
 
     @Transactional
     public void saveTaxInvoices(TaxInvoicesSaveRequest request, MultipartFile file) {

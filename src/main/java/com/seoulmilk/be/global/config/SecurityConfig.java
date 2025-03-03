@@ -27,7 +27,8 @@ public class SecurityConfig {
     private static final String[] WHITE_LIST = {
             "/auth/login", "/auth/sign-up", "/swagger-ui/**",
             "/v3/api-docs/**", "/swagger-resources/**",
-            "/swagger-ui.html", "/webjars/**", "/global/health-check"
+            "/swagger-ui.html", "/webjars/**", "/global/health-check",
+            "/analyze", "/save" // TODO: test 용으로 임의 추가 (삭제 필수)
     };
 
     private final JwtService jwtService;
