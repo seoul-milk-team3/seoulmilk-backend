@@ -1,5 +1,6 @@
 package com.seoulmilk.be.tax.presentation;
 
+import com.seoulmilk.be.global.dto.SuccessResponse;
 import com.seoulmilk.be.tax.application.NtsTaxService;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequest;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
@@ -17,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static com.seoulmilk.be.global.dto.SuccessCode.*;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/tax-invoices")
@@ -33,10 +36,9 @@ public class NtsTaxController implements NtxTaxApi {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(response);
+                .body(SuccessResponse.of(ANALYZE_TAX_SUCCESS, response));
     }
 
-    // 단일 저장 -> 추후삭제
     @Override
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> saveTaxInvoices(
@@ -47,10 +49,9 @@ public class NtsTaxController implements NtxTaxApi {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("saveTaxInvoices");
+                .body(SuccessResponse.of(SAVE_TAX_SUCCESS));
     }
 
-    // 다중 저장
     @Override
     @PostMapping(value = "/list", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> saveTaxInvoicesList(
@@ -61,6 +62,6 @@ public class NtsTaxController implements NtxTaxApi {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("saveTaxInvoices");
+                .body(SuccessResponse.of(SAVE_TAX_SUCCESS));
     }
 }
