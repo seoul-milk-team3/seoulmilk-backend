@@ -12,7 +12,6 @@ import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class NtsTaxService {
 
     private final NtsTaxRepository ntsTaxRepository;
@@ -45,8 +43,6 @@ public class NtsTaxService {
         return responses;
     }
 
-
-    @Transactional
     public void saveTaxInvoices(TaxInvoicesSaveRequest request, MultipartFile file) {
         String imageUrl = simpleStorageService.uploadFile(file, "tax-invoices");
 
@@ -55,7 +51,6 @@ public class NtsTaxService {
         ntsTaxRepository.save(ntsTax);
     }
 
-    @Transactional
     public void saveTaxInvoicesList(TaxInvoicesSaveRequestList requestList, List<MultipartFile> files) {
 
         List<String> imageUrlList = files.stream()
