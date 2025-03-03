@@ -6,6 +6,7 @@ import com.seoulmilk.be.tax.application.ext.ClovaOcrProperties;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.dto.request.ClovaOcrRequest;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequest;
+import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,21 +22,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class NtsTaxOcrService {
+public class NtsTaxService {
 
     private final NtsTaxRepository ntsTaxRepository;
     private final SimpleStorageService simpleStorageService;
     private final ClovaOcrClient clovaOcrClient;
     private final ClovaOcrProperties clovaOcrProperties;
-
-//    public ClovaOcrResponse analyzeTaxInvoices(MultipartFile file) {
-//
-//            return clovaOcrClient.getOcrResult(
-//                    clovaOcrProperties.secrets(),
-//                    ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)
-//            );
-//
-//    }
 
     public List<ClovaOcrResponse> analyzeTaxInvoices(List<MultipartFile> files) {
         List<ClovaOcrResponse> responses = new ArrayList<>();
@@ -49,6 +41,7 @@ public class NtsTaxOcrService {
             responses.add(ocrResult);
         });
 
+        log.info("responses: {}", responses);
         return responses;
     }
 
@@ -60,5 +53,23 @@ public class NtsTaxOcrService {
         NtsTax ntsTax = request.toNtsTax(request, imageUrl);
 
         ntsTaxRepository.save(ntsTax);
+    }
+
+    @Transactional
+    public void saveTaxInvoicesList(TaxInvoicesSaveRequestList requestList, List<MultipartFile> files) {
+
+        List<String> imageUrlList = files.stream()
+                .map(file -> simpleStorageService.uploadFile(file, "tax-invoices"))
+                .toList();
+
+        requestList.requests()
+                .forEach(request ->
+                        {
+                            String imageUrl = imageUrlList.get(requestList.requests().indexOf(request));
+                            NtsTax ntsTax = request.toNtsTax(request, imageUrl);
+
+                            ntsTaxRepository.save(ntsTax);
+                        }
+                );
     }
 }

@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Collections;
 
-
 @OpenAPIDefinition(
         info = @Info(title = "SeoulMilk API 명세서",
                 description = "SeoulMilk API 명세서",
@@ -28,13 +27,12 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         SecurityScheme securityScheme = new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP).scheme("Bearer").bearerFormat("JWT")
+                .type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
                 .in(SecurityScheme.In.HEADER).name("Authorization");
         SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
 
         return new OpenAPI()
-//                .servers(List.of(new Server().url("/api")))
-                .components(new Components().addSecuritySchemes("BearerAuth", securityScheme))
+                .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
                 .security(Collections.singletonList(securityRequirement));
     }
 }

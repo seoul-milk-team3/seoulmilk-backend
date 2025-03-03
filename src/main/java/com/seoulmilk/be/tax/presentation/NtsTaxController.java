@@ -1,14 +1,16 @@
 package com.seoulmilk.be.tax.presentation;
 
-import com.seoulmilk.be.tax.application.NtsTaxOcrService;
+import com.seoulmilk.be.tax.application.NtsTaxService;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequest;
+import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
-import com.seoulmilk.be.tax.presentation.api.NtxTaxOcrApi;
+import com.seoulmilk.be.tax.presentation.api.NtxTaxApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,29 +19,45 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class NtsTaxOcrController implements NtxTaxOcrApi {
+@RequestMapping("/tax-invoices")
+public class NtsTaxController implements NtxTaxApi {
 
-    private final NtsTaxOcrService ntsTaxOcrService;
+    private final NtsTaxService ntsTaxService;
 
     @Override
     @PostMapping(value = "/analyze", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> analyzeTaxInvoices(
             @RequestPart List<MultipartFile> files
     ) {
-        List<ClovaOcrResponse> response = ntsTaxOcrService.analyzeTaxInvoices(files);
+        List<ClovaOcrResponse> response = ntsTaxService.analyzeTaxInvoices(files);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
     }
 
+    // 단일 저장 -> 추후삭제
     @Override
-    @PostMapping(value = "/save", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> saveTaxInvoices(
             @RequestPart TaxInvoicesSaveRequest request,
             @RequestPart MultipartFile file
     ) {
-        ntsTaxOcrService.saveTaxInvoices(request, file);
+        ntsTaxService.saveTaxInvoices(request, file);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("saveTaxInvoices");
+    }
+
+    // 다중 저장
+    @Override
+    @PostMapping(value = "/list", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> saveTaxInvoicesList(
+            @RequestPart TaxInvoicesSaveRequestList requestList,
+            @RequestPart List<MultipartFile> files
+    ) {
+        ntsTaxService.saveTaxInvoicesList(requestList, files);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
