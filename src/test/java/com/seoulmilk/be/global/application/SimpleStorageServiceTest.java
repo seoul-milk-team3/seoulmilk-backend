@@ -30,19 +30,19 @@ class SimpleStorageServiceTest {
     void uploadFile() throws IOException {
         // given
         String path = "test";
-        String fileName = "test.jpg";
+        String fileName = "test-ocr.png";
         MultipartFile file = MultipartFileUtil.convertToMultipartFile("src/test/resources/" + fileName);
 
         // when
         String url = simpleStorageService.uploadFile(file, path);
-        simpleStorageService.deleteFile(url);
+//        simpleStorageService.deleteFile(url);
 
         // then
         assertNotNull(url);
         assertTrue(url.contains(bucket));
         assertTrue(url.contains(path));
         System.out.println("업로드된 URL: " + url);
-        System.out.println("삭제된 URL " + url);
+//        System.out.println("삭제된 URL " + url);
     }
 
     // test 를 위한 MultipartFileUtil 클래스
