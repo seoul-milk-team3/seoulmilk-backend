@@ -35,7 +35,6 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
         try {
             List<OfficeTaxFilterResponse> result = jpaQueryFactory
                     .select(Projections.constructor(OfficeTaxFilterResponse.class,
-                            user.id,
                             ntsTax.suId,
                             ntsTax.ipId,
                             ntsTax.transDate,
@@ -43,7 +42,6 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                             ntsTax.suAddr,
                             ntsTax.isNormal))
                     .from(ntsTax)
-                    .leftJoin(ntsTax.user, user)
                     .orderBy(ntsTax.id.desc())
                     .where(
                             filterByRegion(region),
