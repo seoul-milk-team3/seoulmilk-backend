@@ -28,7 +28,7 @@ public class NtsTaxController implements NtxTaxApi {
     private final NtsTaxService ntsTaxService;
 
     @Override
-    @PostMapping(value = "/analyze", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/ocr", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> analyzeTaxInvoices(
             @RequestPart List<MultipartFile> files
     ) {
