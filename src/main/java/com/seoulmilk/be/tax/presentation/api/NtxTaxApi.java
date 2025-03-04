@@ -88,7 +88,7 @@ public interface NtxTaxApi {
                     - endYearAndMonth: "2024-03-01"
                     - region: "대전"
                     - searchSupplierName: "대전더미유통"
-                    - resultType: "NORMAL"  (정상:NORMAL, 비정상:ABNORMAL)
+                    - resultType: "NORMAL"  (정상조회:NORMAL, 비정상조회:ABNORMAL, 전제조회:ALL) *입력시 대소문자 상관없습니다.
                     - page: 1
                     - size: 8
                             """
@@ -100,11 +100,11 @@ public interface NtxTaxApi {
             )
     })
     ResponseEntity<?> findOfficeTaxByFilters(
-            @RequestParam(required = false) LocalDate startYearAndMonth,   //파일 업로드 일자 필터링
+            @RequestParam(required = false) LocalDate startYearAndMonth,
             @RequestParam(required = false) LocalDate endYearAndMonth,
-            @RequestParam(required = false) String region,  //지역 필터링
-            @RequestParam(required = false) String searchSupplierName, //공급자 검색 필터링
-            @RequestParam(required = false) String resultType,  //처리 결과 필터링,
+            @RequestParam(required = false) String region,
+            @RequestParam(required = false) String searchSupplierName,
+            @RequestParam(required = false) String resultType,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size
     );

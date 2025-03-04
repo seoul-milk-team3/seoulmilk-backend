@@ -3,6 +3,7 @@ package com.seoulmilk.be.tax.persistence;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.seoulmilk.be.tax.domain.type.ResultType;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,11 +82,12 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
     }
 
     private BooleanExpression filterByResultType(String resultType) {
-        if (ObjectUtils.isEmpty(resultType)) {
+        ResultType type = ResultType.fromString(resultType);
+
+        if (ObjectUtils.isEmpty(resultType) || type == ResultType.ALL) {
             return null;
-        }
-        else {
-            return ntsTax.isNormal.eq(resultType);
+        } else {
+            return ntsTax.isNormal.eq(type);
         }
     }
 

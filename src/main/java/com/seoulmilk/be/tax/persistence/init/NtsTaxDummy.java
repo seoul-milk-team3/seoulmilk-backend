@@ -4,6 +4,7 @@ import com.seoulmilk.be.global.util.DummyDataInit;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.Arap;
 import com.seoulmilk.be.tax.domain.type.PayStatus;
+import com.seoulmilk.be.tax.domain.type.ResultType;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import com.seoulmilk.be.user.domain.User;
 import com.seoulmilk.be.user.persistence.UserRepository;
@@ -52,7 +53,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("대전광역시 더미동111-111")
                     .ipName("대전 더미사업")
                     .ipAddr("대전광역시 더미동222-222")
-                    .isNormal("1")
+                    .isNormal(ResultType.NORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-08")
@@ -75,7 +76,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("서울광역시 더미동111-111")
                     .ipName("서울 더미사업")
                     .ipAddr("서울 더미동111-111")
-                    .isNormal("2")
+                    .isNormal(ResultType.NORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-09")
@@ -98,7 +99,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("광주광역시 더미동222-222")
                     .ipName("광주 더미사업")
                     .ipAddr("광주 더미동111-111")
-                    .isNormal("1")
+                    .isNormal(ResultType.ABNORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-10")
@@ -121,7 +122,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("서울광역시 더미동222-222")
                     .ipName("서울 더미사업")
                     .ipAddr("서울 더미동222-222")
-                    .isNormal("2")
+                    .isNormal(ResultType.NORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-11")
@@ -144,7 +145,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("울산광역시 더미동222-222")
                     .ipName("울산 더미사업")
                     .ipAddr("울산 더미동111-111")
-                    .isNormal("1")
+                    .isNormal(ResultType.ABNORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-12")
@@ -167,7 +168,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("대구광역시 더미동222-222")
                     .ipName("대구 더미사업")
                     .ipAddr("대구 더미동111-111")
-                    .isNormal("2")
+                    .isNormal(ResultType.NORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-13")
@@ -190,7 +191,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("부산광역시 더미동222-222")
                     .ipName("부산 더미사업")
                     .ipAddr("부산 더미동111-111")
-                    .isNormal("1")
+                    .isNormal(ResultType.ABNORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-14")
@@ -213,7 +214,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("경기도 더미동222-222")
                     .ipName("경기 더미사업")
                     .ipAddr("경기 더미동111-111")
-                    .isNormal("1")
+                    .isNormal(ResultType.NORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-15")
