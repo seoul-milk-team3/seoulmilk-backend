@@ -25,7 +25,15 @@ public class AuthController implements AuthApi {
     @PostMapping("/office/sign-up")
     @Override
     public SuccessResponse<String> signUpOffice(@RequestBody OfficeSignUpRequest request) {
-        authService.signUp(request);
+        authService.signUpOffice(request);
+        return SuccessResponse.of(SIGN_UP_SUCCESS);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/branch/sign-up")
+    @Override
+    public SuccessResponse<String> signUpBranch(@RequestBody BranchSignUpRequest request) {
+        authService.signUpBranch(request);
         return SuccessResponse.of(SIGN_UP_SUCCESS);
     }
 

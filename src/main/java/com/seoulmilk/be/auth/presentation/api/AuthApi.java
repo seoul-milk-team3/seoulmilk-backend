@@ -1,5 +1,6 @@
 package com.seoulmilk.be.auth.presentation.api;
 
+import com.seoulmilk.be.auth.dto.request.BranchSignUpRequest;
 import com.seoulmilk.be.auth.dto.request.LoginRequest;
 import com.seoulmilk.be.auth.dto.request.OfficeSignUpRequest;
 import com.seoulmilk.be.global.dto.SuccessResponse;
@@ -12,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Tag(name = "Auth", description = "사용자 인증 관련 API")
 public interface AuthApi {
     @Operation(
-            summary = "회원가입",
+            summary = "본사 직원 회원가입",
             description = "사용자의 정보를 입력받아 회원가입을 진행합니다."
     )
     @ApiResponses(value = {
@@ -30,6 +31,26 @@ public interface AuthApi {
             )
     })
     SuccessResponse<String> signUpOffice(OfficeSignUpRequest request);
+
+    @Operation(
+            summary = "가맹점 직원 회원가입",
+            description = "사용자의 정보를 입력받아 회원가입을 진행합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "회원가입이 성공적으로 완료되었습니다."
+            ),
+            @ApiResponse(
+                    responseCode = "208",
+                    description = "The employee ID already exists."
+            ),
+            @ApiResponse(
+                    responseCode = "208",
+                    description = "The email already exists."
+            )
+    })
+    SuccessResponse<String> signUpBranch(BranchSignUpRequest request);
 
     @Operation(
             summary = "로그인",

@@ -40,16 +40,28 @@ public class AuthService {
     private String accessHeader;
 
     @Transactional
-    public void signUp(OfficeSignUpRequest request) {
-        if (userRepository.existsByEmployeeId(request.employeeId())) {
-            throw new ExistUserException(EXIST_EMPLOYEE_ID);
-        }
-        if (userRepository.existsByEmail(request.email())) {
-            throw new ExistUserException(EXIST_EMAIL);
-        }
+    public void signUpOffice(OfficeSignUpRequest request) {
+        validateUniqueUser(request.employeeId(), request.email());
 
         User user = request.toOfficeUser(passwordEncoder);
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void signUpBranch(BranchSignUpRequest request) {
+        validateUniqueUser(request.employeeId(), request.email());
+
+        User user = request.toBranchUser(passwordEncoder);
+        userRepository.save(user);
+    }
+
+    private void validateUniqueUser(String employeeId, String email) {
+        if (userRepository.existsByEmployeeId(employeeId)) {
+            throw new ExistUserException(EXIST_EMPLOYEE_ID);
+        }
+        if (userRepository.existsByEmail(email)) {
+            throw new ExistUserException(EXIST_EMAIL);
+        }
     }
 
     @Transactional
