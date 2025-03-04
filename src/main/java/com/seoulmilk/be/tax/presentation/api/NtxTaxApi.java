@@ -8,9 +8,11 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface NtxTaxApi {
@@ -75,5 +77,35 @@ public interface NtxTaxApi {
     ResponseEntity<?> saveTaxInvoicesList(
             @RequestPart TaxInvoicesSaveRequestList requestList,
             @RequestPart List<MultipartFile> files
+    );
+
+    @Operation(
+            summary = "세금 계산서 자료 조회하기",
+            description = "본사의 세금 계산서 자료를 조건에 맞게 필터링 합니다." + '\n' +
+                    """
+                    예시)
+                    - startYearAndMonth: "2024-01-01"
+                    - endYearAndMonth: "2024-03-01"
+                    - region: "대전"
+                    - searchSupplierName: "대전더미유통"
+                    - resultType: "NORMAL"  (정상:NORMAL, 비정상:ABNORMAL)
+                    - page: 1
+                    - size: 8
+                            """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "세금 계산서가 성공적으로 조회되었습니다."
+            )
+    })
+    ResponseEntity<?> findOfficeTaxByFilters(
+            @RequestParam(required = false) LocalDate startYearAndMonth,   //파일 업로드 일자 필터링
+            @RequestParam(required = false) LocalDate endYearAndMonth,
+            @RequestParam(required = false) String region,  //지역 필터링
+            @RequestParam(required = false) String searchSupplierName, //공급자 검색 필터링
+            @RequestParam(required = false) String resultType,  //처리 결과 필터링,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "8") int size
     );
 }
