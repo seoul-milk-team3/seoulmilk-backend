@@ -1,5 +1,6 @@
 package com.seoulmilk.be.user.domain;
 
+import com.google.common.hash.Hashing;
 import com.seoulmilk.be.global.domain.BaseTimeEntity;
 import com.seoulmilk.be.user.domain.type.Role;
 import com.seoulmilk.be.user.domain.type.Telecom;
@@ -8,6 +9,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.nio.charset.StandardCharsets;
 
 @Entity
 @Table(name = "USERS")
@@ -59,5 +62,11 @@ public class User extends BaseTimeEntity {
         this.telecom = telecom;
         this.role = role;
         this.isDeleted = false;
+    }
+
+    public String getCodefId() {
+        return Hashing.sha256()
+                .hashString(this.email, StandardCharsets.UTF_8)
+                .toString();
     }
 }
