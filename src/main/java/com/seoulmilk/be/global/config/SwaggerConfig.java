@@ -17,7 +17,9 @@ import java.util.List;
 @OpenAPIDefinition(
         info = @Info(title = "SeoulMilk API 명세서",
                 description = "SeoulMilk API 명세서",
-                version = "v1"))
+                version = "v1"),
+        servers = @io.swagger.v3.oas.annotations.servers.Server(url = "/api", description = "Default Server URL")
+)
 
 @Configuration
 public class SwaggerConfig {
