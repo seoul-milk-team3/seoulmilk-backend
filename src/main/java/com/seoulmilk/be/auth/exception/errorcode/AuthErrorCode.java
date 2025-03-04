@@ -1,4 +1,4 @@
-package com.seoulmilk.be.auth.exception.errorCode;
+package com.seoulmilk.be.auth.exception.errorcode;
 
 import com.seoulmilk.be.global.exception.errorcode.ErrorCode;
 import lombok.Getter;

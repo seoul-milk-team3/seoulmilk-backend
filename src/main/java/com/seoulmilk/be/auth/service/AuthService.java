@@ -20,8 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.seoulmilk.be.auth.exception.errorCode.AuthErrorCode.EXIST_EMAIL;
-import static com.seoulmilk.be.auth.exception.errorCode.AuthErrorCode.EXIST_EMPLOYEE_ID;
+import static com.seoulmilk.be.auth.exception.errorcode.AuthErrorCode.EXIST_EMAIL;
+import static com.seoulmilk.be.auth.exception.errorcode.AuthErrorCode.EXIST_EMPLOYEE_ID;
 import static com.seoulmilk.be.user.exception.errorCode.UserErrorCode.USER_NOT_FOUND;
 
 @Service
