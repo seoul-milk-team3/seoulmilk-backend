@@ -2,6 +2,7 @@ package com.seoulmilk.be.user.domain;
 
 import com.seoulmilk.be.global.domain.BaseTimeEntity;
 import com.seoulmilk.be.user.domain.type.Role;
+import com.seoulmilk.be.user.domain.type.Telecom;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,7 +39,7 @@ public class User extends BaseTimeEntity {
     private String birthday;
 
     @Column(name = "TELECOM")
-    private String telecom;
+    private Telecom telecom;
 
     @Column(name = "IS_DELETED", nullable = false)
     private Boolean isDeleted;
@@ -48,7 +49,7 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     @Builder
-    public User(String name, String employeeId, String password, String email, String phoneNo, String birthday, String telecom, Role role) {
+    public User(String name, String employeeId, String password, String email, String phoneNo, String birthday, Telecom telecom, Role role) {
         this.name = name;
         this.employeeId = employeeId;
         this.password = password;
