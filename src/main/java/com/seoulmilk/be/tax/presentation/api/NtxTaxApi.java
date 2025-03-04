@@ -86,8 +86,8 @@ public interface NtxTaxApi {
                     - 예시)
                     - startYearAndMonth: "2024-01-01"
                     - endYearAndMonth: "2024-03-01"
-                    - region: "대전"
-                    - searchSupplierName: "대전더미유통"
+                    - region: "대전"  *지역이름으로 조회해주세요.(서울/대전/광주/울산/부산/경기)
+                    - searchSupplierName: "대전더미유통" * (지역이름 + 더미유통) 으로 조합해서 조회해주세요. 
                     - resultType: "NORMAL"  (정상조회:NORMAL, 비정상조회:ABNORMAL, 전제조회:ALL) *입력시 대소문자 상관없습니다.
                     - page: 1
                     - size: 8
