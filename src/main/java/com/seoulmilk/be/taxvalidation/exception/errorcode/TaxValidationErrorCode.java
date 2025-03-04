@@ -11,8 +11,8 @@ public enum TaxValidationErrorCode implements ErrorCode {
     UNSUPPORTED_ENCODING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Unsupported Encoding Exception occurred."),
     JSON_PROCESSING_ERROR(HttpStatus.BAD_REQUEST, "JSON Processing Exception occurred while processing the Codef API."),
     INTERRUPTED_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Request was interrupted while processing the Codef API."),
-    CODEF_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Codef API Error during first request validation"),
-    INVALID_RESPONSE_FORMAT(HttpStatus.INTERNAL_SERVER_ERROR, "")
+    CODEF_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Codef API Error during first request validation."),
+    INVALID_RESPONSE_FORMAT(HttpStatus.INTERNAL_SERVER_ERROR, "The value requested in the response of the Codef API is missing.")
     ;
 
     private final HttpStatus httpStatus;
