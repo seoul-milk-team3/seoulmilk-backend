@@ -1,11 +1,12 @@
 package com.seoulmilk.be.auth.service;
 
 import com.seoulmilk.be.auth.dto.request.LoginRequest;
+import com.seoulmilk.be.auth.dto.request.OfficeSignUpRequest;
 import com.seoulmilk.be.auth.exception.ExistUserException;
 import com.seoulmilk.be.global.jwt.application.JwtService;
 import com.seoulmilk.be.global.jwt.refresh.application.RefreshTokenService;
 import com.seoulmilk.be.user.domain.User;
-import com.seoulmilk.be.auth.dto.request.SignUpRequest;
+import com.seoulmilk.be.auth.dto.request.BranchSignUpRequest;
 import com.seoulmilk.be.user.exception.UserNotFoundException;
 import com.seoulmilk.be.user.persistence.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -39,7 +40,7 @@ public class AuthService {
     private String accessHeader;
 
     @Transactional
-    public void signUp(SignUpRequest request) {
+    public void signUp(OfficeSignUpRequest request) {
         if (userRepository.existsByEmployeeId(request.employeeId())) {
             throw new ExistUserException(EXIST_EMPLOYEE_ID);
         }
@@ -47,7 +48,7 @@ public class AuthService {
             throw new ExistUserException(EXIST_EMAIL);
         }
 
-        User user = request.toUser(passwordEncoder);
+        User user = request.toOfficeUser(passwordEncoder);
         userRepository.save(user);
     }
 

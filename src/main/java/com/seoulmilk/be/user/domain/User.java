@@ -31,6 +31,15 @@ public class User extends BaseTimeEntity {
     @Column(name = "EMAIL", nullable = false)
     private String email;
 
+    @Column(name = "PHONE_NO")
+    private String phoneNo;
+
+    @Column(name = "BIRTHDAY")
+    private String birthday;
+
+    @Column(name = "TELECOM")
+    private String telecom;
+
     @Column(name = "IS_DELETED", nullable = false)
     private Boolean isDeleted;
 
@@ -39,11 +48,14 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     @Builder
-    public User(String name, String employeeId, String password, String email, Role role) {
+    public User(String name, String employeeId, String password, String email, String phoneNo, String birthday, String telecom, Role role) {
         this.name = name;
         this.employeeId = employeeId;
         this.password = password;
         this.email = email;
+        this.phoneNo = phoneNo;
+        this.birthday = birthday;
+        this.telecom = telecom;
         this.role = role;
         this.isDeleted = false;
     }

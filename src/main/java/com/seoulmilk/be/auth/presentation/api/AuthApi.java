@@ -1,8 +1,8 @@
 package com.seoulmilk.be.auth.presentation.api;
 
 import com.seoulmilk.be.auth.dto.request.LoginRequest;
+import com.seoulmilk.be.auth.dto.request.OfficeSignUpRequest;
 import com.seoulmilk.be.global.dto.SuccessResponse;
-import com.seoulmilk.be.auth.dto.request.SignUpRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -29,7 +29,7 @@ public interface AuthApi {
                     description = "The email already exists."
             )
     })
-    SuccessResponse<String> signUp(SignUpRequest request);
+    SuccessResponse<String> signUpOffice(OfficeSignUpRequest request);
 
     @Operation(
             summary = "로그인",
