@@ -25,6 +25,8 @@ public enum CodefParameter {
     THREAD_INDEX("threadIndex"),
     JTI("jti"),
     TWO_WAY_TIMESTAMP("twoWayTimestamp"),
+    SIMPLE_AUTH("simpleAuth"),
+    IS_2_WAY("is2Way"),
     ;
 
     private final String paramName;
