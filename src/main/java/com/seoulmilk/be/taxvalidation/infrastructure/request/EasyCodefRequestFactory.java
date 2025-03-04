@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParameter.*;
 
@@ -23,7 +24,6 @@ public class EasyCodefRequestFactory {
         HashMap<String, Object> request = new HashMap<>(createDefaultRequest());
         request.putAll(createUserRequest(user));
         request.putAll(createNtsTaxRequest(ntsTax));
-        log.info(request.toString());
         return request;
     }
 
@@ -54,4 +54,5 @@ public class EasyCodefRequestFactory {
         request.put(SUPPLY_VALUE.getParamName(), ntsTax.getChargeTotal().toString());
         return request;
     }
+
 }
