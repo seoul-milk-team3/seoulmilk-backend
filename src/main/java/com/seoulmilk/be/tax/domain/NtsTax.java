@@ -37,7 +37,7 @@ public class NtsTax extends BaseTimeEntity {
     @Column(name = "BUPLA", length = 4, nullable = false)
     private String bupla;  // 사업장
 
-    @Column(name = "ISSUE_DATE", length = 8, nullable = false)
+    @Column(name = "ISSUE_DATE", length = 12, nullable = false)
     private String issueDate;  // 전자세금계산서 작성일자
 
     @Column(name = "SU_ID", length = 13, nullable = false)

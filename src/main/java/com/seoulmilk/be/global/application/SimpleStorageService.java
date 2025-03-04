@@ -37,6 +37,8 @@ public class SimpleStorageService {
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
+
             amazonS3.putObject(new PutObjectRequest(bucket, filePath, file.getInputStream(), metadata));
 //                    .withCannedAcl(CannedAccessControlList.PublicRead));  // TODO: S3 ACL 공개 설정 여부 메서드로 관리
 

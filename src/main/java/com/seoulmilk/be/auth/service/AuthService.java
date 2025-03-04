@@ -75,5 +75,4 @@ public class AuthService {
         String username = authentication.getName();
         return userRepository.findByEmployeeId(username).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
     }
-
 }

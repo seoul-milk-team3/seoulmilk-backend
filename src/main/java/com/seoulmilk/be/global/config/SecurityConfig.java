@@ -25,9 +25,9 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private static final String[] WHITE_LIST = {
-            "/auth/login", "/auth/sign-up", "/swagger-ui/**",
+            "/auth/**", "/swagger-ui/**",
             "/v3/api-docs/**", "/swagger-resources/**",
-            "/swagger-ui.html", "/webjars/**"
+            "/swagger-ui.html", "/webjars/**", "/global/health-check"
     };
 
     private final JwtService jwtService;
