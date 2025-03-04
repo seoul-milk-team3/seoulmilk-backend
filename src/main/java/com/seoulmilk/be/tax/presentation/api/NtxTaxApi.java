@@ -83,7 +83,7 @@ public interface NtxTaxApi {
             summary = "세금 계산서 자료 조회하기",
             description = "본사의 세금 계산서 자료를 조건에 맞게 필터링 합니다." + '\n' +
                     """
-                    예시)
+                    - 예시)
                     - startYearAndMonth: "2024-01-01"
                     - endYearAndMonth: "2024-03-01"
                     - region: "대전"
