@@ -54,13 +54,13 @@ public interface AuthApi {
 
     @Operation(
             summary = "로그인",
-            description = "사용자의 사번과 비밀번호를 입력받아 로그인합니다." +
-                    """ 
-                                테스트 계정:
-                                - 사번: test1
-                                - 비밀번호: 1234
-                                - 권한 : 관리자
+            description = "사용자의 사번과 비밀번호를 입력받아 로그인합니다." + "\n" +
                     """
+                    예시) 테스트 계정 
+                    - 사번: test1
+                    - 비밀번호: 1234
+                    - 권한 : 관리자
+                            """
     )
     @ApiResponses(value = {
             @ApiResponse(

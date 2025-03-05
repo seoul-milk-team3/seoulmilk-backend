@@ -17,7 +17,7 @@ import java.util.Collections;
                 description = "SeoulMilk API 명세서",
                 version = "v1"
         ),
-        servers = @Server(url = "/api", description = "Default Server URL")
+        servers = @io.swagger.v3.oas.annotations.servers.Server(url = "/api", description = "Default Server URL")
 )
 
 @Configuration
