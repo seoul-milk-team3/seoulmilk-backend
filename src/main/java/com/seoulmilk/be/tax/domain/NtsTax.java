@@ -278,6 +278,10 @@ public class NtsTax extends BaseTimeEntity {
     }
 
     public void updateIsNormal(String isNormal) {
-        this.isNormal = isNormal;
+        if (isNormal.equals("1")) {
+            this.isNormal = ResultType.NORMAL;
+            return;
+        }
+        this.isNormal = ResultType.ABNORMAL;
     }
 }
