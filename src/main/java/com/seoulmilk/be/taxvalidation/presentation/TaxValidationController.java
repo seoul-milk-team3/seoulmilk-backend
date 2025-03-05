@@ -19,7 +19,8 @@ public class TaxValidationController implements TaxValidationApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{taxId}/pre-verified/{loginTypeLevel}")
     @Override
-    public SuccessResponse<String> validateInvoicePreVerified(@PathVariable final Long taxId, @PathVariable final String loginTypeLevel) {
+    public SuccessResponse<String> validateInvoicePreVerified(
+            @PathVariable final Long taxId, @PathVariable final String loginTypeLevel) {
         taxValidationService.validateInvoicePreVerified(taxId, loginTypeLevel);
         return SuccessResponse.of(VALIDATE_TAX_INVOICE_SUCCESS);
     }
@@ -30,7 +31,7 @@ public class TaxValidationController implements TaxValidationApi {
     public SuccessResponse<InvoiceVerificationResponse> validateInvoicePostVerified(
             @PathVariable final Long taxId, @PathVariable final String loginTypeLevel) {
         InvoiceVerificationResponse response = taxValidationService.validateInvoicePostVerified(taxId, loginTypeLevel);
-        taxValidationService.updateNtsTaxIsNormal(taxId, response.getIsNormal());
+        taxValidationService.updateNtsTaxIsNormal(taxId, response.isNormal());
         return SuccessResponse.of(VALIDATE_TAX_INVOICE_SUCCESS, response);
     }
 
