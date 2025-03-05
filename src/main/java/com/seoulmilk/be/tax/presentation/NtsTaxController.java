@@ -5,17 +5,16 @@ import com.seoulmilk.be.tax.application.NtsTaxService;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequest;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
+import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.presentation.api.NtxTaxApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.seoulmilk.be.global.dto.SuccessCode.*;
@@ -63,5 +62,23 @@ public class NtsTaxController implements NtxTaxApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.of(SAVE_TAX_SUCCESS));
+    }
+
+    @Override
+    @GetMapping("/office-filter")
+    public ResponseEntity<?> findOfficeTaxByFilters(
+            @RequestParam(required = false) LocalDate startYearAndMonth,
+            @RequestParam(required = false) LocalDate endYearAndMonth,
+            @RequestParam(required = false) String region,
+            @RequestParam(required = false) String searchSupplierName,
+            @RequestParam(required = false) String resultType,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "8") int size)
+    {
+        List<OfficeTaxFilterResponse> response = ntsTaxService.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, page, size);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.of(OFFICE_TAX_FILTER_SUCCESS,response));
     }
 }
