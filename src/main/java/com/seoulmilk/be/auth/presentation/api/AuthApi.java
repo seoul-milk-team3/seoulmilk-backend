@@ -22,12 +22,8 @@ public interface AuthApi {
                     description = "회원가입이 성공적으로 완료되었습니다."
             ),
             @ApiResponse(
-                    responseCode = "208",
-                    description = "The employee ID already exists."
-            ),
-            @ApiResponse(
-                    responseCode = "208",
-                    description = "The email already exists."
+                    responseCode = "409",
+                    description = "회원 정보가 중복됩니다."
             )
     })
     SuccessResponse<String> signUpOffice(OfficeSignUpRequest request);
@@ -42,12 +38,8 @@ public interface AuthApi {
                     description = "회원가입이 성공적으로 완료되었습니다."
             ),
             @ApiResponse(
-                    responseCode = "208",
-                    description = "The employee ID already exists."
-            ),
-            @ApiResponse(
-                    responseCode = "208",
-                    description = "The email already exists."
+                    responseCode = "409",
+                    description = "회원 정보가 중복됩니다."
             )
     })
     SuccessResponse<String> signUpBranch(BranchSignUpRequest request);
