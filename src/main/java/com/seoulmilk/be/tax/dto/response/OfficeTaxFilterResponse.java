@@ -5,6 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record OfficeTaxFilterResponse(
+        Long id,
         String suId,
         String ipId,
         String transDate,

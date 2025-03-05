@@ -35,6 +35,7 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
         try {
             List<OfficeTaxFilterResponse> result = jpaQueryFactory
                     .select(Projections.constructor(OfficeTaxFilterResponse.class,
+                            ntsTax.id,
                             ntsTax.suId,
                             ntsTax.ipId,
                             ntsTax.transDate,
