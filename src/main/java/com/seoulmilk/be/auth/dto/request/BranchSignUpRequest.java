@@ -7,14 +7,14 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Schema(description = "대리점 회원가입 요청 DTO")
 @Builder
 public record BranchSignUpRequest(
         @NotBlank
-        String name,
-
-        @Schema(description = "사번입니다.")
-        @NotBlank
         String employeeId,
+
+        @NotBlank
+        String phoneNo,
 
         @NotBlank
         String password,
@@ -24,8 +24,8 @@ public record BranchSignUpRequest(
 ) {
     public User toBranchUser(PasswordEncoder passwordEncoder) {
         return User.builder()
-                .name(this.name)
                 .employeeId(this.employeeId)
+                .phoneNo(this.phoneNo)
                 .password(passwordEncoder.encode(this.password))
                 .email(this.email)
                 .role(Role.BRANCH)

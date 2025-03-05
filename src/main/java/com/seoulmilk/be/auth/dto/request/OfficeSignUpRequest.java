@@ -8,13 +8,14 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Schema(description = "본사 직원 회원가입 요청 DTO")
 @Builder
 public record OfficeSignUpRequest (
         @Schema(description = "본명이어야 합니다.")
         @NotBlank
         String name,
 
-        @Schema(description = "사번입니다.")
+        @Schema(description = "사번")
         @NotBlank
         String employeeId,
 
@@ -34,7 +35,7 @@ public record OfficeSignUpRequest (
         @NotBlank
         Telecom telecom,
 
-        @Schema(description = "ADMIN: 관리자, OFFICE: 본사 직원, BRANCH: 대리점 직원")
+        @Schema(description = "ADMIN: 관리자, OFFICE: 본사 직원", defaultValue = "OFFICE")
         @NotBlank
         Role role
 ) {
