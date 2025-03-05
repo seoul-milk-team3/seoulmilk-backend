@@ -30,6 +30,9 @@ import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefRespo
 @Service
 @RequiredArgsConstructor
 public class TaxValidationService {
+    private static final String RESPONSE_DATA = "data";
+    private static final String RESPONSE_RESULT = "result";
+
     @Value("${api.codef.url}")
     private String productUrl;
 
@@ -49,7 +52,8 @@ public class TaxValidationService {
         validateResponse(responseMap);
 
         if (isSimpleAuthenticationResponse(responseMap)) {
-            codefApiCacheService.saveCodefResponse(user.getCodefId(), (Map<String, Object>) responseMap.get("data"));
+            codefApiCacheService.saveCodefResponse(user.getCodefId(),
+                    (Map<String, Object>) responseMap.get(RESPONSE_DATA));
         }
     }
 
@@ -61,10 +65,10 @@ public class TaxValidationService {
 
         Map<String, Object> responseMap = parseResponse(response);
 
-        if (!(responseMap.get("data") instanceof Map)) {
+        if (!(responseMap.get(RESPONSE_DATA) instanceof Map)) {
             throw new TaxValidationException(INVALID_RESPONSE_FORMAT);
         }
-        Map<String, Object> dataMap = (Map<String, Object>) responseMap.get("data");
+        Map<String, Object> dataMap = (Map<String, Object>) responseMap.get(RESPONSE_DATA);
         return new InvoiceVerificationResponse(dataMap.get("resAuthenticity").toString());
     }
 
@@ -115,17 +119,17 @@ public class TaxValidationService {
     }
 
     private void validateResponse(Map<String, Object> responseMap) {
-        if (!(responseMap.get("result") instanceof Map) || !(responseMap.get("data") instanceof Map)) {
+        if (!(responseMap.get(RESPONSE_RESULT) instanceof Map) || !(responseMap.get(RESPONSE_DATA) instanceof Map)) {
             throw new TaxValidationException(INVALID_RESPONSE_FORMAT);
         }
-        Map<String, Object> dataMap = (Map<String, Object>) responseMap.get("data");
+        Map<String, Object> dataMap = (Map<String, Object>) responseMap.get(RESPONSE_DATA);
         if (!dataMap.containsKey("continue2Way")) {
             throw new TaxValidationException(CODEF_API_ERROR);
         }
     }
 
     private boolean isSimpleAuthenticationResponse(Map<String, Object> responseMap) {
-        Map<String, Object> resultMap = (Map<String, Object>) responseMap.get("result");
+        Map<String, Object> resultMap = (Map<String, Object>) responseMap.get(RESPONSE_RESULT);
         return SIMPLE_AUTHENTICATION_RESPONSE.isEqual(resultMap.get(CODE.getParamName()).toString());
     }
 

@@ -18,6 +18,7 @@ public class EasyCodefRequestFactory {
     private static final String ORGANIZATION_CODE = "0004";
     private static final String LOGIN_TYPE_CODE = "5";
     private static final String LOGIN_TYPE_LEVEL_CODE = "1";
+    private static final String BAR = "-";
 
 
     public HashMap<String, Object> createValidationRequest(User user, NtsTax ntsTax) {
@@ -47,8 +48,8 @@ public class EasyCodefRequestFactory {
 
     private HashMap<String, Object> createNtsTaxRequest(NtsTax ntsTax) {
         HashMap<String, Object> request = new HashMap<>();
-        request.put(SUPPLIER_REG_NUMBER.getParamName(), ntsTax.getSuId());
-        request.put(CONTRACTOR_REG_NUMBER.getParamName(), ntsTax.getIpId());
+        request.put(SUPPLIER_REG_NUMBER.getParamName(), ntsTax.getSuId().replace(BAR, ""));
+        request.put(CONTRACTOR_REG_NUMBER.getParamName(), ntsTax.getIpId().replace(BAR, ""));
         request.put(APPROVAL_NO.getParamName(), ntsTax.getIssueId());
         request.put(REPORTING_DATE.getParamName(), ntsTax.getIssueDate());
         request.put(SUPPLY_VALUE.getParamName(), ntsTax.getChargeTotal().toString());
