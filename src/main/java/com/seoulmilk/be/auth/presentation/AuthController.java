@@ -2,10 +2,11 @@ package com.seoulmilk.be.auth.presentation;
 
 
 import com.seoulmilk.be.auth.dto.request.LoginRequest;
+import com.seoulmilk.be.auth.dto.request.OfficeSignUpRequest;
 import com.seoulmilk.be.auth.presentation.api.AuthApi;
 import com.seoulmilk.be.auth.service.AuthService;
 import com.seoulmilk.be.global.dto.SuccessResponse;
-import com.seoulmilk.be.auth.dto.request.SignUpRequest;
+import com.seoulmilk.be.auth.dto.request.BranchSignUpRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,18 @@ public class AuthController implements AuthApi {
     private final AuthService authService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/sign-up")
+    @PostMapping("/office/sign-up")
     @Override
-    public SuccessResponse<String> signUp(@RequestBody SignUpRequest request) {
-        authService.signUp(request);
+    public SuccessResponse<String> signUpOffice(@RequestBody OfficeSignUpRequest request) {
+        authService.signUpOffice(request);
+        return SuccessResponse.of(SIGN_UP_SUCCESS);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/branch/sign-up")
+    @Override
+    public SuccessResponse<String> signUpBranch(@RequestBody BranchSignUpRequest request) {
+        authService.signUpBranch(request);
         return SuccessResponse.of(SIGN_UP_SUCCESS);
     }
 

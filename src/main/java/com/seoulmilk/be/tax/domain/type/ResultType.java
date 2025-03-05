@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ResultType {
     NORMAL("1"),
-    ABNORMAL("2"),
+    ABNORMAL("0"),
     ALL(""),
     ;
 

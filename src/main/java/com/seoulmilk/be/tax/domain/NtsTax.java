@@ -276,4 +276,12 @@ public class NtsTax extends BaseTimeEntity {
         this.payStatus = payStatus;
         this.payDate = payDate;
     }
+
+    public void updateIsNormal(String isNormal) {
+        if (isNormal.equals("1")) {
+            this.isNormal = ResultType.NORMAL;
+            return;
+        }
+        this.isNormal = ResultType.ABNORMAL;
+    }
 }

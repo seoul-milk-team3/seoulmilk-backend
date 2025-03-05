@@ -11,6 +11,7 @@ public enum SuccessCode {
     SAVE_TAX_SUCCESS(201, "세금계산서가 성공적으로 저장되었습니다."),
     ANALYZE_TAX_SUCCESS(200, "세금계산서가 성공적으로 분석되었습니다."),
     OFFICE_TAX_FILTER_SUCCESS(200, "본사 세금계산서 필터링이 성공적으로 완료되었습니다."),
+    VALIDATE_TAX_INVOICE_SUCCESS(200, "세금계산서 검증이 성공적으로 요청되었습니다."),
     ;
 
 

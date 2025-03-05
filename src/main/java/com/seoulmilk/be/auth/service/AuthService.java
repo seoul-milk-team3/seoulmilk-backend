@@ -1,11 +1,12 @@
 package com.seoulmilk.be.auth.service;
 
 import com.seoulmilk.be.auth.dto.request.LoginRequest;
+import com.seoulmilk.be.auth.dto.request.OfficeSignUpRequest;
 import com.seoulmilk.be.auth.exception.ExistUserException;
 import com.seoulmilk.be.global.jwt.application.JwtService;
 import com.seoulmilk.be.global.jwt.refresh.application.RefreshTokenService;
 import com.seoulmilk.be.user.domain.User;
-import com.seoulmilk.be.auth.dto.request.SignUpRequest;
+import com.seoulmilk.be.auth.dto.request.BranchSignUpRequest;
 import com.seoulmilk.be.user.exception.UserNotFoundException;
 import com.seoulmilk.be.user.persistence.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,8 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.seoulmilk.be.auth.exception.errorCode.AuthErrorCode.EXIST_EMAIL;
-import static com.seoulmilk.be.auth.exception.errorCode.AuthErrorCode.EXIST_EMPLOYEE_ID;
+import static com.seoulmilk.be.auth.exception.errorcode.AuthErrorCode.EXIST_EMAIL;
+import static com.seoulmilk.be.auth.exception.errorcode.AuthErrorCode.EXIST_EMPLOYEE_ID;
 import static com.seoulmilk.be.user.exception.errorCode.UserErrorCode.USER_NOT_FOUND;
 
 @Service
@@ -39,16 +40,28 @@ public class AuthService {
     private String accessHeader;
 
     @Transactional
-    public void signUp(SignUpRequest request) {
-        if (userRepository.existsByEmployeeId(request.employeeId())) {
+    public void signUpOffice(OfficeSignUpRequest request) {
+        validateUniqueUser(request.employeeId(), request.email());
+
+        User user = request.toOfficeUser(passwordEncoder);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void signUpBranch(BranchSignUpRequest request) {
+        validateUniqueUser(request.employeeId(), request.email());
+
+        User user = request.toBranchUser(passwordEncoder);
+        userRepository.save(user);
+    }
+
+    private void validateUniqueUser(String employeeId, String email) {
+        if (userRepository.existsByEmployeeId(employeeId)) {
             throw new ExistUserException(EXIST_EMPLOYEE_ID);
         }
-        if (userRepository.existsByEmail(request.email())) {
+        if (userRepository.existsByEmail(email)) {
             throw new ExistUserException(EXIST_EMAIL);
         }
-
-        User user = request.toUser(passwordEncoder);
-        userRepository.save(user);
     }
 
     @Transactional

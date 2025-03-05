@@ -80,6 +80,19 @@ dependencies {
 
 	//s3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	//codef
+	implementation 'io.codef.api:easycodef-java:1.0.6'
+
+	//guava
+	implementation 'com.google.guava:guava:32.1.2-jre'
+
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//mac os
+	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.100.Final:osx-aarch_64'
+
 }
 
 tasks.named('test') {
