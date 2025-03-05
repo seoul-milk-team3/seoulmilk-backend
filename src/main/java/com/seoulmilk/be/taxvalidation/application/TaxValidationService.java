@@ -42,11 +42,11 @@ public class TaxValidationService {
     private final EasyCodefRequestFactory easyCodefRequestFactory;
     private final CodefApiCacheService codefApiCacheService;
 
-    public void validateInvoicePreVerified(Long taxId) {
+    public void validateInvoicePreVerified(Long taxId, String loginTypeLevel) {
         User user = authService.getLoginUser();
         NtsTax ntsTax = getNtsTaxById(taxId);
 
-        String response = requestCodefApi(user, ntsTax);
+        String response = requestCodefApi(user, ntsTax, loginTypeLevel);
         Map<String, Object> responseMap = parseResponse(response);
 
         validateResponse(responseMap);
@@ -57,11 +57,11 @@ public class TaxValidationService {
         }
     }
 
-    public InvoiceVerificationResponse validateInvoicePostVerified(Long taxId) {
+    public InvoiceVerificationResponse validateInvoicePostVerified(Long taxId, String loginTypeLevel) {
         User user = authService.getLoginUser();
         NtsTax ntsTax = getNtsTaxById(taxId);
 
-        String response = requestCodefApiWith2Way(user, ntsTax);
+        String response = requestCodefApiWith2Way(user, ntsTax, loginTypeLevel);
 
         Map<String, Object> responseMap = parseResponse(response);
 
@@ -69,7 +69,7 @@ public class TaxValidationService {
             throw new TaxValidationException(INVALID_RESPONSE_FORMAT);
         }
         Map<String, Object> dataMap = (Map<String, Object>) responseMap.get(RESPONSE_DATA);
-        return new InvoiceVerificationResponse(dataMap.get("resAuthenticity").toString());
+        return new InvoiceVerificationResponse(dataMap.get(RES_AUTHENTICITY.getParamName()).toString());
     }
 
     private NtsTax getNtsTaxById(Long taxId) {
@@ -77,12 +77,12 @@ public class TaxValidationService {
                 .orElseThrow(() -> new NtsTaxNotFoundException(NTS_TAX_NOT_FOUND));
     }
 
-    private String requestCodefApi(User user, NtsTax ntsTax) {
+    private String requestCodefApi(User user, NtsTax ntsTax, String loginTypeLevel) {
         EasyCodef codef = easyCodefProvider.getEasyCodef();
 
         try {
             return codef.requestProduct(productUrl, EasyCodefServiceType.DEMO,
-                    easyCodefRequestFactory.createValidationRequest(user, ntsTax));
+                    easyCodefRequestFactory.createValidationRequest(user, ntsTax, loginTypeLevel));
         } catch (UnsupportedEncodingException e) {
             throw new TaxValidationException(UNSUPPORTED_ENCODING_ERROR);
         } catch (JsonProcessingException e) {
@@ -92,12 +92,12 @@ public class TaxValidationService {
         }
     }
 
-    private String requestCodefApiWith2Way(User user, NtsTax ntsTax) {
+    private String requestCodefApiWith2Way(User user, NtsTax ntsTax, String loginTypeLevel) {
         EasyCodef codef = easyCodefProvider.getEasyCodef();
 
         try {
-            HashMap<String, Object> body = easyCodefRequestFactory.createValidationRequest(user, ntsTax);
-            body.putAll(Map.of("simpleAuth", "1", IS_2_WAY.getParamName(), true));
+            HashMap<String, Object> body = easyCodefRequestFactory.createValidationRequest(user, ntsTax, loginTypeLevel);
+            body.putAll(Map.of(SIMPLE_AUTH.getParamName(), "1", IS_2_WAY.getParamName(), true));
             body.put(TWO_WAY_INFO.getParamName(), codefApiCacheService.getTwoWayInfo(user.getCodefId()));
             codefApiCacheService.removeTwoWayInfo(user.getCodefId());
             return codef.requestCertification(productUrl, EasyCodefServiceType.DEMO, body);

@@ -27,6 +27,7 @@ public enum CodefParameter {
     TWO_WAY_TIMESTAMP("twoWayTimestamp"),
     SIMPLE_AUTH("simpleAuth"),
     IS_2_WAY("is2Way"),
+    RES_AUTHENTICITY("resAuthenticity"),
     ;
 
     private final String paramName;

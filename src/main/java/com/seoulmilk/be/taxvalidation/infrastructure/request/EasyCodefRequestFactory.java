@@ -17,22 +17,21 @@ import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParam
 public class EasyCodefRequestFactory {
     private static final String ORGANIZATION_CODE = "0004";
     private static final String LOGIN_TYPE_CODE = "5";
-    private static final String LOGIN_TYPE_LEVEL_CODE = "1";
     private static final String BAR = "-";
 
 
-    public HashMap<String, Object> createValidationRequest(User user, NtsTax ntsTax) {
-        HashMap<String, Object> request = new HashMap<>(createDefaultRequest());
+    public HashMap<String, Object> createValidationRequest(User user, NtsTax ntsTax, String loginTypeLevel) {
+        HashMap<String, Object> request = new HashMap<>(createDefaultRequest(loginTypeLevel));
         request.putAll(createUserRequest(user));
         request.putAll(createNtsTaxRequest(ntsTax));
         return request;
     }
 
-    private HashMap<String, Object> createDefaultRequest() {
+    private HashMap<String, Object> createDefaultRequest(String loginTypeLevel) {
         HashMap<String, Object> request = new HashMap<>();
         request.put(ORGANIZATION.getParamName(), ORGANIZATION_CODE);
         request.put(LOGIN_TYPE.getParamName(), LOGIN_TYPE_CODE);
-        request.put(LOGIN_TYPE_LEVEL.getParamName(), LOGIN_TYPE_LEVEL_CODE);
+        request.put(LOGIN_TYPE_LEVEL.getParamName(), loginTypeLevel);
         return request;
     }
 

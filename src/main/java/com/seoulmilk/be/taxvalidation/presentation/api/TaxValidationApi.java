@@ -23,7 +23,10 @@ public interface TaxValidationApi {
     })
     SuccessResponse<String> validateInvoicePreVerified(
             @Parameter(in = ParameterIn.PATH, description = "세금계산서 ID", required = true)
-            Long taxId
+            Long taxId,
+            @Parameter(in = ParameterIn.PATH, description = "간편 인증 방법 (1:카카오톡, 2:페이코, 3:삼성패스, 4:KB모바일, " +
+                    "5:통신사(PASS), 6:네이버, 7:신한인증서, 8: toss, 9: 뱅크샐러드)", required = true)
+            String loginTypeLevel
     );
 
     @Operation(
@@ -38,6 +41,9 @@ public interface TaxValidationApi {
     })
     SuccessResponse<InvoiceVerificationResponse> validateInvoicePostVerified(
             @Parameter(in = ParameterIn.PATH, description = "세금계산서 ID", required = true)
-            Long taxId
+            Long taxId,
+            @Parameter(in = ParameterIn.PATH, description = "간편 인증 방법 (1:카카오톡, 2:페이코, 3:삼성패스, 4:KB모바일, " +
+                    "5:통신사(PASS), 6:네이버, 7:신한인증서, 8: toss, 9: 뱅크샐러드)", required = true)
+            String loginTypeLevel
     );
 }
