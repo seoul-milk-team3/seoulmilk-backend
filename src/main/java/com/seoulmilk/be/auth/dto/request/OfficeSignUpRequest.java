@@ -22,12 +22,14 @@ public record OfficeSignUpRequest (
         @NotBlank
         String password,
 
+        @Schema(defaultValue = "yeonjy@seoul.com")
         @NotBlank
         String email,
 
+        @Schema(defaultValue = "01022223333")
         @NotBlank
         String phoneNo,
-        @Schema(description = "생년월일 입니다. (형식: YYYYMMDD)")
+        @Schema(description = "생년월일 입니다. (형식: YYYYMMDD)", defaultValue = "19940227")
         @NotBlank
         String birthday,
 

@@ -13,12 +13,14 @@ public record BranchSignUpRequest(
         @NotBlank
         String employeeId,
 
+        @Schema(defaultValue = "01022223333")
         @NotBlank
         String phoneNo,
 
         @NotBlank
         String password,
 
+        @Schema(defaultValue = "yeonjy@seoul.com")
         @NotBlank
         String email
 ) {
