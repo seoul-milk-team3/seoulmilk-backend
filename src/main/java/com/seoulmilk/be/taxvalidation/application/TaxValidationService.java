@@ -6,6 +6,7 @@ import com.seoulmilk.be.auth.service.AuthService;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
+import com.seoulmilk.be.taxvalidation.dto.request.CodefRequest;
 import com.seoulmilk.be.taxvalidation.dto.response.InvoiceVerificationResponse;
 import com.seoulmilk.be.taxvalidation.exception.TaxValidationException;
 import com.seoulmilk.be.taxvalidation.infrastructure.auth.EasyCodefProvider;
@@ -22,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.seoulmilk.be.tax.domain.type.ResultType.NORMAL;
 import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_NOT_FOUND;
 import static com.seoulmilk.be.taxvalidation.exception.errorcode.TaxValidationErrorCode.*;
 import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParameter.*;
@@ -78,29 +80,28 @@ public class TaxValidationService {
     }
 
     private String requestCodefApi(User user, NtsTax ntsTax, String loginTypeLevel) {
-        EasyCodef codef = easyCodefProvider.getEasyCodef();
-
-        try {
-            return codef.requestProduct(productUrl, EasyCodefServiceType.DEMO,
-                    easyCodefRequestFactory.createValidationRequest(user, ntsTax, loginTypeLevel));
-        } catch (UnsupportedEncodingException e) {
-            throw new TaxValidationException(UNSUPPORTED_ENCODING_ERROR);
-        } catch (JsonProcessingException e) {
-            throw new TaxValidationException(JSON_PROCESSING_ERROR);
-        } catch (InterruptedException e) {
-            throw new TaxValidationException(INTERRUPTED_ERROR);
-        }
+        return requestCodef(new CodefRequest(user, ntsTax, loginTypeLevel, false));
     }
 
     private String requestCodefApiWith2Way(User user, NtsTax ntsTax, String loginTypeLevel) {
+        return requestCodef(new CodefRequest(user, ntsTax, loginTypeLevel, true));
+    }
+
+    private String requestCodef(CodefRequest request) {
         EasyCodef codef = easyCodefProvider.getEasyCodef();
+        HashMap<String, Object> body = easyCodefRequestFactory.createValidationRequest(request.user(), request.ntsTax(), request.loginTypeLevel());
+
+        if (request.isTwoWay()) {
+            body.putAll(Map.of(SIMPLE_AUTH.getParamName(), NORMAL.getValue(), IS_2_WAY.getParamName(), true));
+            body.put(TWO_WAY_INFO.getParamName(), codefApiCacheService.getTwoWayInfo(request.user().getCodefId()));
+            codefApiCacheService.removeTwoWayInfo(request.user().getCodefId());
+        }
 
         try {
-            HashMap<String, Object> body = easyCodefRequestFactory.createValidationRequest(user, ntsTax, loginTypeLevel);
-            body.putAll(Map.of(SIMPLE_AUTH.getParamName(), "1", IS_2_WAY.getParamName(), true));
-            body.put(TWO_WAY_INFO.getParamName(), codefApiCacheService.getTwoWayInfo(user.getCodefId()));
-            codefApiCacheService.removeTwoWayInfo(user.getCodefId());
-            return codef.requestCertification(productUrl, EasyCodefServiceType.DEMO, body);
+            if (request.isTwoWay()) {
+                return codef.requestCertification(productUrl, EasyCodefServiceType.DEMO, body);
+            }
+            return codef.requestProduct(productUrl, EasyCodefServiceType.DEMO, body);
         } catch (UnsupportedEncodingException e) {
             throw new TaxValidationException(UNSUPPORTED_ENCODING_ERROR);
         } catch (JsonProcessingException e) {
