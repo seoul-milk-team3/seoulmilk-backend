@@ -1,8 +1,7 @@
 package com.seoulmilk.be.auth.presentation.api;
 
-import com.seoulmilk.be.auth.dto.request.BranchSignUpRequest;
-import com.seoulmilk.be.auth.dto.request.LoginRequest;
-import com.seoulmilk.be.auth.dto.request.OfficeSignUpRequest;
+import com.seoulmilk.be.auth.dto.request.*;
+import com.seoulmilk.be.auth.dto.response.PasswordChangeResponse;
 import com.seoulmilk.be.global.dto.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -48,11 +47,11 @@ public interface AuthApi {
             summary = "로그인",
             description = "사용자의 사번과 비밀번호를 입력받아 로그인합니다." + "\n" +
                     """
-                    예시) 테스트 계정 
-                    - 사번: test1
-                    - 비밀번호: 1234
-                    - 권한 : 관리자
-                            """
+                            예시) 테스트 계정 
+                            - 사번: test1
+                            - 비밀번호: 1234
+                            - 권한 : 관리자
+                                    """
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -65,4 +64,41 @@ public interface AuthApi {
             )
     })
     SuccessResponse<String> login(LoginRequest request, HttpServletResponse response);
+
+
+    @Operation(
+            summary = "비밀번호 변경을 위한 이메일 요청",
+            description = "사용자의 이메일을 입력받아 비밀번호 변경 이메일을 송신합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "비밀번호 재설정 이메일이 성공적으로 전송되었습니다."
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "이메일 인코딩이 실패했습니다."
+            )
+    })
+    SuccessResponse<PasswordChangeResponse> sendPasswordChangeEmail(PasswordChangeRequest request);
+
+    @Operation(
+            summary = "비밀번호 변경",
+            description = "비밀번호를 변경합니다. 사용자가 받은 이메일에 비밀번호 변경 링크가 있습니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "비밀번호 재설정 이메일이 성공적으로 전송되었습니다."
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "UUID가 유효하지 않습니다."
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "해당 유저가 존재하지 않습니다."
+            )
+    })
+    SuccessResponse<String> changePassword(NewPasswordRequest request);
 }
