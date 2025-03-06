@@ -140,6 +140,7 @@ public class TaxValidationService {
     public void updateNtsTaxIsNormal(Long taxId, String isNormal) {
         NtsTax ntsTax = getNtsTaxById(taxId);
         ntsTax.updateIsNormal(isNormal);
+        ntsTax.updateIsValidated("1");  // 진위 여부 검증 완료 상태로 변경
     }
 }
 

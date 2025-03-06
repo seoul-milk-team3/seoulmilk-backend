@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.seoulmilk.be.tax.domain.QNtsTax.ntsTax;
-import static com.seoulmilk.be.user.domain.QUser.user;
 
 @Slf4j
 @Repository
@@ -30,38 +29,33 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                                                                 String region,
                                                                 String searchSupplierName,
                                                                 String resultType,
+                                                                String isValidated,
                                                                 Pageable pageable) {
 
-        try {
-            List<OfficeTaxFilterResponse> result = jpaQueryFactory
-                    .select(Projections.constructor(OfficeTaxFilterResponse.class,
-                            ntsTax.id,
-                            ntsTax.suId,
-                            ntsTax.ipId,
-                            ntsTax.transDate,
-                            ntsTax.suName,
-                            ntsTax.suAddr,
-                            ntsTax.isNormal))
-                    .from(ntsTax)
-                    .orderBy(ntsTax.id.desc())
-                    .where(
-                            filterByRegion(region),
-                            filterBySupplierName(searchSupplierName),
-                            filterByResultType(resultType),
-                            filterByYearAndMonth(startYearAndMonth, endYearAndMonth)
-                    )
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
-                    .fetch();
-
-            log.info("Query executed, result size: {}", result.size());
-            return result;
-
-        } catch (Exception e) {
-            log.error("Error executing query", e);
-        }
-
-        return null;
+        return jpaQueryFactory
+                .select(Projections.constructor(OfficeTaxFilterResponse.class,
+                        ntsTax.id,
+                        ntsTax.suId,
+                        ntsTax.ipId,
+                        ntsTax.transDate,
+                        ntsTax.suName,
+                        ntsTax.suAddr,
+                        ntsTax.isNormal,
+                        ntsTax.isValidated,
+                        ntsTax.createdDateTime
+                        ))
+                .from(ntsTax)
+                .orderBy(ntsTax.id.desc())
+                .where(
+                        filterByIsValidated(isValidated),
+                        filterByRegion(region),
+                        filterBySupplierName(searchSupplierName),
+                        filterByResultType(resultType),
+                        filterByYearAndMonth(startYearAndMonth, endYearAndMonth)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
     }
 
     private BooleanExpression filterByRegion(String region) {
@@ -94,10 +88,23 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
         if (ObjectUtils.isEmpty(startYearAndMonth) || ObjectUtils.isEmpty(endYearAndMonth)) {
             return null;
         } else {
-            return ntsTax.transDate.between(
-                    startYearAndMonth.toString(),
-                    (endYearAndMonth.plusDays(1)).toString()
-            );
+
+            return ntsTax.createdDateTime.after(startYearAndMonth.atStartOfDay())
+                    .and(ntsTax.createdDateTime.before(endYearAndMonth.plusDays(1).atStartOfDay()));
+
+            //TODO: 일자 기준 필터링의 필드가 transDate 인지 createdTime 인지 확인 하고 주석 삭제 예정
+//            return ntsTax.transDate.between(
+//                    startYearAndMonth.toString(),
+//                    (endYearAndMonth.plusDays(1)).toString()
+//            );
+        }
+    }
+
+    private BooleanExpression filterByIsValidated(String isValidated) {
+        if (ObjectUtils.isEmpty(isValidated)) {
+            return ntsTax.isValidated.ne(isValidated);
+        } else {
+            return ntsTax.isValidated.eq(isValidated);
         }
     }
 }

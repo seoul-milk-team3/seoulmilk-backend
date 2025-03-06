@@ -86,6 +86,9 @@ public class NtsTax extends BaseTimeEntity {
     @Column(name = "PAY_DATE", length = 12)
     private String payDate;  // 지급일자
 
+    @Column(name = "IS_VALIDATED", length = 1)
+    private String isValidated;  // 진위 확인 여부
+
     @Transient
     @Column(name = "INTER_NO", length = 24)
     private String interNo;  // 사업자 관리번호
@@ -220,7 +223,7 @@ public class NtsTax extends BaseTimeEntity {
 
 
     @Builder
-    public NtsTax(User user, String issueId, Arap arap, String issueDt, String issueDate, String interNo, String aspCode, TypeCode typeCode, PurpCode purpCode, AmendCode amendCode, String descText1, String descText2, String descText3, String suId, String suMin, String suName, String suRepres, String suAddr, String suBustype, String suIndtype, String suDeptname, String suPersname, String suTelno, String suHpno, String suEmail, IpTypeCode ipTypecode, String ipId, String ipMin, String ipName, String ipRepres, String ipAddr, String ipBustype, String ipIndtype, String ipDeptname1, String ipPersname1, String ipTelno1, String ipHpno1, String ipEmail1, String ipDeptname2, String ipPersname2, String ipTelno2, String ipHpno2, String ipEmail2, Long chargeTotal, Long taxTotal, Long grandTotal, String ernam, String transDate, ResultType isNormal, String imageUrl, PayStatus payStatus, String payDate) {
+    public NtsTax(User user, String issueId, Arap arap, String issueDt, String issueDate, String interNo, String aspCode, TypeCode typeCode, PurpCode purpCode, AmendCode amendCode, String descText1, String descText2, String descText3, String suId, String suMin, String suName, String suRepres, String suAddr, String suBustype, String suIndtype, String suDeptname, String suPersname, String suTelno, String suHpno, String suEmail, IpTypeCode ipTypecode, String ipId, String ipMin, String ipName, String ipRepres, String ipAddr, String ipBustype, String ipIndtype, String ipDeptname1, String ipPersname1, String ipTelno1, String ipHpno1, String ipEmail1, String ipDeptname2, String ipPersname2, String ipTelno2, String ipHpno2, String ipEmail2, Long chargeTotal, Long taxTotal, Long grandTotal, String ernam, String transDate, ResultType isNormal, String imageUrl, PayStatus payStatus, String payDate, String isValidated) {
         this.user = user;
         this.issueId = issueId;
         this.arap = arap;
@@ -275,6 +278,7 @@ public class NtsTax extends BaseTimeEntity {
         this.imageUrl = imageUrl;
         this.payStatus = payStatus;
         this.payDate = payDate;
+        this.isValidated = isValidated;
     }
 
     public void updateIsNormal(String isNormal) {
@@ -283,5 +287,10 @@ public class NtsTax extends BaseTimeEntity {
             return;
         }
         this.isNormal = ResultType.ABNORMAL;
+    }
+
+    // 진위 여부 확인 이후 검증 완료 변경 상태를 위한 메소드 (pr 리뷰 이후에 주석 지우고 merge 예정)
+    public void updateIsValidated(String isValidated) {
+        this.isValidated = isValidated;
     }
 }
