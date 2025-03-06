@@ -3,6 +3,7 @@ package com.seoulmilk.be.tax.presentation;
 import com.seoulmilk.be.global.dto.SuccessResponse;
 import com.seoulmilk.be.tax.application.NtsTaxService;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
+import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponse;
 import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.presentation.api.NtxTaxApi;
@@ -55,7 +56,7 @@ public class NtsTaxController implements NtxTaxApi {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size) {
 
-        List<OfficeTaxFilterResponse> response = ntsTaxService.findListBeforeValidateTax(page, size);
+        List<BeforeValidateTaxResponse> response = ntsTaxService.findListBeforeValidateTax(page, size);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

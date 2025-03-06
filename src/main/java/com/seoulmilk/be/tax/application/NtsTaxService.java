@@ -6,6 +6,7 @@ import com.seoulmilk.be.tax.application.ext.ClovaOcrProperties;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.dto.request.ClovaOcrRequest;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
+import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponse;
 import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,11 +63,11 @@ public class NtsTaxService {
                 );
     }
 
-    public List<OfficeTaxFilterResponse> findListBeforeValidateTax(int page,
-                                                                   int size) {
+    public List<BeforeValidateTaxResponse> findListBeforeValidateTax(int page,
+                                                                     int size) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
-        return ntsTaxRepository.findOfficeTaxByFilters(
+        List<OfficeTaxFilterResponse> results = ntsTaxRepository.findOfficeTaxByFilters(
                 null,
                 null,
                 null,
@@ -74,5 +76,9 @@ public class NtsTaxService {
                 "0",
                 pageable
         );
+
+        return results.stream()
+                .map(BeforeValidateTaxResponse::from)
+                .toList();
     }
 }
