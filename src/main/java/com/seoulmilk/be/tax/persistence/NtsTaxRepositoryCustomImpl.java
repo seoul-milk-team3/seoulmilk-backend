@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.seoulmilk.be.tax.domain.QNtsTax.ntsTax;
-import static com.seoulmilk.be.user.domain.QUser.user;
 
 @Slf4j
 @Repository

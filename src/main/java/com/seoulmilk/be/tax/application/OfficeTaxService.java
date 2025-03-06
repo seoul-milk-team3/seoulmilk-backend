@@ -1,7 +1,5 @@
 package com.seoulmilk.be.tax.application;
 
-import com.seoulmilk.be.global.exception.errorcode.ErrorCode;
-import com.seoulmilk.be.global.exception.errorcode.GlobalErrorCode;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxDetailResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;

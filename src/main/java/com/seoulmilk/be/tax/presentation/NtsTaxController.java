@@ -5,7 +5,6 @@ import com.seoulmilk.be.tax.application.NtsTaxService;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponse;
 import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
-import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.presentation.api.NtxTaxApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
