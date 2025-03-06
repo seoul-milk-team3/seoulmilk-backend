@@ -12,7 +12,7 @@ public record PasswordChangeRequest(
         @NotBlank
         String email,
 
-        @Schema(description = "대리점 / 본사 여부")
+        @Schema(description = "대리점(BRANCH) / 본사(OFFICE) 여부")
         @NotBlank
         Role role
 ) {
