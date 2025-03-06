@@ -33,38 +33,28 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                                                                 String isValidated,
                                                                 Pageable pageable) {
 
-        try {
-            List<OfficeTaxFilterResponse> result = jpaQueryFactory
-                    .select(Projections.constructor(OfficeTaxFilterResponse.class,
-                            ntsTax.id,
-                            ntsTax.suId,
-                            ntsTax.ipId,
-                            ntsTax.transDate,
-                            ntsTax.suName,
-                            ntsTax.suAddr,
-                            ntsTax.isNormal,
-                            ntsTax.isValidated))
-                    .from(ntsTax)
-                    .orderBy(ntsTax.id.desc())
-                    .where(
-                            filterByIsValidated(isValidated),
-                            filterByRegion(region),
-                            filterBySupplierName(searchSupplierName),
-                            filterByResultType(resultType),
-                            filterByYearAndMonth(startYearAndMonth, endYearAndMonth)
-                    )
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
-                    .fetch();
-
-            log.info("Query executed, result size: {}", result.size());
-            return result;
-
-        } catch (Exception e) {
-            log.error("Error executing query", e);
-        }
-
-        return null;
+        return jpaQueryFactory
+                .select(Projections.constructor(OfficeTaxFilterResponse.class,
+                        ntsTax.id,
+                        ntsTax.suId,
+                        ntsTax.ipId,
+                        ntsTax.transDate,
+                        ntsTax.suName,
+                        ntsTax.suAddr,
+                        ntsTax.isNormal,
+                        ntsTax.isValidated))
+                .from(ntsTax)
+                .orderBy(ntsTax.id.desc())
+                .where(
+                        filterByIsValidated(isValidated),
+                        filterByRegion(region),
+                        filterBySupplierName(searchSupplierName),
+                        filterByResultType(resultType),
+                        filterByYearAndMonth(startYearAndMonth, endYearAndMonth)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
     }
 
     private BooleanExpression filterByRegion(String region) {
