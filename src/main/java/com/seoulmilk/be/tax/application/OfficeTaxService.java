@@ -1,8 +1,11 @@
 package com.seoulmilk.be.tax.application;
 
+import com.seoulmilk.be.global.exception.errorcode.ErrorCode;
+import com.seoulmilk.be.global.exception.errorcode.GlobalErrorCode;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxDetailResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
+import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -36,7 +41,7 @@ public class OfficeTaxService {
     public OfficeTaxDetailResponse findOfficeTaxDetail (Long taxId) {
 
         NtsTax tax = ntsTaxRepository.findById(taxId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 세금계산서가 존재하지 않습니다."));
+                .orElseThrow(() -> new NtsTaxNotFoundException(NTS_TAX_NOT_FOUND));
 
         return OfficeTaxDetailResponse.of(tax);
     }
