@@ -15,9 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -31,18 +31,14 @@ public class NtsTaxService {
     private final ClovaOcrProperties clovaOcrProperties;
 
     public List<ClovaOcrResponse> analyzeTaxInvoices(List<MultipartFile> files) {
-        List<ClovaOcrResponse> responses = new ArrayList<>();
 
-        files.forEach(file -> {
-            ClovaOcrResponse ocrResult = clovaOcrClient.getOcrResult(
-                    clovaOcrProperties.secrets(),
-                    ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)
-            );
-
-            responses.add(ocrResult);
-        });
-
-        return responses;
+        return files.stream()
+                .map(file ->
+                        clovaOcrClient.getOcrResult(
+                                clovaOcrProperties.secrets(),
+                                ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)
+                        ))
+                .toList();
     }
 
     public void saveTaxInvoicesList(TaxInvoicesSaveRequestList requestList, List<MultipartFile> files) {
@@ -62,6 +58,7 @@ public class NtsTaxService {
                 );
     }
 
+    @Transactional(readOnly = true)
     public List<BeforeValidateTaxResponse> findListBeforeValidateTax(int page,
                                                                      int size) {
 

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +20,7 @@ import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_N
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class OfficeTaxService {
 
     private final NtsTaxRepository ntsTaxRepository;
@@ -37,7 +39,6 @@ public class OfficeTaxService {
     }
 
     public OfficeTaxDetailResponse findOfficeTaxDetail (Long taxId) {
-
         NtsTax tax = ntsTaxRepository.findById(taxId)
                 .orElseThrow(() -> new NtsTaxNotFoundException(NTS_TAX_NOT_FOUND));
 
