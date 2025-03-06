@@ -42,7 +42,8 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                         ntsTax.suAddr,
                         ntsTax.isNormal,
                         ntsTax.isValidated,
-                        ntsTax.createdDateTime))
+                        ntsTax.createdDateTime
+                        ))
                 .from(ntsTax)
                 .orderBy(ntsTax.id.desc())
                 .where(

@@ -3,7 +3,7 @@ package com.seoulmilk.be.tax.presentation;
 import com.seoulmilk.be.global.dto.SuccessResponse;
 import com.seoulmilk.be.tax.application.OfficeTaxService;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxDetailResponse;
-import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
+import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponseList;
 import com.seoulmilk.be.tax.presentation.api.OfficeTaxApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static com.seoulmilk.be.global.dto.SuccessCode.OFFICE_TAX_DETAIL_SUCCESS;
 import static com.seoulmilk.be.global.dto.SuccessCode.OFFICE_TAX_FILTER_SUCCESS;
@@ -35,13 +34,12 @@ public class OfficeTaxController implements OfficeTaxApi {
             @RequestParam(required = false) String searchSupplierName,
             @RequestParam(required = false) String resultType,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "8") int size)
-    {
-        List<OfficeTaxFilterResponse> response = officeTaxService.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, page, size);
+            @RequestParam(defaultValue = "8") int size) {
+        OfficeTaxFilterResponseList response = officeTaxService.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, page, size);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.of(OFFICE_TAX_FILTER_SUCCESS,response));
+                .body(SuccessResponse.of(OFFICE_TAX_FILTER_SUCCESS, response));
     }
 
     @GetMapping
@@ -52,6 +50,6 @@ public class OfficeTaxController implements OfficeTaxApi {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.of(OFFICE_TAX_DETAIL_SUCCESS,response));
+                .body(SuccessResponse.of(OFFICE_TAX_DETAIL_SUCCESS, response));
     }
 }

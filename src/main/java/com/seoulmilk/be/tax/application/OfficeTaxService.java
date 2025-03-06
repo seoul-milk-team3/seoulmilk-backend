@@ -3,6 +3,7 @@ package com.seoulmilk.be.tax.application;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxDetailResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
+import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponseList;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,17 +26,19 @@ public class OfficeTaxService {
 
     private final NtsTaxRepository ntsTaxRepository;
 
-    public List<OfficeTaxFilterResponse> findOfficeTaxByFilters(LocalDate startYearAndMonth,
-                                                                LocalDate endYearAndMonth,
-                                                                String region,
-                                                                String searchSupplierName,
-                                                                String resultType,
-                                                                int page,
-                                                                int size)
+    public OfficeTaxFilterResponseList findOfficeTaxByFilters(LocalDate startYearAndMonth,
+                                                              LocalDate endYearAndMonth,
+                                                              String region,
+                                                              String searchSupplierName,
+                                                              String resultType,
+                                                              int page,
+                                                              int size)
     {
         String isValidated = "1";
         Pageable pageable = PageRequest.of(page - 1, size);
-        return ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable);
+        List<OfficeTaxFilterResponse> result = ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable);
+
+        return OfficeTaxFilterResponseList.of(result, result.size());
     }
 
     public OfficeTaxDetailResponse findOfficeTaxDetail (Long taxId) {
