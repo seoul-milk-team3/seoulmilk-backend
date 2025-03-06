@@ -31,8 +31,8 @@ public record OfficeTaxDetailResponse(
                 .chargeTotal(ntsTax.getChargeTotal())
                 .grandTotal(ntsTax.getGrandTotal())
                 .taxTotal(ntsTax.getTaxTotal())
-                .createdDate(ntsTax.getCreatedTime().toLocalDate())
-                .createdTime(ntsTax.getCreatedTime().toLocalTime())
+                .createdDate(ntsTax.getCreatedDateTime().toLocalDate())
+                .createdTime(ntsTax.getCreatedDateTime().toLocalTime())
                 .imageUrl(ntsTax.getImageUrl())
                 .build();
     }

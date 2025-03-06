@@ -87,10 +87,15 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
         if (ObjectUtils.isEmpty(startYearAndMonth) || ObjectUtils.isEmpty(endYearAndMonth)) {
             return null;
         } else {
-            return ntsTax.transDate.between(    // TODO: 일자 field 가 transDate 인지 createdDate 인지 확인하기
-                    startYearAndMonth.toString(),
-                    (endYearAndMonth.plusDays(1)).toString()
-            );
+
+            return ntsTax.createdTime.after(startYearAndMonth.atStartOfDay())
+                    .and(ntsTax.createdTime.before(endYearAndMonth.plusDays(1).atStartOfDay()));
+
+            //TODO: 일자 기준 필터링의 필드가 transDate 인지 createdTime 인지 확인 하고 주석 삭제 예정
+//            return ntsTax.transDate.between(
+//                    startYearAndMonth.toString(),
+//                    (endYearAndMonth.plusDays(1)).toString()
+//            );
         }
     }
 
