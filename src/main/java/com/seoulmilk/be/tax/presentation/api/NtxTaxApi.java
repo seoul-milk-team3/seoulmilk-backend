@@ -41,4 +41,19 @@ public interface NtxTaxApi {
             @RequestPart TaxInvoicesSaveRequestList requestList,
             @RequestPart List<MultipartFile> files
     );
+
+    @Operation(
+            summary = "진위 여부 확인 전 리스트 조회",
+            description = "OCR 을 통해 분석되고, 진위 여부 확인 전의 세금 계산서 리스트를 확인합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "진위 여부 확인 전 리스트가 성공적으로 조회되었습니다."
+            )
+    })
+    ResponseEntity<?> findListBeforeValidateTax(
+            @RequestPart int page,
+            @RequestPart int size
+    );
 }

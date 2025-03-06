@@ -19,13 +19,13 @@ import static com.seoulmilk.be.global.dto.SuccessCode.OFFICE_TAX_FILTER_SUCCESS;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/tax-invoices")
+@RequestMapping("/tax-invoices/office")
 public class OfficeTaxController implements OfficeTaxApi {
 
     private final OfficeTaxService officeTaxService;
 
     @Override
-    @GetMapping("/office-filter")
+    @GetMapping("/filter")
     public ResponseEntity<?> findOfficeTaxByFilters(
             @RequestParam(required = false) LocalDate startYearAndMonth,
             @RequestParam(required = false) LocalDate endYearAndMonth,

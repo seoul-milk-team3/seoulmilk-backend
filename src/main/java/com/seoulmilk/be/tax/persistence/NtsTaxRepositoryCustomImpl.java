@@ -30,6 +30,7 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                                                                 String region,
                                                                 String searchSupplierName,
                                                                 String resultType,
+                                                                String isValidated,
                                                                 Pageable pageable) {
 
         try {
@@ -41,10 +42,12 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                             ntsTax.transDate,
                             ntsTax.suName,
                             ntsTax.suAddr,
-                            ntsTax.isNormal))
+                            ntsTax.isNormal,
+                            ntsTax.isValidated))
                     .from(ntsTax)
                     .orderBy(ntsTax.id.desc())
                     .where(
+                            filterByIsValidated(isValidated),
                             filterByRegion(region),
                             filterBySupplierName(searchSupplierName),
                             filterByResultType(resultType),
@@ -94,10 +97,18 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
         if (ObjectUtils.isEmpty(startYearAndMonth) || ObjectUtils.isEmpty(endYearAndMonth)) {
             return null;
         } else {
-            return ntsTax.transDate.between(
+            return ntsTax.transDate.between(    // TODO: 일자 field 가 transDate 인지 createdDate 인지 확인하기
                     startYearAndMonth.toString(),
                     (endYearAndMonth.plusDays(1)).toString()
             );
+        }
+    }
+
+    private BooleanExpression filterByIsValidated(String isValidated) {
+        if (ObjectUtils.isEmpty(isValidated)) {
+            return ntsTax.isValidated.ne(isValidated);
+        } else {
+            return ntsTax.isValidated.eq(isValidated);
         }
     }
 }

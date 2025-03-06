@@ -11,6 +11,7 @@ public record OfficeTaxFilterResponse(
         String transDate,
         String suName,
         String suAddr,
-        ResultType isNormal
+        ResultType isNormal,
+        String isValidated
 ) {
 }
