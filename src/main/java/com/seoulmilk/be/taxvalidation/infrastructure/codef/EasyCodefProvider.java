@@ -1,4 +1,4 @@
-package com.seoulmilk.be.taxvalidation.infrastructure.auth;
+package com.seoulmilk.be.taxvalidation.infrastructure.codef;
 
 import io.codef.api.EasyCodef;
 import lombok.RequiredArgsConstructor;

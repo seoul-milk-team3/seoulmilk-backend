@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum AuthErrorCode implements ErrorCode {
-    EXIST_EMPLOYEE_ID(HttpStatus.ALREADY_REPORTED, "The employee ID already exists."),
-    EXIST_EMAIL(HttpStatus.ALREADY_REPORTED, "The email already exists."),
+    EXIST_EMPLOYEE_ID(HttpStatus.CONFLICT, "The employee ID already exists."),
+    EXIST_EMAIL(HttpStatus.CONFLICT, "The email already exists."),
     ;
 
     private final HttpStatus httpStatus;

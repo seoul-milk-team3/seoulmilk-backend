@@ -9,7 +9,7 @@ import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import com.seoulmilk.be.taxvalidation.dto.request.CodefRequest;
 import com.seoulmilk.be.taxvalidation.dto.response.InvoiceVerificationResponse;
 import com.seoulmilk.be.taxvalidation.exception.TaxValidationException;
-import com.seoulmilk.be.taxvalidation.infrastructure.auth.EasyCodefProvider;
+import com.seoulmilk.be.taxvalidation.infrastructure.codef.EasyCodefProvider;
 import com.seoulmilk.be.taxvalidation.infrastructure.request.EasyCodefRequestFactory;
 import com.seoulmilk.be.user.domain.User;
 import io.codef.api.EasyCodef;
@@ -89,7 +89,8 @@ public class TaxValidationService {
 
     private String requestCodef(CodefRequest request) {
         EasyCodef codef = easyCodefProvider.getEasyCodef();
-        HashMap<String, Object> body = easyCodefRequestFactory.createValidationRequest(request.user(), request.ntsTax(), request.loginTypeLevel());
+        HashMap<String, Object> body = easyCodefRequestFactory.createValidationRequest(
+                request.user(), request.ntsTax(), request.loginTypeLevel());
 
         if (request.isTwoWay()) {
             body.putAll(Map.of(SIMPLE_AUTH.getParamName(), NORMAL.getValue(), IS_2_WAY.getParamName(), true));
