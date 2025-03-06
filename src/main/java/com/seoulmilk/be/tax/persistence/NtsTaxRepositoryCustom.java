@@ -13,5 +13,6 @@ public interface NtsTaxRepositoryCustom {
                                                           String region,
                                                           String searchSupplierName,
                                                           String resultType,
+                                                          String isValidated,
                                                           Pageable pageable);
 }

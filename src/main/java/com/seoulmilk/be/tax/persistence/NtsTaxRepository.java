@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NtsTaxRepository extends JpaRepository<NtsTax, Long> , NtsTaxRepositoryCustom {
-
 }

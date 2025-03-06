@@ -53,10 +53,11 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("대전광역시 더미동111-111")
                     .ipName("대전 더미사업")
                     .ipAddr("대전광역시 더미동222-222")
-                    .isNormal(ResultType.NORMAL)
+                    .isNormal(ResultType.ABNORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-08")
+                    .isValidated("1")
                     .build();
 
             NtsTax DUMMY_TAX2 = NtsTax.builder()
@@ -80,6 +81,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-09")
+                    .isValidated("1")
                     .build();
 
             NtsTax DUMMY_TAX3 = NtsTax.builder()
@@ -99,10 +101,11 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("광주광역시 더미동222-222")
                     .ipName("광주 더미사업")
                     .ipAddr("광주 더미동111-111")
-                    .isNormal(ResultType.ABNORMAL)
+                    .isNormal(ResultType.NORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-10")
+                    .isValidated("1")
                     .build();
 
             NtsTax DUMMY_TAX4 = NtsTax.builder()
@@ -122,10 +125,11 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("서울광역시 더미동222-222")
                     .ipName("서울 더미사업")
                     .ipAddr("서울 더미동222-222")
-                    .isNormal(ResultType.NORMAL)
+                    .isNormal(ResultType.ABNORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-11")
+                    .isValidated("0")
                     .build();
 
             NtsTax DUMMY_TAX5 = NtsTax.builder()
@@ -149,6 +153,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-12")
+                    .isValidated("0")
                     .build();
 
             NtsTax DUMMY_TAX6 = NtsTax.builder()
@@ -168,10 +173,11 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("대구광역시 더미동222-222")
                     .ipName("대구 더미사업")
                     .ipAddr("대구 더미동111-111")
-                    .isNormal(ResultType.NORMAL)
+                    .isNormal(ResultType.ABNORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-13")
+                    .isValidated("0")
                     .build();
 
             NtsTax DUMMY_TAX7 = NtsTax.builder()
@@ -195,6 +201,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-14")
+                    .isValidated("0")
                     .build();
 
             NtsTax DUMMY_TAX8 = NtsTax.builder()
@@ -214,10 +221,11 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .suAddr("경기도 더미동222-222")
                     .ipName("경기 더미사업")
                     .ipAddr("경기 더미동111-111")
-                    .isNormal(ResultType.NORMAL)
+                    .isNormal(ResultType.ABNORMAL)
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-15")
+                    .isValidated("0")
                     .build();
 
 

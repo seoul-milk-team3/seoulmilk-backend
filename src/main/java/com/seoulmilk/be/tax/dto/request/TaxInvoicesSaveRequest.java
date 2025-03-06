@@ -30,6 +30,7 @@ public record TaxInvoicesSaveRequest(
                 .ipId(fieldMap.getOrDefault("공급받는자 등록번호", "empty"))
                 .issueDate(fieldMap.getOrDefault("작성일자", "empty").replace("-", ""))
                 .imageUrl(imageUrl)
+                .isValidated("0")
                 //TODO: 추후에는 실제 데이터로 변경해야 함 : 개발에는 필요없는 회사 데이터 이므로 임시로 dummy 값으로 설정
                 .taxTotal(100L)
                 .grandTotal(100L)
