@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
 
-@Tag(name = "global", description = "global API")
+@Tag(name = "Global", description = "설정 확인을 위한 API")
 public interface globalApi {
 
     @Operation(

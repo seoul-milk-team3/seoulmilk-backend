@@ -25,49 +25,13 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class NtsTaxService {
+public class OfficeTaxService {
 
     private final NtsTaxRepository ntsTaxRepository;
-    private final SimpleStorageService simpleStorageService;
-    private final ClovaOcrClient clovaOcrClient;
-    private final ClovaOcrProperties clovaOcrProperties;
 
-    public List<ClovaOcrResponse> analyzeTaxInvoices(List<MultipartFile> files) {
-        List<ClovaOcrResponse> responses = new ArrayList<>();
-
-        files.forEach(file -> {
-            ClovaOcrResponse ocrResult = clovaOcrClient.getOcrResult(
-                    clovaOcrProperties.secrets(),
-                    ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)
-            );
-
-            responses.add(ocrResult);
-        });
-
-        log.info("responses: {}", responses);
-        return responses;
-    }
-
-    public void saveTaxInvoicesList(TaxInvoicesSaveRequestList requestList, List<MultipartFile> files) {
-
-        List<String> imageUrlList = files.stream()
-                .map(file -> simpleStorageService.uploadFile(file, "tax-invoices"))
-                .toList();
-
-        requestList.requests()
-                .forEach(request ->
-                        {
-                            String imageUrl = imageUrlList.get(requestList.requests().indexOf(request));
-                            NtsTax ntsTax = request.toNtsTax(request, imageUrl);
-
-                            ntsTaxRepository.save(ntsTax);
-                        }
-                );
-    }
-
-    public List<OfficeTaxFilterResponse> findOfficeTaxByFilters(LocalDate startYearAndMonth,
+    public List<OfficeTaxFilterResponse> findOfficeTaxByFilters(LocalDate startYearAndMonth,  
                                                                 LocalDate endYearAndMonth,
-                                                                String region,
+                                                                String region, 
                                                                 String searchSupplierName,
                                                                 String resultType,
                                                                 int page,
