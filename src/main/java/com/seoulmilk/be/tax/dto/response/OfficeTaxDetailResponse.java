@@ -1,5 +1,6 @@
 package com.seoulmilk.be.tax.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.Arap;
 import lombok.Builder;
@@ -18,6 +19,7 @@ public record OfficeTaxDetailResponse(
         Long grandTotal, //총액(공급가액 + 세액)
         Long taxTotal, //총 세액 합계
         LocalDate createdDate, //생성일
+        @JsonFormat(pattern = "HH:mm:ss")
         LocalTime createdTime,//생성시간
         String imageUrl
 ) {
