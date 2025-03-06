@@ -7,5 +7,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class TaxValidationException extends RuntimeException {
-    private final ErrorCode code;
+    private final ErrorCode errorCode;
 }
