@@ -33,11 +33,11 @@ public class OfficeTaxService {
         return ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable);
     }
 
-    public List<OfficeTaxDetailResponse> findOfficeTaxDetail (Long taxId) {
+    public OfficeTaxDetailResponse findOfficeTaxDetail (Long taxId) {
 
         NtsTax tax = ntsTaxRepository.findById(taxId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 세금계산서가 존재하지 않습니다."));
 
-        return List.of(OfficeTaxDetailResponse.of(tax));
+        return OfficeTaxDetailResponse.of(tax);
     }
 }

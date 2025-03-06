@@ -18,7 +18,8 @@ public record OfficeTaxDetailResponse(
         Long grandTotal, //총액(공급가액 + 세액)
         Long taxTotal, //총 세액 합계
         LocalDate createdDate, //생성일
-        LocalTime createdTime//생성시간
+        LocalTime createdTime,//생성시간
+        String imageUrl
 ) {
     public static OfficeTaxDetailResponse of(NtsTax ntsTax) {
         return OfficeTaxDetailResponse.builder()
@@ -32,6 +33,7 @@ public record OfficeTaxDetailResponse(
                 .taxTotal(ntsTax.getTaxTotal())
                 .createdDate(ntsTax.getCreatedTime().toLocalDate())
                 .createdTime(ntsTax.getCreatedTime().toLocalTime())
+                .imageUrl(ntsTax.getImageUrl())
                 .build();
     }
 }

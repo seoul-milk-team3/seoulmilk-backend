@@ -48,7 +48,7 @@ public class OfficeTaxController implements OfficeTaxApi {
     public ResponseEntity<?> findOfficeTaxDetail(
             @RequestParam Long taxId
     ) {
-        List<OfficeTaxDetailResponse> response = officeTaxService.findOfficeTaxDetail(taxId);
+        OfficeTaxDetailResponse response = officeTaxService.findOfficeTaxDetail(taxId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
