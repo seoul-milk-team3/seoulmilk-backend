@@ -10,17 +10,17 @@ import java.time.LocalTime;
 
 @Builder
 public record OfficeTaxDetailResponse(
-        Long id,//id
-        Arap arap, //매출매입구분
-        String issueDate, //작성일자
-        String suId, //공급자 사업자 등록 번호
-        String ipId, //공급받는자 사업자 등록번호
-        Long chargeTotal, //총 공급가액 합계
-        Long grandTotal, //총액(공급가액 + 세액)
-        Long taxTotal, //총 세액 합계
-        LocalDate createdDate, //생성일
+        Long id,
+        Arap arap,
+        String issueDate,
+        String suId,
+        String ipId,
+        Long chargeTotal,
+        Long grandTotal,
+        Long taxTotal,
+        LocalDate createdDate,
         @JsonFormat(pattern = "HH:mm:ss")
-        LocalTime createdTime,//생성시간
+        LocalTime createdTime,
         String imageUrl
 ) {
     public static OfficeTaxDetailResponse of(NtsTax ntsTax) {
