@@ -36,7 +36,7 @@ public class BranchTaxController implements BranchTaxApi {
     public SuccessResponse<BranchTaxDetailResponse> findBranchTaxDetail(
             @PathVariable Long taxId
     ) {
-        BranchTaxDetailResponse response = branchTaxService.findOfficeTaxDetail(taxId);
+        BranchTaxDetailResponse response = branchTaxService.findBranchTaxDetail(taxId);
 
         return SuccessResponse.of(BRANCH_TAX_DETAIL_SUCCESS, response);
     }

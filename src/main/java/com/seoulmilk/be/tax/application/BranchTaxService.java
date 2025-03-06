@@ -36,14 +36,18 @@ public class BranchTaxService {
         return BranchTaxFilterResponseList.of(filteredTax, filteredTax.size());
     }
 
-    public BranchTaxDetailResponse findOfficeTaxDetail(Long taxId) {
+    public BranchTaxDetailResponse findBranchTaxDetail(Long taxId) {
         User user = authService.getLoginUser();
         NtsTax ntsTax = ntsTaxRepository.findById(taxId)
                 .orElseThrow(() -> new NtsTaxNotFoundException(NTS_TAX_NOT_FOUND));
-        if (!ntsTax.getSuId().equals(user.getEmployeeId())) {
+        if (!getRemovedBar(ntsTax.getSuId()).equals(getRemovedBar(user.getEmployeeId()))) {
             throw new UnauthorizedTaxUserException(UNAUTHORIZED_TAX_USER);
         }
 
         return BranchTaxDetailResponse.of(ntsTax);
+    }
+
+    private String getRemovedBar(String barStr) {
+        return barStr.replace("-", "");
     }
 }

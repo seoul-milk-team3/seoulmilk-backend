@@ -42,7 +42,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .arap(Arap.AP)
                     .issueDt("2024-01-01")
                     .issueDate("20240101")
-                    .suId("444-33-22222")
+                    .suId("123-45-678")
                     .ipId("333-22-88855")
                     .chargeTotal(2752800L)
                     .taxTotal(0L)

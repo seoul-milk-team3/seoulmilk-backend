@@ -2,6 +2,7 @@ package com.seoulmilk.be.tax.persistence;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seoulmilk.be.tax.domain.type.PayStatus;
 import com.seoulmilk.be.tax.domain.type.ResultType;
@@ -78,7 +79,8 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                         filterByPayStatus(filter.getPayStatus()),
                         filterByResultType(filter.getResultType()),
                         filterByYearAndMonth(filter.getStartDate(), filter.getEndDate()),
-                        ntsTax.user.eq(user)
+                        Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
+                                .eq(user.getEmployeeId().replace("-", ""))
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
