@@ -1,5 +1,7 @@
 package com.seoulmilk.be.tax.application;
 
+import com.seoulmilk.be.tax.domain.NtsTax;
+import com.seoulmilk.be.tax.dto.response.OfficeTaxDetailResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +31,13 @@ public class OfficeTaxService {
         String isValidated = "1";
         Pageable pageable = PageRequest.of(page - 1, size);
         return ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable);
+    }
+
+    public List<OfficeTaxDetailResponse> findOfficeTaxDetail (Long taxId) {
+
+        NtsTax tax = ntsTaxRepository.findById(taxId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 세금계산서가 존재하지 않습니다."));
+
+        return List.of(OfficeTaxDetailResponse.of(tax));
     }
 }

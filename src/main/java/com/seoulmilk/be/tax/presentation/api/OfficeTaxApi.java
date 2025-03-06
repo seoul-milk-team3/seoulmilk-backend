@@ -41,4 +41,18 @@ public interface OfficeTaxApi {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size
     );
+
+    @Operation(
+            summary = "세금 계산서 상세 조회하기",
+            description = "본사의 세금 계산서 상세를 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "세금 계산서 상세가 성공적으로 조회되었습니다."
+            )
+    })
+    ResponseEntity<?> findOfficeTaxDetail(
+            @RequestParam Long taxId
+    );
 }
