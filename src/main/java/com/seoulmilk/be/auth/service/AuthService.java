@@ -1,17 +1,26 @@
 package com.seoulmilk.be.auth.service;
 
-import com.seoulmilk.be.auth.dto.request.LoginRequest;
-import com.seoulmilk.be.auth.dto.request.OfficeSignUpRequest;
-import com.seoulmilk.be.auth.exception.ExistUserException;
+import com.seoulmilk.be.auth.dto.request.*;
+import com.seoulmilk.be.auth.dto.response.PasswordChangeResponse;
+import com.seoulmilk.be.auth.exception.NonExistUserException;
+import com.seoulmilk.be.auth.exception.FailEmailEncodingException;
+import com.seoulmilk.be.auth.exception.InvalidUuidException;
 import com.seoulmilk.be.global.jwt.application.JwtService;
 import com.seoulmilk.be.global.jwt.refresh.application.RefreshTokenService;
 import com.seoulmilk.be.user.domain.User;
-import com.seoulmilk.be.auth.dto.request.BranchSignUpRequest;
+import com.seoulmilk.be.user.domain.type.Role;
 import com.seoulmilk.be.user.exception.UserNotFoundException;
 import com.seoulmilk.be.user.persistence.UserRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,10 +29,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.seoulmilk.be.auth.exception.errorcode.AuthErrorCode.EXIST_EMAIL;
-import static com.seoulmilk.be.auth.exception.errorcode.AuthErrorCode.EXIST_EMPLOYEE_ID;
+import java.io.UnsupportedEncodingException;
+import java.util.UUID;
+
+import static com.seoulmilk.be.auth.exception.errorcode.AuthErrorCode.*;
 import static com.seoulmilk.be.user.exception.errorCode.UserErrorCode.USER_NOT_FOUND;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -38,6 +50,7 @@ public class AuthService {
     private String refreshHeader;
     @Value("${jwt.access.header}")
     private String accessHeader;
+
 
     @Transactional
     public void signUpOffice(OfficeSignUpRequest request) {
@@ -57,10 +70,10 @@ public class AuthService {
 
     private void validateUniqueUser(String employeeId, String email) {
         if (userRepository.existsByEmployeeId(employeeId)) {
-            throw new ExistUserException(EXIST_EMPLOYEE_ID);
+            throw new NonExistUserException(NON_EXIST_EMPLOYEE_ID);
         }
         if (userRepository.existsByEmail(email)) {
-            throw new ExistUserException(EXIST_EMAIL);
+            throw new NonExistUserException(NON_EXIST_EMAIL);
         }
     }
 
@@ -88,4 +101,5 @@ public class AuthService {
         String username = authentication.getName();
         return userRepository.findByEmployeeId(username).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
     }
+
 }
