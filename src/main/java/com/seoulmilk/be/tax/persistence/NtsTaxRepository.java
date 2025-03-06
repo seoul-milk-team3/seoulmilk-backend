@@ -8,6 +8,4 @@ import java.util.Optional;
 
 @Repository
 public interface NtsTaxRepository extends JpaRepository<NtsTax, Long> , NtsTaxRepositoryCustom {
-
-    Optional<NtsTax> findById(Long taxId);
 }
