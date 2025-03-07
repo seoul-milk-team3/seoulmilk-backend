@@ -13,9 +13,12 @@ import java.util.List;
 
 @Configuration
 public class CorsConfig {
-
     @Value("#{'${cors.allowed.origins}'.split(', ')}")
     private List<String> allowedOrigins;
+    @Value("${jwt.refresh.header}")
+    private String refreshHeader;
+    @Value("${jwt.access.header}")
+    private String accessHeader;
 
     @Bean
     public CorsFilter corsFilter() {
@@ -25,6 +28,7 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         config.setAllowedOrigins(allowedOrigins);
         config.addAllowedHeader("*");
+        config.setExposedHeaders(List.of(accessHeader, refreshHeader, "Set-Cookie"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
         source.registerCorsConfiguration("/**", config);
