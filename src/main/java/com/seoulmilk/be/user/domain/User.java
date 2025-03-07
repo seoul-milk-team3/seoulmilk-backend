@@ -69,4 +69,8 @@ public class User extends BaseTimeEntity {
                 .hashString(this.email, StandardCharsets.UTF_8)
                 .toString();
     }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }
