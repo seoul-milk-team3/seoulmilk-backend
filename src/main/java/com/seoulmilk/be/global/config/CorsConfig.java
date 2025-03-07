@@ -29,7 +29,7 @@ public class CorsConfig {
                 HttpMethod.PATCH.name(),
                 HttpMethod.OPTIONS.name()));
         config.setAllowedHeaders(List.of("*"));
-        config.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
+        config.setExposedHeaders(List.of("Authorization", "Set-Cookie", "REFRESH_TOKEN"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
