@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum NtsTaxErrorCode implements ErrorCode {
     NTS_TAX_NOT_FOUND(HttpStatus.NOT_FOUND, "No NTS tax found"),
+    UNAUTHORIZED_TAX_USER(HttpStatus.UNAUTHORIZED, "User is not authorized to access this tax detail.")
     ;
 
     private final HttpStatus httpStatus;
