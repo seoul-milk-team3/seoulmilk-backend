@@ -45,7 +45,7 @@ public class BranchTaxService {
             throw new UnauthorizedTaxUserException(UNAUTHORIZED_TAX_USER);
         }
 
-        return BranchTaxDetailResponse.of(ntsTax);
+        return BranchTaxDetailResponse.from(ntsTax);
     }
 
     private String getRemovedBar(String barStr) {

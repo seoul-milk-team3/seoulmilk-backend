@@ -29,7 +29,7 @@ public record BranchTaxDetailResponse(
         @Schema(description = "지급 날짜")
         String payDate
 ) {
-    public static BranchTaxDetailResponse of(NtsTax ntsTax) {
+    public static BranchTaxDetailResponse from(NtsTax ntsTax) {
         return BranchTaxDetailResponse.builder()
                 .id(ntsTax.getId())
                 .imageUrl(ntsTax.getImageUrl())
