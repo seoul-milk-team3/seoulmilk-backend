@@ -8,9 +8,10 @@ import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponseList;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.exception.UnauthorizedTaxUserException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
-import com.seoulmilk.be.taxvalidation.dto.request.BranchTaxFilterRequest;
+import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
 import com.seoulmilk.be.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ import java.util.List;
 import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_NOT_FOUND;
 import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.UNAUTHORIZED_TAX_USER;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -40,7 +41,7 @@ public class BranchTaxService {
         User user = authService.getLoginUser();
         NtsTax ntsTax = ntsTaxRepository.findById(taxId)
                 .orElseThrow(() -> new NtsTaxNotFoundException(NTS_TAX_NOT_FOUND));
-        if (!getRemovedBar(ntsTax.getSuId()).equals(getRemovedBar(user.getEmployeeId()))) {
+        if (!getRemovedBar(ntsTax.getSuId()).equals(getRemovedBar(user.getBusinessId()))) {
             throw new UnauthorizedTaxUserException(UNAUTHORIZED_TAX_USER);
         }
 

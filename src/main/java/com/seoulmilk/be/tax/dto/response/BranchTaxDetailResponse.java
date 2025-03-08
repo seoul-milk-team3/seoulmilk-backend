@@ -1,5 +1,6 @@
 package com.seoulmilk.be.tax.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.PayStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,8 +16,9 @@ public record BranchTaxDetailResponse(
         @Schema(description = "승인 번호")
         String issueId,
 
-        @Schema(description = "생성 일자")
-        LocalDateTime createdDateTime,
+        @Schema(description = "생성 일자 (yyyy-MM-dd)")
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        LocalDateTime createdDate,
 
         @Schema(description = "금액")
         Long grandTotal,
@@ -32,7 +34,7 @@ public record BranchTaxDetailResponse(
                 .id(ntsTax.getId())
                 .imageUrl(ntsTax.getImageUrl())
                 .issueId(ntsTax.getIssueId())
-                .createdDateTime(ntsTax.getCreatedDateTime())
+                .createdDate(ntsTax.getCreatedDateTime())
                 .grandTotal(ntsTax.getGrandTotal())
                 .payStatus(ntsTax.getPayStatus())
                 .payDate(ntsTax.getPayDate())

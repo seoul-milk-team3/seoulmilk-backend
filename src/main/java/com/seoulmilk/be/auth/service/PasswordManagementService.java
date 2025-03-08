@@ -3,7 +3,8 @@ package com.seoulmilk.be.auth.service;
 import com.seoulmilk.be.auth.dto.request.NewPasswordRequest;
 import com.seoulmilk.be.auth.dto.request.PasswordChangeRequest;
 import com.seoulmilk.be.auth.dto.response.PasswordChangeResponse;
-import com.seoulmilk.be.auth.exception.NonExistUserException;
+import com.seoulmilk.be.auth.exception.ExistUserException;
+import com.seoulmilk.be.auth.exception.NotFoundUserException;
 import com.seoulmilk.be.user.domain.User;
 import com.seoulmilk.be.user.domain.type.Role;
 import com.seoulmilk.be.user.persistence.UserRepository;
@@ -62,7 +63,7 @@ public class PasswordManagementService {
     public void changePassword(NewPasswordRequest request) {
         String email = emailCacheService.getValue(request.uuid());
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NonExistUserException(NON_EXIST_USER));
+                .orElseThrow(() -> new NotFoundUserException(NOT_FOUND_USER));
 
         user.updatePassword(passwordEncoder.encode(request.password()));
 

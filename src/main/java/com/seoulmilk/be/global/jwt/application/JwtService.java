@@ -25,7 +25,7 @@ import static com.seoulmilk.be.global.jwt.exception.JwtErrorCode.TOKEN_CREATE_ER
 @RequiredArgsConstructor
 public class JwtService {
     private static final String BEARER = "Bearer ";
-    private static final String EMPLOYEE_ID_CLAIM = "employeeId";
+    private static final String EMAIL_CLAIM = "email";
 
     private final RefreshTokenService refreshTokenService;
     private final ObjectMapper objectMapper;
@@ -42,12 +42,12 @@ public class JwtService {
     private String refreshHeader;
 
 
-    public String createAccessToken(String employeeId) {
+    public String createAccessToken(String email) {
         Date now = new Date();
         return JWT.create()
                 .withSubject("AccessToken")
                 .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod))
-                .withClaim(EMPLOYEE_ID_CLAIM, employeeId)
+                .withClaim(EMAIL_CLAIM, email)
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
@@ -59,8 +59,8 @@ public class JwtService {
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
-    public void sendAccessAndRefreshToken(HttpServletResponse response, String employeeId) throws TokenCreateException {
-        String accessToken = createAccessToken(employeeId);
+    public void sendAccessAndRefreshToken(HttpServletResponse response, String email) throws TokenCreateException {
+        String accessToken = createAccessToken(email);
         String refreshToken = createRefreshToken();
 
         try {
@@ -75,7 +75,7 @@ public class JwtService {
 
         setTokenHeader(response, accessHeader, accessToken);
         setTokenHeader(response, refreshHeader, refreshToken);
-        refreshTokenService.updateToken(employeeId, refreshToken);
+        refreshTokenService.updateToken(email, refreshToken);
     }
 
     public void setTokenHeader(HttpServletResponse response, String headerName, String token) {
@@ -94,10 +94,10 @@ public class JwtService {
                 .map(refreshToken -> refreshToken.replace(BEARER, ""));
     }
 
-    public Optional<String> extractEmployeeId(String accessToken) throws JWTVerificationException {
+    public Optional<String> extractEmail(String accessToken) throws JWTVerificationException {
         try {
             return Optional.ofNullable(
-                    JWT.require(Algorithm.HMAC512(secretKey)).build().verify(accessToken).getClaim(EMPLOYEE_ID_CLAIM).asString());
+                    JWT.require(Algorithm.HMAC512(secretKey)).build().verify(accessToken).getClaim(EMAIL_CLAIM).asString());
         } catch (JWTVerificationException e) {
             log.error("access token is not valid. {}", e.getMessage());
             return Optional.empty();
