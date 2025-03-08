@@ -1,7 +1,7 @@
 package com.seoulmilk.be.global.exception;
 
 import com.seoulmilk.be.auth.exception.FailEmailEncodingException;
-import com.seoulmilk.be.auth.exception.NonExistUserException;
+import com.seoulmilk.be.auth.exception.ExistUserException;
 import com.seoulmilk.be.global.exception.errorcode.ErrorCode;
 import com.seoulmilk.be.global.exception.errorcode.GlobalErrorCode;
 import com.seoulmilk.be.global.exception.errorcode.UserNotFoundException;
@@ -44,8 +44,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(e.getErrorCode());
     }
 
-    @ExceptionHandler(NonExistUserException.class)
-    public ResponseEntity<Object> handleExistUserException(NonExistUserException e, HttpServletRequest request) {
+    @ExceptionHandler(ExistUserException.class)
+    public ResponseEntity<Object> handleExistUserException(ExistUserException e, HttpServletRequest request) {
         log.info(String.valueOf(e.getErrorCode()), request);
         return handleExceptionInternal(e.getErrorCode());
     }

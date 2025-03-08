@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class NonExistUserException extends RuntimeException {
+public class InvalidPasswordException extends RuntimeException {
     private final ErrorCode errorCode;
 }
