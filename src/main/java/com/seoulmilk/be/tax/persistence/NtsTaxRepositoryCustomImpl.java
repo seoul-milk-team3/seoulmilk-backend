@@ -3,6 +3,7 @@ package com.seoulmilk.be.tax.persistence;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.seoulmilk.be.tax.domain.type.RegionType;
 import com.seoulmilk.be.tax.domain.type.ResultType;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                         ntsTax.isNormal,
                         ntsTax.isValidated,
                         ntsTax.createdDateTime
-                        ))
+                ))
                 .from(ntsTax)
                 .orderBy(ntsTax.id.desc())
                 .where(
@@ -59,12 +60,15 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
     }
 
     private BooleanExpression filterByRegion(String region) {
-        if (ObjectUtils.isEmpty(region)) {
+        RegionType type = RegionType.fromString(region);
+
+        if (type == RegionType.ALL || type.getValue().isBlank()) {
             return null;
-        } else {
-            return ntsTax.suAddr.contains(region);
         }
+
+        return ntsTax.suAddr.contains(type.getValue());
     }
+
 
     private BooleanExpression filterBySupplierName(String searchSupplierName) {
         if (ObjectUtils.isEmpty(searchSupplierName)) {
