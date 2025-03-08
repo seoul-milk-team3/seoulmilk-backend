@@ -38,10 +38,18 @@ public class AuthController implements AuthApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/login")
+    @PostMapping("/login/office")
     @Override
-    public SuccessResponse<String> login(@RequestBody LoginRequest request, HttpServletResponse response) {
-        authService.login(request, response);
+    public SuccessResponse<String> officeLogin(@RequestBody OfficeLoginRequest request, HttpServletResponse response) {
+        authService.officeLogin(request, response);
+        return SuccessResponse.of(LOGIN_SUCCESS);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/login/branch")
+    @Override
+    public SuccessResponse<String> branchLogin(@RequestBody BranchLoginRequest request, HttpServletResponse response) {
+        authService.branchLogin(request, response);
         return SuccessResponse.of(LOGIN_SUCCESS);
     }
 

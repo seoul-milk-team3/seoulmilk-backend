@@ -28,7 +28,7 @@ public interface AuthApi {
     SuccessResponse<String> signUpOffice(OfficeSignUpRequest request);
 
     @Operation(
-            summary = "가맹점 직원 회원가입",
+            summary = "대리점 직원 회원가입",
             description = "사용자의 정보를 입력받아 회원가입을 진행합니다."
     )
     @ApiResponses(value = {
@@ -44,7 +44,7 @@ public interface AuthApi {
     SuccessResponse<String> signUpBranch(BranchSignUpRequest request);
 
     @Operation(
-            summary = "로그인",
+            summary = "본사 직원 로그인",
             description = "사용자의 사번과 비밀번호를 입력받아 로그인합니다." + "\n" +
                     """
                             예시) 테스트 계정 
@@ -60,10 +60,26 @@ public interface AuthApi {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "User not found"
+                    description = "일치하는 사용자가 존재하지 않습니다."
             )
     })
-    SuccessResponse<String> login(LoginRequest request, HttpServletResponse response);
+    SuccessResponse<String> officeLogin(OfficeLoginRequest request, HttpServletResponse response);
+
+    @Operation(
+            summary = "대리점 직원 로그인",
+            description = "사업자 등록 번호와 비밀번호를 입력받아 로그인합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "로그인이 성공적으로 완료되었습니다."
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "일치하는 사용자가 존재하지 않습니다."
+            )
+    })
+    SuccessResponse<String> branchLogin(BranchLoginRequest request, HttpServletResponse response);
 
 
     @Operation(

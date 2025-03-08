@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Builder
 public record BranchSignUpRequest(
         @NotBlank
-        String employeeId,
+        String businessId,
 
         @Schema(defaultValue = "01022223333")
         @NotBlank
@@ -26,7 +26,7 @@ public record BranchSignUpRequest(
 ) {
     public User toBranchUser(PasswordEncoder passwordEncoder) {
         return User.builder()
-                .employeeId(this.employeeId)
+                .businessId(this.businessId)
                 .phoneNo(this.phoneNo)
                 .password(passwordEncoder.encode(this.password))
                 .email(this.email)
