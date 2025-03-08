@@ -1,25 +1,25 @@
 package com.seoulmilk.be.auth.presentation;
 
 
-import com.seoulmilk.be.auth.dto.request.LoginRequest;
-import com.seoulmilk.be.auth.dto.request.OfficeSignUpRequest;
+import com.seoulmilk.be.auth.dto.request.*;
+import com.seoulmilk.be.auth.dto.response.PasswordChangeResponse;
 import com.seoulmilk.be.auth.presentation.api.AuthApi;
 import com.seoulmilk.be.auth.service.AuthService;
+import com.seoulmilk.be.auth.service.PasswordManagementService;
 import com.seoulmilk.be.global.dto.SuccessResponse;
-import com.seoulmilk.be.auth.dto.request.BranchSignUpRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import static com.seoulmilk.be.global.dto.SuccessCode.LOGIN_SUCCESS;
-import static com.seoulmilk.be.global.dto.SuccessCode.SIGN_UP_SUCCESS;
+import static com.seoulmilk.be.global.dto.SuccessCode.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController implements AuthApi {
     private final AuthService authService;
+    private final PasswordManagementService passwordManagementService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/office/sign-up")
@@ -38,9 +38,34 @@ public class AuthController implements AuthApi {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/login")
-    public SuccessResponse<String> login(@RequestBody LoginRequest request, HttpServletResponse response) {
-        authService.login(request, response);
+    @PostMapping("/login/office")
+    @Override
+    public SuccessResponse<String> officeLogin(@RequestBody OfficeLoginRequest request, HttpServletResponse response) {
+        authService.officeLogin(request, response);
         return SuccessResponse.of(LOGIN_SUCCESS);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/login/branch")
+    @Override
+    public SuccessResponse<String> branchLogin(@RequestBody BranchLoginRequest request, HttpServletResponse response) {
+        authService.branchLogin(request, response);
+        return SuccessResponse.of(LOGIN_SUCCESS);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/password")
+    @Override
+    public SuccessResponse<PasswordChangeResponse> sendPasswordChangeEmail(
+            @RequestBody PasswordChangeRequest request) {
+        return SuccessResponse.of(SEND_PASSWORD_CHANGE_EMAIL_SUCCESS,
+                passwordManagementService.sendPasswordChangeEmail(request));
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/password")
+    public SuccessResponse<String> changePassword(@RequestBody NewPasswordRequest request) {
+        passwordManagementService.changePassword(request);
+        return SuccessResponse.of(SEND_PASSWORD_CHANGE_EMAIL_SUCCESS);
     }
 }

@@ -1,8 +1,13 @@
 package com.seoulmilk.be.global.exception;
 
+import com.seoulmilk.be.auth.exception.FailEmailEncodingException;
+import com.seoulmilk.be.auth.exception.ExistUserException;
 import com.seoulmilk.be.global.exception.errorcode.ErrorCode;
 import com.seoulmilk.be.global.exception.errorcode.GlobalErrorCode;
+import com.seoulmilk.be.global.exception.errorcode.UserNotFoundException;
 import com.seoulmilk.be.global.exception.response.ErrorResponse;
+import com.seoulmilk.be.tax.exception.UnauthorizedTaxUserException;
+import com.seoulmilk.be.taxvalidation.exception.TaxValidationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import org.slf4j.Logger;
@@ -35,6 +40,36 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(FileConvertFailException.class)
     public ResponseEntity<Object> handleFileConvertFail(FileConvertFailException e, HttpServletRequest request) {
+        log.info(String.valueOf(e.getErrorCode()), request);
+        return handleExceptionInternal(e.getErrorCode());
+    }
+
+    @ExceptionHandler(ExistUserException.class)
+    public ResponseEntity<Object> handleExistUserException(ExistUserException e, HttpServletRequest request) {
+        log.info(String.valueOf(e.getErrorCode()), request);
+        return handleExceptionInternal(e.getErrorCode());
+    }
+
+    @ExceptionHandler(TaxValidationException.class)
+    public ResponseEntity<Object> handleTaxValidationException(TaxValidationException e, HttpServletRequest request) {
+        log.info(String.valueOf(e.getErrorCode()), request);
+        return handleExceptionInternal(e.getErrorCode());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException e, HttpServletRequest request) {
+        log.info(String.valueOf(e.getErrorCode()), request);
+        return handleExceptionInternal(e.getErrorCode());
+    }
+
+    @ExceptionHandler(UnauthorizedTaxUserException.class)
+    public ResponseEntity<Object> handleUnauthorizedTaxUserException(UnauthorizedTaxUserException e, HttpServletRequest request) {
+        log.info(String.valueOf(e.getErrorCode()), request);
+        return handleExceptionInternal(e.getErrorCode());
+    }
+
+    @ExceptionHandler(FailEmailEncodingException.class)
+    public ResponseEntity<Object> handleFailEmailEncodingException(FailEmailEncodingException e, HttpServletRequest request) {
         log.info(String.valueOf(e.getErrorCode()), request);
         return handleExceptionInternal(e.getErrorCode());
     }
