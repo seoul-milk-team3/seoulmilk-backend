@@ -3,7 +3,7 @@ package com.seoulmilk.be.tax.presentation.api;
 import com.seoulmilk.be.global.dto.SuccessResponse;
 import com.seoulmilk.be.tax.dto.response.BranchTaxDetailResponse;
 import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponseList;
-import com.seoulmilk.be.taxvalidation.dto.request.BranchTaxFilterRequest;
+import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

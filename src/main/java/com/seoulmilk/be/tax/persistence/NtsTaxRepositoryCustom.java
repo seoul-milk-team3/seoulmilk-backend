@@ -2,7 +2,7 @@ package com.seoulmilk.be.tax.persistence;
 
 import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
-import com.seoulmilk.be.taxvalidation.dto.request.BranchTaxFilterRequest;
+import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
 import com.seoulmilk.be.user.domain.User;
 import org.springframework.data.domain.Pageable;
 

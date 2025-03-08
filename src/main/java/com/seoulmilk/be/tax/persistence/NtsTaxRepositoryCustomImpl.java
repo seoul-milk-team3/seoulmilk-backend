@@ -8,7 +8,7 @@ import com.seoulmilk.be.tax.domain.type.PayStatus;
 import com.seoulmilk.be.tax.domain.type.ResultType;
 import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
-import com.seoulmilk.be.taxvalidation.dto.request.BranchTaxFilterRequest;
+import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
 import com.seoulmilk.be.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -80,7 +80,7 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                         filterByResultType(filter.getResultType()),
                         filterByYearAndMonth(filter.getStartDate(), filter.getEndDate()),
                         Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
-                                .eq(user.getEmployeeId().replace("-", ""))
+                                .eq(user.getBusinessId().replace("-", ""))
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

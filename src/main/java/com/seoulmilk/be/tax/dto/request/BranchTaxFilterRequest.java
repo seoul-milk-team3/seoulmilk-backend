@@ -1,4 +1,4 @@
-package com.seoulmilk.be.taxvalidation.dto.request;
+package com.seoulmilk.be.tax.dto.request;
 
 import com.seoulmilk.be.tax.domain.type.PayStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
