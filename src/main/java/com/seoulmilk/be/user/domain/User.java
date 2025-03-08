@@ -26,8 +26,11 @@ public class User extends BaseTimeEntity {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "EMPLOYEE_ID", nullable = false)
+    @Column(name = "EMPLOYEE_ID")
     private String employeeId;
+
+    @Column(name = "BUSINESS_ID")
+    private String businessId;
 
     @Column(name = "PASSWORD", nullable = false)
     private String password;
@@ -47,14 +50,16 @@ public class User extends BaseTimeEntity {
     @Column(name = "IS_DELETED", nullable = false)
     private Boolean isDeleted;
 
+
     @Column(name = "ROLE", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Builder
-    public User(String name, String employeeId, String password, String email, String phoneNo, String birthday, Telecom telecom, Role role) {
+    public User(String name, String employeeId, String businessId, String password, String email, String phoneNo, String birthday, Telecom telecom, Role role) {
         this.name = name;
         this.employeeId = employeeId;
+        this.businessId = businessId;
         this.password = password;
         this.email = email;
         this.phoneNo = phoneNo;
