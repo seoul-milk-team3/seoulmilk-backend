@@ -5,6 +5,7 @@ import com.seoulmilk.be.global.jwt.exception.InvalidTokenException;
 import com.seoulmilk.be.global.jwt.exception.JwtErrorCode;
 import com.seoulmilk.be.global.jwt.refresh.application.RefreshTokenService;
 import com.seoulmilk.be.global.jwt.refresh.domain.RefreshToken;
+import com.seoulmilk.be.user.domain.type.Role;
 import com.seoulmilk.be.user.persistence.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,7 +33,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
     private final RefreshTokenService refreshTokenService;
 
-    private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
+    private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -55,7 +56,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
         if (jwtService.isTokenValid(refreshToken)) {
             RefreshToken refresh = refreshTokenService.findByToken(refreshToken);
-            jwtService.sendAccessAndRefreshToken(response, refresh.getEmployeeId());
+            jwtService.sendAccessAndRefreshToken(response, refresh.getEmail());
         }
     }
 
@@ -63,8 +64,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                                                    FilterChain filterChain) throws ServletException, IOException {
         try {
             jwtService.extractAccessToken(request)
-                    .ifPresent(accessToken -> jwtService.extractEmployeeId(accessToken)
-                            .ifPresentOrElse(email -> userRepository.findByEmployeeId(email).ifPresent(this::saveAuthentication),
+                    .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
+                            .ifPresentOrElse(email -> userRepository.findByEmail(email).ifPresent(this::saveAuthentication),
                                     () -> {
                                         throw new InvalidTokenException(JwtErrorCode.INVALID_TOKEN);
                                     }
@@ -78,7 +79,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     public void saveAuthentication(com.seoulmilk.be.user.domain.User user) {
         UserDetails userDetailsUser = User.builder()
-                .username(user.getEmployeeId())
+                .username(user.getEmail())
                 .password(user.getPassword())
                 .roles(user.getRole().name())
                 .build();

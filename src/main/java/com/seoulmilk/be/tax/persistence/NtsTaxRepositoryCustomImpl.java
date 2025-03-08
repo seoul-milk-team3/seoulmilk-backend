@@ -2,10 +2,15 @@ package com.seoulmilk.be.tax.persistence;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seoulmilk.be.tax.domain.type.RegionType;
+import com.seoulmilk.be.tax.domain.type.PayStatus;
 import com.seoulmilk.be.tax.domain.type.ResultType;
+import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
+import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
+import com.seoulmilk.be.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -59,6 +64,30 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<BranchTaxFilterResponse> findBranchTaxByFiltersAndUser(BranchTaxFilterRequest filter, User user, Pageable pageable) {
+        return jpaQueryFactory
+                .select(Projections.constructor(BranchTaxFilterResponse.class,
+                        ntsTax.id,
+                        ntsTax.issueId,
+                        ntsTax.isNormal,
+                        ntsTax.payStatus,
+                        ntsTax.createdDateTime
+                ))
+                .from(ntsTax)
+                .orderBy(ntsTax.id.desc())
+                .where(
+                        filterByPayStatus(filter.getPayStatus()),
+                        filterByResultType(filter.getResultType()),
+                        filterByYearAndMonth(filter.getStartDate(), filter.getEndDate()),
+                        Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
+                                .eq(user.getBusinessId().replace("-", ""))
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
     private BooleanExpression filterByRegion(String region) {
         RegionType type = RegionType.fromString(region);
 
@@ -86,6 +115,13 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
         } else {
             return ntsTax.isNormal.eq(type);
         }
+    }
+
+    private BooleanExpression filterByPayStatus(PayStatus payStatus) {
+        if (payStatus == null) {
+            return null;
+        }
+        return ntsTax.payStatus.eq(payStatus);
     }
 
     private BooleanExpression filterByYearAndMonth(LocalDate startYearAndMonth, LocalDate endYearAndMonth) {

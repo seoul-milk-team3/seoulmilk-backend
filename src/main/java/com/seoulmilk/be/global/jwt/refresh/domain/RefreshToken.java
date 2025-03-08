@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshToken {
     @Id
-    @Column(name = "EMPLOYEE_ID")
-    private String employeeId;
+    @Column(name = "EMAIL")
+    private String email;
 
     @Column(name = "REFRESH_TOKEN", nullable = false)
     private String refreshToken;
@@ -25,8 +25,8 @@ public class RefreshToken {
     @Column(name = "EXPIRATION_DATE", nullable = false)
     private LocalDateTime expirationDate;
 
-    public RefreshToken(String employeeId) {
-        this.employeeId = employeeId;
+    public RefreshToken(String email) {
+        this.email = email;
     }
 
     public void createRefreshToken(String refreshToken, Long expiration) {
