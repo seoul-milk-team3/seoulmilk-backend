@@ -77,4 +77,9 @@ public class NtsTaxService {
                 .map(BeforeValidateTaxResponse::from)
                 .toList();
     }
+
+    @Transactional
+    public void saveNtsTax(NtsTax ntsTax) {
+        ntsTaxRepository.save(ntsTax);
+    }
 }
