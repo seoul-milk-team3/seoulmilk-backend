@@ -8,17 +8,15 @@ import java.util.Arrays;
 import java.util.List;
 
 @Builder
-public record TaxInvoicesSaveRequestList (
+public record TaxInvoicesSaveRequestList(
         List<TaxInvoicesSaveRequest> requests
-){
+) {
 
     public static TaxInvoicesSaveRequestList of(List<ClovaOcrResponse> ocrResponses, List<MultipartFile> files) {
-        // OCR 응답과 파일을 매칭하여 TaxInvoicesSaveRequest 생성
         List<TaxInvoicesSaveRequest> requests = ocrResponses.stream()
                 .map(ocrResponse -> {
-                    // 이미지 URL을 파일 리스트와 매칭
                     String imageUrl = files.get(ocrResponses.indexOf(ocrResponse)).getOriginalFilename();
-                    // TaxInvoicesSaveRequest 생성
+
                     return new TaxInvoicesSaveRequest(ocrResponse.requestId(), mapFields(ocrResponse.images()));
                 })
                 .toList();
