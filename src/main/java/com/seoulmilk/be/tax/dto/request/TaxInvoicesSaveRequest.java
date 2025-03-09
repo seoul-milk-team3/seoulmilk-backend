@@ -2,6 +2,8 @@ package com.seoulmilk.be.tax.dto.request;
 
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.Arap;
+import com.seoulmilk.be.tax.domain.type.PayStatus;
+import com.seoulmilk.be.tax.domain.type.ResultType;
 
 import java.util.List;
 import java.util.Map;
@@ -29,13 +31,17 @@ public record TaxInvoicesSaveRequest(
                 .chargeTotal(parseLongOrDefault(fieldMap.get("공급가액"), 0L))
                 .ipId(fieldMap.getOrDefault("공급받는자 등록번호", "empty"))
                 .issueDate(fieldMap.getOrDefault("작성일자", "empty").replace("-", ""))
+                .transDate(fieldMap.getOrDefault("거래일자", "empty"))
+                .ipName(fieldMap.getOrDefault("공급받는자명", "empty"))
+                .ipAddr(fieldMap.getOrDefault("공급받는자 주소", "empty"))
                 .imageUrl(imageUrl)
                 .isValidated("0")
+                .isNormal(ResultType.ABNORMAL)
+                .payStatus(PayStatus.PAID_YET)
                 //TODO: 추후에는 실제 데이터로 변경해야 함 : 개발에는 필요없는 회사 데이터 이므로 임시로 dummy 값으로 설정
                 .taxTotal(100L)
                 .grandTotal(100L)
                 .ernam("dummy")
-                .transDate("dummy")
                 .arap(Arap.AP)
                 .issueDt("dummy")
                 .build();
