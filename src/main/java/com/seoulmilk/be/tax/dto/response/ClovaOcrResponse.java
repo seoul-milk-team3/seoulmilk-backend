@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record ClovaOcrResponse(
-        String requestId,
         Images[] images
 ) {
     @JsonIgnoreProperties(ignoreUnknown = true)
