@@ -17,13 +17,13 @@ import java.util.List;
 @Tag(name = "Tax", description = "Tax OCR API")
 public interface NtxTaxApi {
     @Operation(
-            summary = "세금 계산서 분석하기",
-            description = "OCR 을 통해 세금계산서를 텍스트로 변환합니다."
+            summary = "세금 계산서 분석 및 저장",
+            description = "OCR 을 통해 세금계산서를 텍스트로 변환하여 DB에 저장합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "OCR 이 성공적으로 완료되었습니다."
+                    responseCode = "201",
+                    description = "OCR 이 성공적으로 완료되어 세금계산서가 DB에 저장되었습니다."
             )
     })
     ResponseEntity<?> analyzeTaxInvoices(

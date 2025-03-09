@@ -6,18 +6,19 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ResultType {
-    NORMAL("1"),
-    ABNORMAL("0"),
-    ALL(""),
+    NORMAL,
+    ABNORMAL,
+    ALL,
     ;
 
-    private final String value;
-
-    public static ResultType fromString(String value) {
-        try {
-            return value == null ? ALL : ResultType.valueOf(value.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return ALL;
-        }
-    }
+//    private final String value;
+//
+//    public static ResultType fromValue(String value) {
+//        for (ResultType type : values()) {
+//            if (type.value.equals(value)) {
+//                return type;
+//            }
+//        }
+//        return ALL;
+//    }
 }

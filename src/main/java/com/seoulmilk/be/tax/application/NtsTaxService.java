@@ -5,7 +5,6 @@ import com.seoulmilk.be.tax.application.ext.ClovaOcrClient;
 import com.seoulmilk.be.tax.application.ext.ClovaOcrProperties;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.dto.request.ClovaOcrRequest;
-import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequest;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponse;
 import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;

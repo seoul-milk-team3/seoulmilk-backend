@@ -201,7 +201,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-14")
-                    .isValidated("0")
+                    .isValidated("1")
                     .build();
 
             NtsTax DUMMY_TAX8 = NtsTax.builder()
@@ -225,7 +225,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .imageUrl("https://dummy.com")
                     .payStatus(PayStatus.PAID)
                     .payDate("2024-08-15")
-                    .isValidated("0")
+                    .isValidated("1")
                     .build();
 
 

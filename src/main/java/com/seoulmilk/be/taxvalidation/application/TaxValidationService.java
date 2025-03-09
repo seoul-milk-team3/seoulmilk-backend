@@ -92,8 +92,9 @@ public class TaxValidationService {
         HashMap<String, Object> body = easyCodefRequestFactory.createValidationRequest(
                 request.user(), request.ntsTax(), request.loginTypeLevel());
 
+        //ResultType : NORMAL ABNORMAL 부분 수정해서 if 문 내부에서 사용된 NORMAL 수정했어요 (주석 merge 시 삭제하기)
         if (request.isTwoWay()) {
-            body.putAll(Map.of(SIMPLE_AUTH.getParamName(), NORMAL.getValue(), IS_2_WAY.getParamName(), true));
+            body.putAll(Map.of(SIMPLE_AUTH.getParamName(), NORMAL, IS_2_WAY.getParamName(), true));
             body.put(TWO_WAY_INFO.getParamName(), codefApiCacheService.getTwoWayInfo(request.user().getCodefId()));
             codefApiCacheService.removeTwoWayInfo(request.user().getCodefId());
         }

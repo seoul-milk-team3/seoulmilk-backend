@@ -23,7 +23,7 @@ public record OfficeTaxDetailResponse(
         LocalTime createdTime,
         String imageUrl
 ) {
-    public static OfficeTaxDetailResponse of(NtsTax ntsTax) {
+    public static OfficeTaxDetailResponse from(NtsTax ntsTax) {
         return OfficeTaxDetailResponse.builder()
                 .id(ntsTax.getId())
                 .arap(ntsTax.getArap())

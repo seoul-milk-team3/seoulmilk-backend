@@ -1,9 +1,12 @@
 package com.seoulmilk.be.tax.application;
 
 import com.seoulmilk.be.tax.domain.NtsTax;
+import com.seoulmilk.be.tax.domain.type.RegionType;
+import com.seoulmilk.be.tax.domain.type.ResultType;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxDetailResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponseList;
+import com.seoulmilk.be.tax.dto.response.OfficeValidateAbnormalTaxResponseList;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +31,11 @@ public class OfficeTaxService {
 
     public OfficeTaxFilterResponseList findOfficeTaxByFilters(LocalDate startYearAndMonth,
                                                               LocalDate endYearAndMonth,
-                                                              String region,
+                                                              RegionType region,
                                                               String searchSupplierName,
-                                                              String resultType,
+                                                              ResultType resultType,
                                                               int page,
-                                                              int size)
-    {
+                                                              int size) {
         String isValidated = "1";
         Pageable pageable = PageRequest.of(page - 1, size);
         List<OfficeTaxFilterResponse> result = ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable);
@@ -41,10 +43,27 @@ public class OfficeTaxService {
         return OfficeTaxFilterResponseList.of(result, result.size());
     }
 
-    public OfficeTaxDetailResponse findOfficeTaxDetail (Long taxId) {
+    public OfficeTaxDetailResponse findOfficeTaxDetail(Long taxId) {
         NtsTax tax = ntsTaxRepository.findById(taxId)
                 .orElseThrow(() -> new NtsTaxNotFoundException(NTS_TAX_NOT_FOUND));
 
-        return OfficeTaxDetailResponse.of(tax);
+        return OfficeTaxDetailResponse.from(tax);
+    }
+
+    public OfficeValidateAbnormalTaxResponseList validateAbnormalOfficeTax(int page,
+                                                                           int size) {
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+        List<OfficeTaxFilterResponse> results = ntsTaxRepository.findOfficeTaxByFilters(
+                null,
+                null,
+                null,
+                null,
+                ResultType.ABNORMAL,
+                "1",
+                pageable
+        );
+
+        return OfficeValidateAbnormalTaxResponseList.of(results, results.size());
     }
 }

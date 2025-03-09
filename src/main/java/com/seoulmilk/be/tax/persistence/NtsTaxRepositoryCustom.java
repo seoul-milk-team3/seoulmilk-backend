@@ -1,5 +1,7 @@
 package com.seoulmilk.be.tax.persistence;
 
+import com.seoulmilk.be.tax.domain.type.RegionType;
+import com.seoulmilk.be.tax.domain.type.ResultType;
 import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
@@ -13,9 +15,9 @@ public interface NtsTaxRepositoryCustom {
 
     List<OfficeTaxFilterResponse> findOfficeTaxByFilters (LocalDate startYearAndMonth,
                                                           LocalDate endYearAndMonth,
-                                                          String region,
+                                                          RegionType region,
                                                           String searchSupplierName,
-                                                          String resultType,
+                                                          ResultType resultType,
                                                           String isValidated,
                                                           Pageable pageable);
 

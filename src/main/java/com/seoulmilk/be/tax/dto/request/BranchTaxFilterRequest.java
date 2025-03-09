@@ -1,6 +1,7 @@
 package com.seoulmilk.be.tax.dto.request;
 
 import com.seoulmilk.be.tax.domain.type.PayStatus;
+import com.seoulmilk.be.tax.domain.type.ResultType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -15,7 +16,7 @@ public class BranchTaxFilterRequest {
     private LocalDate endDate;
 
     @Schema(defaultValue = "NORMAL")
-    private String resultType;
+    private ResultType resultType;  //type String -> ResultType 으로 수정함
     private PayStatus payStatus;
 
     @Builder.Default

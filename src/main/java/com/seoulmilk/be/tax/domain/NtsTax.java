@@ -289,7 +289,6 @@ public class NtsTax extends BaseTimeEntity {
         this.isNormal = ResultType.ABNORMAL;
     }
 
-    // 진위 여부 확인 이후 검증 완료 변경 상태를 위한 메소드 (pr 리뷰 이후에 주석 지우고 merge 예정)
     public void updateIsValidated(String isValidated) {
         this.isValidated = isValidated;
     }

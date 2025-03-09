@@ -4,12 +4,12 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.seoulmilk.be.tax.domain.type.RegionType;
 import com.seoulmilk.be.tax.domain.type.PayStatus;
+import com.seoulmilk.be.tax.domain.type.RegionType;
 import com.seoulmilk.be.tax.domain.type.ResultType;
+import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
 import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
-import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
 import com.seoulmilk.be.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +32,9 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
     @Override
     public List<OfficeTaxFilterResponse> findOfficeTaxByFilters(LocalDate startYearAndMonth,
                                                                 LocalDate endYearAndMonth,
-                                                                String region,
+                                                                RegionType region,
                                                                 String searchSupplierName,
-                                                                String resultType,
+                                                                ResultType resultType,
                                                                 String isValidated,
                                                                 Pageable pageable) {
 
@@ -88,14 +88,12 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                 .fetch();
     }
 
-    private BooleanExpression filterByRegion(String region) {
-        RegionType type = RegionType.fromString(region);
-
-        if (type == RegionType.ALL || type.getValue().isBlank()) {
+    private BooleanExpression filterByRegion(RegionType region) {
+        if (region == RegionType.ALL || region.getValue().isBlank()) {
             return null;
         }
 
-        return ntsTax.suAddr.contains(type.getValue());
+        return ntsTax.suAddr.contains(region.getValue());
     }
 
 
@@ -107,13 +105,11 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
         }
     }
 
-    private BooleanExpression filterByResultType(String resultType) {
-        ResultType type = ResultType.fromString(resultType);
-
-        if (ObjectUtils.isEmpty(resultType) || type == ResultType.ALL) {
+    private BooleanExpression filterByResultType(ResultType resultType) {
+        if (ObjectUtils.isEmpty(resultType) || resultType == ResultType.ALL) {
             return null;
         } else {
-            return ntsTax.isNormal.eq(type);
+            return ntsTax.isNormal.eq(resultType);
         }
     }
 
