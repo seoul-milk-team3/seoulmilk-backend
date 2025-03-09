@@ -5,6 +5,7 @@ import com.seoulmilk.be.tax.application.ext.ClovaOcrClient;
 import com.seoulmilk.be.tax.application.ext.ClovaOcrProperties;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.dto.request.ClovaOcrRequest;
+import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequest;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponse;
 import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
@@ -30,15 +31,36 @@ public class NtsTaxService {
     private final ClovaOcrClient clovaOcrClient;
     private final ClovaOcrProperties clovaOcrProperties;
 
-    public List<ClovaOcrResponse> analyzeTaxInvoices(List<MultipartFile> files) {
+    public void analyzeTaxInvoices(List<MultipartFile> files) {
 
-        return files.stream()
+        List<ClovaOcrResponse> responses = files.stream()
                 .map(file ->
                         clovaOcrClient.getOcrResult(
                                 clovaOcrProperties.secrets(),
                                 ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)
                         ))
                 .toList();
+
+        saveTaxFromOcr(responses, files);
+    }
+
+    private void saveTaxFromOcr(List<ClovaOcrResponse> responses, List<MultipartFile> files) {
+
+        List<String> imageUrlList = files.stream()
+                .map(file -> simpleStorageService.uploadFile(file, "tax-invoices"))
+                .toList();
+
+        TaxInvoicesSaveRequestList responseList = TaxInvoicesSaveRequestList.of(responses, files);
+
+        responseList.requests()
+                .forEach(request ->
+                        {
+                            String imageUrl = imageUrlList.get(responseList.requests().indexOf(request));
+                            NtsTax ntsTax = request.toNtsTax(request, imageUrl);
+
+                            ntsTaxRepository.save(ntsTax);
+                        }
+                );
     }
 
     public void saveTaxInvoicesList(TaxInvoicesSaveRequestList requestList, List<MultipartFile> files) {

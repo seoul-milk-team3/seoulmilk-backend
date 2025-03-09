@@ -12,8 +12,7 @@ public enum SuccessCode {
     SEND_PASSWORD_CHANGE_EMAIL_SUCCESS(201, "비밀번호 재설정 이메일이 성공적으로 전송되었습니다."),
 
     // tax
-    SAVE_TAX_SUCCESS(201, "세금계산서가 성공적으로 저장되었습니다."),
-    ANALYZE_TAX_SUCCESS(200, "세금계산서가 성공적으로 분석되었습니다."),
+    SAVE_TAX_SUCCESS(201, "세금계산서가 성공적으로 분석되어 저장되었습니다."),
     LIST_BEFRORE_VALIDATE_TAX_SUCCESS(200, "세금계산서 검증 전 리스트 조회가 성공적으로 완료되었습니다."),
 
     // office

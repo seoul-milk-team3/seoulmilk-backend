@@ -4,7 +4,6 @@ import com.seoulmilk.be.global.dto.SuccessResponse;
 import com.seoulmilk.be.tax.application.NtsTaxService;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponse;
-import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
 import com.seoulmilk.be.tax.presentation.api.NtxTaxApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.seoulmilk.be.global.dto.SuccessCode.*;
+import static com.seoulmilk.be.global.dto.SuccessCode.LIST_BEFRORE_VALIDATE_TAX_SUCCESS;
+import static com.seoulmilk.be.global.dto.SuccessCode.SAVE_TAX_SUCCESS;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,11 +29,11 @@ public class NtsTaxController implements NtxTaxApi {
     public ResponseEntity<?> analyzeTaxInvoices(
             @RequestPart List<MultipartFile> files
     ) {
-        List<ClovaOcrResponse> response = ntsTaxService.analyzeTaxInvoices(files);
+        ntsTaxService.analyzeTaxInvoices(files);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.of(ANALYZE_TAX_SUCCESS, response));
+                .body(SuccessResponse.of(SAVE_TAX_SUCCESS));
     }
 
     @Override
