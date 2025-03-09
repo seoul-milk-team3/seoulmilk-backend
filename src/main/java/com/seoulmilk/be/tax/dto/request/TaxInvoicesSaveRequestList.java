@@ -17,7 +17,7 @@ public record TaxInvoicesSaveRequestList(
                 .map(ocrResponse -> {
                     String imageUrl = files.get(ocrResponses.indexOf(ocrResponse)).getOriginalFilename();
 
-                    return new TaxInvoicesSaveRequest(ocrResponse.requestId(), mapFields(ocrResponse.images()));
+                    return new TaxInvoicesSaveRequest(mapFields(ocrResponse.images())); //ncp 가 제공하는 requestId 삭제
                 })
                 .toList();
 

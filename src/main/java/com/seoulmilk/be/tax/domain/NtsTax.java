@@ -73,6 +73,7 @@ public class NtsTax extends BaseTimeEntity {
     @Column(name = "IP_ADDR", length = 150)
     private String ipAddr;  // 공급받는자 주소
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "IS_NORMAL", length = 1)
     private ResultType isNormal;  // 정상 여부
 

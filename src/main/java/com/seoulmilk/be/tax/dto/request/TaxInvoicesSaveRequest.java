@@ -10,13 +10,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public record TaxInvoicesSaveRequest(
-        String requestId,
+//        String requestId,
         List<Field> fields
 ) {
     public record Field(
             String name,
             String inferText
     ) {
+
     }
 
     public NtsTax toNtsTax(TaxInvoicesSaveRequest request, String imageUrl) {
