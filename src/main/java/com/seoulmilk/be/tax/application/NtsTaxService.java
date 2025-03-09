@@ -4,9 +4,12 @@ import com.seoulmilk.be.global.application.SimpleStorageService;
 import com.seoulmilk.be.tax.application.ext.ClovaOcrClient;
 import com.seoulmilk.be.tax.application.ext.ClovaOcrProperties;
 import com.seoulmilk.be.tax.domain.NtsTax;
+import com.seoulmilk.be.tax.domain.type.RegionType;
+import com.seoulmilk.be.tax.domain.type.ResultType;
 import com.seoulmilk.be.tax.dto.request.ClovaOcrRequest;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponse;
+import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponseList;
 import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
@@ -80,22 +83,20 @@ public class NtsTaxService {
     }
 
     @Transactional(readOnly = true)
-    public List<BeforeValidateTaxResponse> findListBeforeValidateTax(int page,
+    public BeforeValidateTaxResponseList findListBeforeValidateTax(int page,
                                                                      int size) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
         List<OfficeTaxFilterResponse> results = ntsTaxRepository.findOfficeTaxByFilters(
                 null,
                 null,
+                RegionType.ALL,
                 null,
-                null,
-                null,
+                ResultType.ALL,
                 "0",
                 pageable
         );
 
-        return results.stream()
-                .map(BeforeValidateTaxResponse::from)
-                .toList();
+        return BeforeValidateTaxResponseList.of(results, results.size());
     }
 }

@@ -4,6 +4,7 @@ import com.seoulmilk.be.global.dto.SuccessResponse;
 import com.seoulmilk.be.tax.application.NtsTaxService;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponse;
+import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponseList;
 import com.seoulmilk.be.tax.presentation.api.NtxTaxApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -55,7 +56,7 @@ public class NtsTaxController implements NtxTaxApi {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size) {
 
-        List<BeforeValidateTaxResponse> response = ntsTaxService.findListBeforeValidateTax(page, size);
+        BeforeValidateTaxResponseList response = ntsTaxService.findListBeforeValidateTax(page, size);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
