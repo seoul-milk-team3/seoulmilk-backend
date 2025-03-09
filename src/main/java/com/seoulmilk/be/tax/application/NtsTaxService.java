@@ -8,7 +8,6 @@ import com.seoulmilk.be.tax.domain.type.RegionType;
 import com.seoulmilk.be.tax.domain.type.ResultType;
 import com.seoulmilk.be.tax.dto.request.ClovaOcrRequest;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
-import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponse;
 import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponseList;
 import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
@@ -58,23 +57,6 @@ public class NtsTaxService {
                 .forEach(request ->
                         {
                             String imageUrl = imageUrlList.get(responseList.requests().indexOf(request));
-                            NtsTax ntsTax = request.toNtsTax(request, imageUrl);
-
-                            ntsTaxRepository.save(ntsTax);
-                        }
-                );
-    }
-
-    public void saveTaxInvoicesList(TaxInvoicesSaveRequestList requestList, List<MultipartFile> files) {
-
-        List<String> imageUrlList = files.stream()
-                .map(file -> simpleStorageService.uploadFile(file, "tax-invoices"))
-                .toList();
-
-        requestList.requests()
-                .forEach(request ->
-                        {
-                            String imageUrl = imageUrlList.get(requestList.requests().indexOf(request));
                             NtsTax ntsTax = request.toNtsTax(request, imageUrl);
 
                             ntsTaxRepository.save(ntsTax);

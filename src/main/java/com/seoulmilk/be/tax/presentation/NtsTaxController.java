@@ -2,8 +2,6 @@ package com.seoulmilk.be.tax.presentation;
 
 import com.seoulmilk.be.global.dto.SuccessResponse;
 import com.seoulmilk.be.tax.application.NtsTaxService;
-import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
-import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponse;
 import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponseList;
 import com.seoulmilk.be.tax.presentation.api.NtxTaxApi;
 import lombok.RequiredArgsConstructor;
@@ -31,19 +29,6 @@ public class NtsTaxController implements NtxTaxApi {
             @RequestPart List<MultipartFile> files
     ) {
         ntsTaxService.analyzeTaxInvoices(files);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(SuccessResponse.of(SAVE_TAX_SUCCESS));
-    }
-
-    @Override
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> saveTaxInvoicesList(
-            @RequestPart TaxInvoicesSaveRequestList requestList,
-            @RequestPart List<MultipartFile> files
-    ) {
-        ntsTaxService.saveTaxInvoicesList(requestList, files);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

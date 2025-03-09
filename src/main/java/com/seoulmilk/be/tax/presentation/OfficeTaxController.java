@@ -4,22 +4,22 @@ import com.seoulmilk.be.global.dto.SuccessResponse;
 import com.seoulmilk.be.tax.application.OfficeTaxService;
 import com.seoulmilk.be.tax.domain.type.RegionType;
 import com.seoulmilk.be.tax.domain.type.ResultType;
+import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxDetailResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponseList;
 import com.seoulmilk.be.tax.dto.response.OfficeValidateAbnormalTaxResponseList;
 import com.seoulmilk.be.tax.presentation.api.OfficeTaxApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import static com.seoulmilk.be.global.dto.SuccessCode.OFFICE_TAX_DETAIL_SUCCESS;
-import static com.seoulmilk.be.global.dto.SuccessCode.OFFICE_TAX_FILTER_SUCCESS;
+import static com.seoulmilk.be.global.dto.SuccessCode.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -65,5 +65,18 @@ public class OfficeTaxController implements OfficeTaxApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(SuccessResponse.of(OFFICE_TAX_FILTER_SUCCESS, response));
+    }
+
+    @Override
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> saveTaxInvoicesList(
+            @RequestPart TaxInvoicesSaveRequestList requestList,
+            @RequestPart List<MultipartFile> files
+    ) {
+        officeTaxService.saveTaxInvoicesList(requestList, files);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.of(SAVE_TAX_SUCCESS));
     }
 }

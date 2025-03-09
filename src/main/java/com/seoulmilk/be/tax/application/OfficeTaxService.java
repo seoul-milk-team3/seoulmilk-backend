@@ -1,8 +1,10 @@
 package com.seoulmilk.be.tax.application;
 
+import com.seoulmilk.be.global.application.SimpleStorageService;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.RegionType;
 import com.seoulmilk.be.tax.domain.type.ResultType;
+import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.*;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +28,7 @@ import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_N
 public class OfficeTaxService {
 
     private final NtsTaxRepository ntsTaxRepository;
+    private final SimpleStorageService simpleStorageService;
 
     public OfficeTaxFilterResponseList findOfficeTaxByFilters(LocalDate startYearAndMonth,
                                                               LocalDate endYearAndMonth,
@@ -40,13 +44,6 @@ public class OfficeTaxService {
         return OfficeTaxFilterResponseList.of(result, result.size());
     }
 
-    public OfficeTaxDetailResponse findOfficeTaxDetail(Long taxId) {
-        NtsTax tax = ntsTaxRepository.findById(taxId)
-                .orElseThrow(() -> new NtsTaxNotFoundException(NTS_TAX_NOT_FOUND));
-
-        return OfficeTaxDetailResponse.from(tax);
-    }
-
     public OfficeValidateAbnormalTaxResponseList validateAbnormalOfficeTax(int page,
                                                                            int size) {
 
@@ -54,7 +51,7 @@ public class OfficeTaxService {
         List<OfficeTaxFilterResponse> results = ntsTaxRepository.findOfficeTaxByFilters(
                 null,
                 null,
-                null,
+                RegionType.ALL,
                 null,
                 ResultType.ABNORMAL,
                 "1",
@@ -62,5 +59,29 @@ public class OfficeTaxService {
         );
 
         return OfficeValidateAbnormalTaxResponseList.of(results, results.size());
+    }
+
+    public OfficeTaxDetailResponse findOfficeTaxDetail(Long taxId) {
+        NtsTax tax = ntsTaxRepository.findById(taxId)
+                .orElseThrow(() -> new NtsTaxNotFoundException(NTS_TAX_NOT_FOUND));
+
+        return OfficeTaxDetailResponse.from(tax);
+    }
+
+    public void saveTaxInvoicesList(TaxInvoicesSaveRequestList requestList, List<MultipartFile> files) {
+
+        List<String> imageUrlList = files.stream()
+                .map(file -> simpleStorageService.uploadFile(file, "tax-invoices"))
+                .toList();
+
+        requestList.requests()
+                .forEach(request ->
+                        {
+                            String imageUrl = imageUrlList.get(requestList.requests().indexOf(request));
+                            NtsTax ntsTax = request.toNtsTax(request, imageUrl);
+
+                            ntsTaxRepository.save(ntsTax);
+                        }
+                );
     }
 }
