@@ -10,15 +10,4 @@ public enum ResultType {
     ABNORMAL,
     ALL,
     ;
-
-//    private final String value;
-//
-//    public static ResultType fromValue(String value) {
-//        for (ResultType type : values()) {
-//            if (type.value.equals(value)) {
-//                return type;
-//            }
-//        }
-//        return ALL;
-//    }
 }
