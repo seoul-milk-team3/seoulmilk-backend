@@ -114,13 +114,13 @@ public class CodefRequestThread extends Thread {
         HashMap<String, Object> certificatedBody = easyCodefRequestFactory.createValidationRequest(
                 codefRequest.user(), codefRequest.ntsTax(), codefRequest.loginTypeLevel());
 
-        certificatedBody.putAll(Map.of(SIMPLE_AUTH.getParamName(), NORMAL.getValue(), IS_2_WAY.getParamName(), true));
+//        certificatedBody.putAll(Map.of(SIMPLE_AUTH.getParamName(), NORMAL.getValue(), IS_2_WAY.getParamName(), true));
         certificatedBody.put(TWO_WAY_INFO.getParamName(), codefCacheService.getTwoWayInfo(codefId));
 
 
         HashMap<String, Object> requestBody = new HashMap<>(certificatedBody);
         requestBody.put(TWO_WAY_INFO.getParamName(), codefCacheService.getTwoWayInfo(codefId));  // 이걸 request map 에 넣기
-        requestBody.putAll(Map.of(SIMPLE_AUTH.getParamName(), NORMAL.getValue(), IS_2_WAY.getParamName(), true));
+//        requestBody.putAll(Map.of(SIMPLE_AUTH.getParamName(), NORMAL.getValue(), IS_2_WAY.getParamName(), true));
 
         try {
             return codefRequest.easyCodef().requestCertification(productUrl, EasyCodefServiceType.DEMO, requestBody);

@@ -36,8 +36,11 @@ public class NtsTaxDummy implements ApplicationRunner {
             User DUMMY_USER1 = userRepository.findById(1L)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
+            User DUMMY_USER2 = userRepository.findById(2L)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
             NtsTax DUMMY_TAX1 = NtsTax.builder()
-                    .user(DUMMY_USER1)
+                    .user(DUMMY_USER2)
                     .issueId("202408084444333300001111")
                     .arap(Arap.AP)
                     .issueDt("2024-01-01")
@@ -61,12 +64,12 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .build();
 
             NtsTax DUMMY_TAX2 = NtsTax.builder()
-                    .user(DUMMY_USER1)
+                    .user(DUMMY_USER2)
                     .issueId("202408084444333300001112")
                     .arap(Arap.AP)
                     .issueDt("2024-02-02")
                     .issueDate("20240202")
-                    .suId("444-33-22223")
+                    .suId("444-33-22222")
                     .ipId("333-22-88856")
                     .chargeTotal(2752801L)
                     .taxTotal(0L)
@@ -85,12 +88,12 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .build();
 
             NtsTax DUMMY_TAX3 = NtsTax.builder()
-                    .user(DUMMY_USER1)
+                    .user(DUMMY_USER2)
                     .issueId("202408084444333300001113")
                     .arap(Arap.AP)
                     .issueDt("2024-03-03")
                     .issueDate("20240303")
-                    .suId("444-33-22224")
+                    .suId("444-33-22222")
                     .ipId("333-22-88857")
                     .chargeTotal(2752802L)
                     .taxTotal(0L)
@@ -109,7 +112,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .build();
 
             NtsTax DUMMY_TAX4 = NtsTax.builder()
-                    .user(DUMMY_USER1)
+                    .user(DUMMY_USER2)
                     .issueId("202408084444333300001114")
                     .arap(Arap.AP)
                     .issueDt("2024-01-11")
@@ -210,7 +213,7 @@ public class NtsTaxDummy implements ApplicationRunner {
                     .arap(Arap.AP)
                     .issueDt("2024-03-13")
                     .issueDate("20240815")
-                    .suId("444-33-22229")
+                    .suId("1")
                     .ipId("333-22-88862")
                     .chargeTotal(2752807L)
                     .taxTotal(0L)

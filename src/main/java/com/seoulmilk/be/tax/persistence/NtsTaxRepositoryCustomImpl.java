@@ -22,6 +22,7 @@ import java.util.List;
 
 import static com.seoulmilk.be.tax.domain.QNtsTax.ntsTax;
 
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                                                                 ResultType resultType,
                                                                 String isValidated,
                                                                 Pageable pageable,
-                                                                User user) {
+                                                                User userInfo) {
 
         return jpaQueryFactory
                 .select(Projections.constructor(OfficeTaxFilterResponse.class,
@@ -54,8 +55,8 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                 .from(ntsTax)
                 .orderBy(ntsTax.id.desc())
                 .where(
-                        filterByTaxofLoginUser(user.getEmployeeId()),
-//                        filterByManagedBranchByLoginUser(user.getBusinessId()),
+                        filterByTaxofLoginUser(userInfo.getEmployeeId())
+                                .or(filterByBranchTaxOfLoginUser(String.valueOf(userInfo.getBusinessId()))),
                         filterByIsValidated(isValidated),
                         filterByRegion(region),
                         filterBySupplierName(searchSupplierName),
@@ -142,11 +143,20 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
     }
 
     private BooleanExpression filterByTaxofLoginUser(String employeeId) {
+        if (employeeId == null) {
+            return null;
+        }
+
         return ntsTax.user.employeeId.eq(employeeId);
     }
 
-//    private BooleanExpression filterByManagedBranchByLoginUser(String businessId) {
-//        return Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
-//                .eq(businessId.replace("-", ""));
-//    }
+    private BooleanExpression filterByBranchTaxOfLoginUser(String businessId) {
+        if (businessId == null) {
+            return null;
+        }
+
+        return Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
+                .eq(businessId.replace("-", ""));
+    }
 }
+

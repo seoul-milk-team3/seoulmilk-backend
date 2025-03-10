@@ -97,7 +97,7 @@ public class TaxValidationService {
         List<NtsTax> ntsTaxes = ntsTaxRepository.findAllById(taxIds);
         for (NtsTax ntsTax : ntsTaxes) {
             log.info("ntsTaxId: {}, isNormal: {}", ntsTax.getId(), ntsTax.getIsNormal());
-            result.add(new InvoiceVerificationResponse(ntsTax.getId(), ntsTax.getIsNormal().getValue()));
+//            result.add(new InvoiceVerificationResponse(ntsTax.getId(), ntsTax.getIsNormal().getValue()));
         }
         return result;
     }
