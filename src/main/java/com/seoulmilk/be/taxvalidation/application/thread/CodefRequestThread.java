@@ -3,8 +3,8 @@ package com.seoulmilk.be.taxvalidation.application.thread;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seoulmilk.be.tax.application.NtsTaxService;
 import com.seoulmilk.be.tax.domain.NtsTax;
+import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import com.seoulmilk.be.taxvalidation.application.CodefCacheService;
 import com.seoulmilk.be.taxvalidation.dto.request.CodefRequest;
 import com.seoulmilk.be.taxvalidation.exception.TaxValidationException;
@@ -17,7 +17,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.seoulmilk.be.tax.domain.type.ResultType.NORMAL;
 import static com.seoulmilk.be.taxvalidation.exception.errorcode.TaxValidationErrorCode.*;
 import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParameter.*;
 import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParameter.IS_2_WAY;
@@ -29,6 +28,7 @@ public class CodefRequestThread extends Thread {
     private static final String DATA = "data";
     private static final String CONTINUE_TWO_WAY = "continue2Way";
     private static final String ENTER_AUTHENTICATION_CODE = "CF-03002";
+    private static final String AUTH_COMPLETED = "1";
 
     private final Object monitor = new Object();
 
@@ -38,17 +38,17 @@ public class CodefRequestThread extends Thread {
     private final String codefId;
     private final String productUrl;
     private final CodefCacheService codefCacheService;
-    private final NtsTaxService ntsTaxService;
+    private final NtsTaxRepository ntsTaxRepository;
 
     @Builder
-    public CodefRequestThread(String productUrl, EasyCodefRequestFactory easyCodefRequestFactory, CodefRequest codefRequest, int threadNo, String codefId, CodefCacheService codefCacheService, NtsTaxService ntsTaxService) {
+    public CodefRequestThread(String productUrl, EasyCodefRequestFactory easyCodefRequestFactory, CodefRequest codefRequest, int threadNo, String codefId, CodefCacheService codefCacheService, NtsTaxRepository ntsTaxRepository) {
         this.codefId = codefId;
         this.productUrl = productUrl;
         this.threadNo = threadNo;
         this.easyCodefRequestFactory = easyCodefRequestFactory;
         this.codefRequest = codefRequest;
         this.codefCacheService = codefCacheService;
-        this.ntsTaxService = ntsTaxService;
+        this.ntsTaxRepository = ntsTaxRepository;
     }
 
     public Object getMonitor() {
@@ -114,13 +114,10 @@ public class CodefRequestThread extends Thread {
         HashMap<String, Object> certificatedBody = easyCodefRequestFactory.createValidationRequest(
                 codefRequest.user(), codefRequest.ntsTax(), codefRequest.loginTypeLevel());
 
-        certificatedBody.putAll(Map.of(SIMPLE_AUTH.getParamName(), NORMAL.getValue(), IS_2_WAY.getParamName(), true));
+        certificatedBody.putAll(Map.of(SIMPLE_AUTH.getParamName(), AUTH_COMPLETED, IS_2_WAY.getParamName(), true));
         certificatedBody.put(TWO_WAY_INFO.getParamName(), codefCacheService.getTwoWayInfo(codefId));
 
-
         HashMap<String, Object> requestBody = new HashMap<>(certificatedBody);
-        requestBody.put(TWO_WAY_INFO.getParamName(), codefCacheService.getTwoWayInfo(codefId));  // 이걸 request map 에 넣기
-        requestBody.putAll(Map.of(SIMPLE_AUTH.getParamName(), NORMAL.getValue(), IS_2_WAY.getParamName(), true));
 
         try {
             return codefRequest.easyCodef().requestCertification(productUrl, EasyCodefServiceType.DEMO, requestBody);
@@ -141,6 +138,6 @@ public class CodefRequestThread extends Thread {
         }
         String resAuthenticity = rootNode.path(DATA).path(RES_AUTHENTICITY.getParamName()).asText();
         ntsTax.updateIsNormal(resAuthenticity);
-        ntsTaxService.saveNtsTax(ntsTax);
+        ntsTaxRepository.save(ntsTax);
     }
 }
