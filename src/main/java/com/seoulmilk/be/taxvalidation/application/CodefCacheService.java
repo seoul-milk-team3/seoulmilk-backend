@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParameter.*;
 
 @Service
-public class CodefApiCacheService {
+public class CodefCacheService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final HashOperations<String, String, Object> hashOperations;
 
-    public CodefApiCacheService(RedisTemplate<String, Object> redisTemplate) {
+    public CodefCacheService(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
         this.hashOperations = redisTemplate.opsForHash();
     }
