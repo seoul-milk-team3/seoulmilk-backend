@@ -71,7 +71,6 @@ public class TaxValidationService {
         sleepThread(requests.size() + 2);
         codefCacheService.removeTwoWayInfo(user.getCodefId());
         return findTaxIsNormal(requests);
-
     }
 
     private List<NtsTax> getNtsTaxesById(List<InvoiceValidationRequest> taxIds) {
@@ -91,8 +90,13 @@ public class TaxValidationService {
 
     public List<InvoiceVerificationResponse> findTaxIsNormal(List<InvoiceValidationRequest> requests) {
         List<InvoiceVerificationResponse> result = new ArrayList<>();
-        for (InvoiceValidationRequest tax : requests) {
-            NtsTax ntsTax = ntsTaxRepository.findById(tax.id()).orElseThrow(() -> new NtsTaxNotFoundException(NTS_TAX_NOT_FOUND));
+
+        List<Long> taxIds = requests.stream()
+                .map(InvoiceValidationRequest::id)
+                .toList();
+        List<NtsTax> ntsTaxes = ntsTaxRepository.findAllById(taxIds);
+        for (NtsTax ntsTax : ntsTaxes) {
+            log.info("ntsTaxId: {}, isNormal: {}", ntsTax.getId(), ntsTax.getIsNormal());
             result.add(new InvoiceVerificationResponse(ntsTax.getId(), ntsTax.getIsNormal().getValue()));
         }
         return result;
