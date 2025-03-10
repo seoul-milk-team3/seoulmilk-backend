@@ -102,8 +102,12 @@ public class CodefRequestThread extends Thread {
             }
         }
 
-        response = afterAuthenticatedRequest();
-        analyzeResponse(response);
+        if (threadNo < 1) {
+            response = afterAuthenticatedRequest();
+            log.info("after authenticated taxId: {}, response: {}", codefRequest.ntsTax().getId(), response);
+            analyzeResponse(response);
+        }
+
     }
 
     private String afterAuthenticatedRequest() {

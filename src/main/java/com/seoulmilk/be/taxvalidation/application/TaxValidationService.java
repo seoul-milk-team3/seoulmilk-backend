@@ -68,7 +68,7 @@ public class TaxValidationService {
         User user = authService.getLoginUser();
 
         CodefRequestThreadManager.notifyUserThread(user.getCodefId());
-        sleepThread(requests.size() + 1);
+        sleepThread(requests.size() + 2);
         codefCacheService.removeTwoWayInfo(user.getCodefId());
         return findTaxIsNormal(requests);
 
