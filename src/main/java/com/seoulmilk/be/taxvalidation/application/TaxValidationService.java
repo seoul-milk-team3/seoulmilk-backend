@@ -1,7 +1,6 @@
 package com.seoulmilk.be.taxvalidation.application;
 
 import com.seoulmilk.be.auth.service.AuthService;
-import com.seoulmilk.be.tax.application.NtsTaxService;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
@@ -39,7 +38,6 @@ public class TaxValidationService {
     private final EasyCodefProvider easyCodefProvider;
     private final EasyCodefRequestFactory easyCodefRequestFactory;
     private final CodefCacheService codefCacheService;
-    private final NtsTaxService ntsTaxService;
 
     public void validateInvoicesPreVerified(List<InvoiceValidationRequest> request, String loginTypeLevel) {
         User user = authService.getLoginUser();
@@ -56,7 +54,7 @@ public class TaxValidationService {
                     .codefRequest(new CodefRequest(easyCodef, user, ntsTax, loginTypeLevel, false))
                     .easyCodefRequestFactory(easyCodefRequestFactory)
                     .codefCacheService(codefCacheService)
-                    .ntsTaxService(ntsTaxService)
+                    .ntsTaxRepository(ntsTaxRepository)
                     .build();
 
             thread.start();
@@ -97,7 +95,7 @@ public class TaxValidationService {
         List<NtsTax> ntsTaxes = ntsTaxRepository.findAllById(taxIds);
         for (NtsTax ntsTax : ntsTaxes) {
             log.info("ntsTaxId: {}, isNormal: {}", ntsTax.getId(), ntsTax.getIsNormal());
-//            result.add(new InvoiceVerificationResponse(ntsTax.getId(), ntsTax.getIsNormal().getValue()));
+            result.add(new InvoiceVerificationResponse(ntsTax.getId(), ntsTax.getIsNormal()));
         }
         return result;
     }
