@@ -12,6 +12,7 @@ public record TaxInvoicesSaveRequestList(
         List<TaxInvoicesSaveRequest> requests
 ) {
 
+    // TODO: 동작 잘되지만 추후 리팩토링 예정
     public static TaxInvoicesSaveRequestList of(List<ClovaOcrResponse> ocrResponses, List<MultipartFile> files) {
         List<TaxInvoicesSaveRequest> requests = ocrResponses.stream()
                 .map(ocrResponse -> {
