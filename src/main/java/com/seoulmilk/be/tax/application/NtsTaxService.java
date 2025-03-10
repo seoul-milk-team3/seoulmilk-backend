@@ -87,4 +87,9 @@ public class NtsTaxService {
 
         return BeforeValidateTaxResponseList.of(results, results.size());
     }
+
+    @Transactional
+    public void saveNtsTax(NtsTax ntsTax) {
+        ntsTaxRepository.save(ntsTax);
+    }
 }
