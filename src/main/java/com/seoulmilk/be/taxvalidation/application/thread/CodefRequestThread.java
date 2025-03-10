@@ -17,10 +17,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.seoulmilk.be.tax.domain.type.ResultType.NORMAL;
-import static com.seoulmilk.be.taxvalidation.exception.errorcode.TaxValidationErrorCode.*;
+import static com.seoulmilk.be.taxvalidation.exception.errorcode.TaxValidationErrorCode.CODEF_API_ERROR;
+import static com.seoulmilk.be.taxvalidation.exception.errorcode.TaxValidationErrorCode.JSON_PROCESSING_ERROR;
 import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParameter.*;
-import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParameter.IS_2_WAY;
 
 @Slf4j
 public class CodefRequestThread extends Thread {
