@@ -73,22 +73,15 @@ public class OfficeTaxService {
         return OfficeTaxDetailResponse.from(tax);
     }
 
-    public void saveTaxInvoicesList(TaxInvoicesSaveRequestList requestList, List<MultipartFile> files) {
+    @Transactional
+    public void saveTaxInvoicesList(TaxInvoicesSaveRequestList requestList, Long taxId) {
+        NtsTax ntsTax = ntsTaxRepository.findById(taxId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 세금 데이터가 없습니다: " + taxId)); //TODO: 예외처리 진행 예정
 
-        List<String> imageUrlList = files.stream()
-                .map(file -> simpleStorageService.uploadFile(file, "tax-invoices"))
-                .toList();
-
-        requestList.requests()
-                .forEach(request ->
-                        {
-                            String imageUrl = imageUrlList.get(requestList.requests().indexOf(request));
-                            NtsTax ntsTax = request.toNtsTax(request, imageUrl);
-
-                            ntsTaxRepository.save(ntsTax);
-                        }
-                );
+        requestList.requests().forEach(request -> {
+            NtsTax updated = request.toNtsTax(request, ntsTax.getImageUrl());
+            ntsTax.updateNtstax(updated);
+        });
+        ntsTaxRepository.save(ntsTax);
     }
-
-
 }

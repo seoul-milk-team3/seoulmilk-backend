@@ -2,9 +2,13 @@ package com.seoulmilk.be.tax.domain;
 
 import com.seoulmilk.be.global.domain.BaseTimeEntity;
 import com.seoulmilk.be.tax.domain.type.*;
+import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequest;
 import com.seoulmilk.be.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -74,7 +78,7 @@ public class NtsTax extends BaseTimeEntity {
     private String ipAddr;  // 공급받는자 주소
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "IS_NORMAL", length = 1)
+    @Column(name = "IS_NORMAL", length = 8)
     private ResultType isNormal;  // 정상 여부
 
     @Column(name = "IMAGE_URL", length = 2000)
@@ -292,5 +296,27 @@ public class NtsTax extends BaseTimeEntity {
 
     public void updateIsValidated(String isValidated) {
         this.isValidated = isValidated;
+    }
+
+    public void updateNtstax(NtsTax updatedNtsTax) {
+        this.suName = updatedNtsTax.getSuName();
+        this.suAddr = updatedNtsTax.getSuAddr();
+        this.suId = updatedNtsTax.getSuId();
+        this.issueId = updatedNtsTax.getIssueId();
+        this.chargeTotal = updatedNtsTax.getChargeTotal();
+        this.ipId = updatedNtsTax.getIpId();
+        this.issueDate = updatedNtsTax.getIssueDate();
+        this.transDate = updatedNtsTax.getTransDate();
+        this.ipName = updatedNtsTax.getIpName();
+        this.ipAddr = updatedNtsTax.getIpAddr();
+        this.imageUrl = updatedNtsTax.getImageUrl();
+        this.isValidated = updatedNtsTax.getIsValidated();
+        this.isNormal = updatedNtsTax.getIsNormal();
+        this.payStatus = updatedNtsTax.getPayStatus();
+        this.taxTotal = updatedNtsTax.getTaxTotal();
+        this.grandTotal = updatedNtsTax.getGrandTotal();
+        this.ernam = updatedNtsTax.getErnam();
+        this.arap = updatedNtsTax.getArap();
+        this.issueDt = updatedNtsTax.getIssueDt();
     }
 }

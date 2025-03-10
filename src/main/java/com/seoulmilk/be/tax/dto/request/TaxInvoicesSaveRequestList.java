@@ -30,5 +30,4 @@ public record TaxInvoicesSaveRequestList(
                 .map(field -> new TaxInvoicesSaveRequest.Field(field.name(), field.inferText()))
                 .toList();
     }
-
 }

@@ -14,10 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static com.seoulmilk.be.global.dto.SuccessCode.*;
 
@@ -71,9 +69,9 @@ public class OfficeTaxController implements OfficeTaxApi {
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> saveTaxInvoicesList(
             @RequestPart TaxInvoicesSaveRequestList requestList,
-            @RequestPart List<MultipartFile> files
+            @RequestParam Long taxId
     ) {
-        officeTaxService.saveTaxInvoicesList(requestList, files);
+        officeTaxService.saveTaxInvoicesList(requestList, taxId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

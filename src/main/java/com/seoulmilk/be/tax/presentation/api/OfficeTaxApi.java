@@ -86,15 +86,14 @@ public interface OfficeTaxApi {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "세금 계산서 이미지와 분석 결과가 성공적으로 저장되었습니다.",
+                    responseCode = "201",
+                    description = "수정된 비정상 세금 계산서의 데이터가 저장되었습니다.",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ApiResponse.class),
                             examples = @ExampleObject(value = "{\n" +
                                     "  \"requests\": [\n" +
                                     "    {\n" +
-                                    "      \"requestId\": \"1a2b3c4d-1111-2222-3333-444455556666\",\n" +
                                     "      \"fields\": [\n" +
                                     "        {\"name\": \"공급자 등록번호\", \"inferText\": \"305-07-11111\"},\n" +
                                     "        {\"name\": \"작성일자\", \"inferText\": \"2024-06-05\"},\n" +
@@ -115,6 +114,6 @@ public interface OfficeTaxApi {
     })
     ResponseEntity<?> saveTaxInvoicesList(
             @RequestPart TaxInvoicesSaveRequestList requestList,
-            @RequestPart List<MultipartFile> files
+            @RequestParam Long taxId
     );
 }
