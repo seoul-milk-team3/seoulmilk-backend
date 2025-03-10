@@ -2,13 +2,12 @@ package com.seoulmilk.be.tax.domain;
 
 import com.seoulmilk.be.global.domain.BaseTimeEntity;
 import com.seoulmilk.be.tax.domain.type.*;
-import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequest;
 import com.seoulmilk.be.user.domain.User;
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.Map;
-import java.util.stream.Collectors;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 @Entity

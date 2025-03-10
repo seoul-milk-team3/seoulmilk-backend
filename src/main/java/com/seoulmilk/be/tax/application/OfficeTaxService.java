@@ -5,21 +5,18 @@ import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.RegionType;
 import com.seoulmilk.be.tax.domain.type.ResultType;
 import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
-import com.seoulmilk.be.tax.dto.response.*;
+import com.seoulmilk.be.tax.dto.response.OfficeTaxDetailResponse;
+import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
+import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponseList;
+import com.seoulmilk.be.tax.dto.response.OfficeValidateAbnormalTaxResponseList;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
-import com.seoulmilk.be.user.domain.User;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.Authentication;
-
 
 import java.time.LocalDate;
 import java.util.List;
