@@ -17,6 +17,7 @@ public enum CodefParameter {
     SUPPLIER_REG_NUMBER("supplierRegNumber"),
     CONTRACTOR_REG_NUMBER("contractorRegNumber"),
     APPROVAL_NO("approvalNo"),
+    ORIGINAL_APPROVAL_NO("originalApprovalNo"),
     REPORTING_DATE("reportingDate"),
     SUPPLY_VALUE("supplyValue"),
     TWO_WAY_INFO("twoWayInfo"),
