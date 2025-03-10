@@ -101,8 +101,7 @@ public class AuthService {
     public User getLoginUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        log.info("uername (email): {}", username);
+        log.info("username (email): {}", username);
         return userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
     }
-
 }

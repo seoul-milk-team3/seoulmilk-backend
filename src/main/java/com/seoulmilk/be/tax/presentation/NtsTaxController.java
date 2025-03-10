@@ -2,9 +2,7 @@ package com.seoulmilk.be.tax.presentation;
 
 import com.seoulmilk.be.global.dto.SuccessResponse;
 import com.seoulmilk.be.tax.application.NtsTaxService;
-import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
-import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponse;
-import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
+import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponseList;
 import com.seoulmilk.be.tax.presentation.api.NtxTaxApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.seoulmilk.be.global.dto.SuccessCode.*;
+import static com.seoulmilk.be.global.dto.SuccessCode.LIST_BEFRORE_VALIDATE_TAX_SUCCESS;
+import static com.seoulmilk.be.global.dto.SuccessCode.SAVE_TAX_SUCCESS;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,20 +28,7 @@ public class NtsTaxController implements NtxTaxApi {
     public ResponseEntity<?> analyzeTaxInvoices(
             @RequestPart List<MultipartFile> files
     ) {
-        List<ClovaOcrResponse> response = ntsTaxService.analyzeTaxInvoices(files);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(SuccessResponse.of(ANALYZE_TAX_SUCCESS, response));
-    }
-
-    @Override
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> saveTaxInvoicesList(
-            @RequestPart TaxInvoicesSaveRequestList requestList,
-            @RequestPart List<MultipartFile> files
-    ) {
-        ntsTaxService.saveTaxInvoicesList(requestList, files);
+        ntsTaxService.analyzeTaxInvoices(files);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -55,7 +41,7 @@ public class NtsTaxController implements NtxTaxApi {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int size) {
 
-        List<BeforeValidateTaxResponse> response = ntsTaxService.findListBeforeValidateTax(page, size);
+        BeforeValidateTaxResponseList response = ntsTaxService.findListBeforeValidateTax(page, size);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
