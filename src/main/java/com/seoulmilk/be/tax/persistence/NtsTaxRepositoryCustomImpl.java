@@ -36,7 +36,8 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                                                                 String searchSupplierName,
                                                                 ResultType resultType,
                                                                 String isValidated,
-                                                                Pageable pageable) {
+                                                                Pageable pageable,
+                                                                User user) {
 
         return jpaQueryFactory
                 .select(Projections.constructor(OfficeTaxFilterResponse.class,
@@ -53,6 +54,8 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                 .from(ntsTax)
                 .orderBy(ntsTax.id.desc())
                 .where(
+                        filterByTaxofLoginUser(user.getEmployeeId()),
+//                        filterByManagedBranchByLoginUser(user.getBusinessId()),
                         filterByIsValidated(isValidated),
                         filterByRegion(region),
                         filterBySupplierName(searchSupplierName),
@@ -137,4 +140,13 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
             return ntsTax.isValidated.eq(isValidated);
         }
     }
+
+    private BooleanExpression filterByTaxofLoginUser(String employeeId) {
+        return ntsTax.user.employeeId.eq(employeeId);
+    }
+
+//    private BooleanExpression filterByManagedBranchByLoginUser(String businessId) {
+//        return Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
+//                .eq(businessId.replace("-", ""));
+//    }
 }

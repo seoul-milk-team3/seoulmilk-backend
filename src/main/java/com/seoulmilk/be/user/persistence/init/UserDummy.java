@@ -33,12 +33,22 @@ public class UserDummy implements ApplicationRunner {
             User DUMMY_USER1 = User.builder()
                     .employeeId("test1")
                     .password(passwordEncoder.encode("1234"))
-                    .email("test@naver.com")
+                    .email("test1@naver.com")
                     .name("테스트1")
                     .role(Role.ADMIN)
                     .build();
 
+            User DUMMY_USER2 = User.builder()
+                    .employeeId("test2")
+                    .password(passwordEncoder.encode("5678"))
+                    .email("test2@naver.com")
+                    .name("테스트2")
+                    .role(Role.ADMIN)
+                    .build();
+
             userList.add(DUMMY_USER1);
+            userList.add(DUMMY_USER2);
+
             userRepository.saveAll(userList);
         }
     }

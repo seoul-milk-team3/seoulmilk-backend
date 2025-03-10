@@ -19,7 +19,8 @@ public interface NtsTaxRepositoryCustom {
                                                           String searchSupplierName,
                                                           ResultType resultType,
                                                           String isValidated,
-                                                          Pageable pageable);
+                                                          Pageable pageable,
+                                                          User user);
 
     List<BranchTaxFilterResponse> findBranchTaxByFiltersAndUser(BranchTaxFilterRequest filter, User user, Pageable pageable);
 }

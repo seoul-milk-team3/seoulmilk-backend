@@ -1,5 +1,6 @@
 package com.seoulmilk.be.tax.application;
 
+import com.seoulmilk.be.auth.service.AuthService;
 import com.seoulmilk.be.global.application.SimpleStorageService;
 import com.seoulmilk.be.tax.application.ext.ClovaOcrClient;
 import com.seoulmilk.be.tax.application.ext.ClovaOcrProperties;
@@ -34,6 +35,7 @@ public class NtsTaxService {
     private final SimpleStorageService simpleStorageService;
     private final ClovaOcrClient clovaOcrClient;
     private final ClovaOcrProperties clovaOcrProperties;
+    private final AuthService authService;
 
     public void analyzeTaxInvoices(List<MultipartFile> files) {
 
@@ -79,7 +81,8 @@ public class NtsTaxService {
                 null,
                 ResultType.ALL,
                 "0",
-                pageable
+                pageable,
+                authService.getLoginUser()
         );
 
         return BeforeValidateTaxResponseList.of(results, results.size());

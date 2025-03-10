@@ -1,5 +1,6 @@
 package com.seoulmilk.be.tax.application;
 
+import com.seoulmilk.be.auth.service.AuthService;
 import com.seoulmilk.be.global.application.SimpleStorageService;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.RegionType;
@@ -11,6 +12,7 @@ import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponseList;
 import com.seoulmilk.be.tax.dto.response.OfficeValidateAbnormalTaxResponseList;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
+import com.seoulmilk.be.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +32,7 @@ import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_N
 public class OfficeTaxService {
 
     private final NtsTaxRepository ntsTaxRepository;
-    private final SimpleStorageService simpleStorageService;
+    private final AuthService authService;
 
     public OfficeTaxFilterResponseList findOfficeTaxByFilters(LocalDate startYearAndMonth,
                                                               LocalDate endYearAndMonth,
@@ -39,9 +41,13 @@ public class OfficeTaxService {
                                                               ResultType resultType,
                                                               int page,
                                                               int size) {
+        User user = authService.getLoginUser();
+//        user.getEmployeeId();   //여기서 로그인한 employeeid 와 세금계산서의 employeeId 가 같은지 확인
+//        user.getBusinessId(); // 여기서 로그인한 businessId와 세금계산서의 suId 와 equal 인지 확인
+
         String isValidated = "1";
         Pageable pageable = PageRequest.of(page - 1, size);
-        List<OfficeTaxFilterResponse> result = ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable);
+        List<OfficeTaxFilterResponse> result = ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable, user);
 
         return OfficeTaxFilterResponseList.of(result, result.size());
     }
@@ -57,7 +63,8 @@ public class OfficeTaxService {
                 null,
                 ResultType.ABNORMAL,
                 "1",
-                pageable
+                pageable,
+                authService.getLoginUser()
         );
 
         return OfficeValidateAbnormalTaxResponseList.of(results, results.size());
