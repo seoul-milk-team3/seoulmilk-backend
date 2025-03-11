@@ -36,6 +36,7 @@ public class TaxValidationController implements TaxValidationApi {
     public SuccessResponse<List<InvoiceVerificationResponse>> validateInvoicePostVerified(
             @RequestBody final List<InvoiceValidationRequest> request) {
         List<InvoiceVerificationResponse> responses = taxValidationService.validateInvoicePostVerified(request);
+        taxValidationService.updateIsValidated(request);
         return SuccessResponse.of(VALIDATE_TAX_INVOICE_SUCCESS, responses);
     }
 
