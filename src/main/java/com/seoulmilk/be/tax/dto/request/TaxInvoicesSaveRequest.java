@@ -1,6 +1,5 @@
 package com.seoulmilk.be.tax.dto.request;
 
-import com.seoulmilk.be.auth.service.AuthService;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.Arap;
 import com.seoulmilk.be.tax.domain.type.PayStatus;

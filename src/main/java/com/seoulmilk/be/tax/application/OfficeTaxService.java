@@ -1,7 +1,6 @@
 package com.seoulmilk.be.tax.application;
 
 import com.seoulmilk.be.auth.service.AuthService;
-import com.seoulmilk.be.global.application.SimpleStorageService;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.RegionType;
 import com.seoulmilk.be.tax.domain.type.ResultType;
@@ -12,7 +11,6 @@ import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponseList;
 import com.seoulmilk.be.tax.dto.response.OfficeValidateAbnormalTaxResponseList;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
-import com.seoulmilk.be.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
