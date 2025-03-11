@@ -1,5 +1,6 @@
 package com.seoulmilk.be.tax.application;
 
+import com.seoulmilk.be.auth.service.AuthService;
 import com.seoulmilk.be.global.application.SimpleStorageService;
 import com.seoulmilk.be.tax.application.ext.ClovaOcrClient;
 import com.seoulmilk.be.tax.application.ext.ClovaOcrProperties;
@@ -12,13 +13,10 @@ import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponseList;
 import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
-import com.seoulmilk.be.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +32,7 @@ public class NtsTaxService {
     private final SimpleStorageService simpleStorageService;
     private final ClovaOcrClient clovaOcrClient;
     private final ClovaOcrProperties clovaOcrProperties;
+    private final AuthService authService;
 
     public void analyzeTaxInvoices(List<MultipartFile> files) {
 
@@ -60,7 +59,7 @@ public class NtsTaxService {
                 .forEach(request ->
                         {
                             String imageUrl = imageUrlList.get(responseList.requests().indexOf(request));
-                            NtsTax ntsTax = request.toNtsTax(request, imageUrl);
+                            NtsTax ntsTax = request.toNtsTax(request, imageUrl, authService.getLoginUser());
 
                             ntsTaxRepository.save(ntsTax);
                         }
@@ -79,9 +78,16 @@ public class NtsTaxService {
                 null,
                 ResultType.ALL,
                 "0",
-                pageable
+                pageable,
+                authService.getLoginUser()
         );
 
         return BeforeValidateTaxResponseList.of(results, results.size());
+    }
+
+    // TODO: 지워도 되는 코드인지 확인해주세요
+    @Transactional
+    public void saveNtsTax(NtsTax ntsTax) {
+        ntsTaxRepository.save(ntsTax);
     }
 }

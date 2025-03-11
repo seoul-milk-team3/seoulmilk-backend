@@ -1,6 +1,6 @@
 package com.seoulmilk.be.tax.application;
 
-import com.seoulmilk.be.global.application.SimpleStorageService;
+import com.seoulmilk.be.auth.service.AuthService;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.RegionType;
 import com.seoulmilk.be.tax.domain.type.ResultType;
@@ -30,7 +30,7 @@ import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_N
 public class OfficeTaxService {
 
     private final NtsTaxRepository ntsTaxRepository;
-    private final SimpleStorageService simpleStorageService;
+    private final AuthService authService;
 
     public OfficeTaxFilterResponseList findOfficeTaxByFilters(LocalDate startYearAndMonth,
                                                               LocalDate endYearAndMonth,
@@ -39,9 +39,10 @@ public class OfficeTaxService {
                                                               ResultType resultType,
                                                               int page,
                                                               int size) {
+
         String isValidated = "1";
         Pageable pageable = PageRequest.of(page - 1, size);
-        List<OfficeTaxFilterResponse> result = ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable);
+        List<OfficeTaxFilterResponse> result = ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable, authService.getLoginUser());
 
         return OfficeTaxFilterResponseList.of(result, result.size());
     }
@@ -57,7 +58,8 @@ public class OfficeTaxService {
                 null,
                 ResultType.ABNORMAL,
                 "1",
-                pageable
+                pageable,
+                authService.getLoginUser()
         );
 
         return OfficeValidateAbnormalTaxResponseList.of(results, results.size());
@@ -76,9 +78,10 @@ public class OfficeTaxService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID의 세금 데이터가 없습니다: " + taxId)); //TODO: 예외처리 진행 예정
 
         requestList.requests().forEach(request -> {
-            NtsTax updated = request.toNtsTax(request, ntsTax.getImageUrl());
+            NtsTax updated = request.toNtsTax(request, ntsTax.getImageUrl(), authService.getLoginUser());
             ntsTax.updateNtstax(updated);
         });
+
         ntsTaxRepository.save(ntsTax);
     }
 }

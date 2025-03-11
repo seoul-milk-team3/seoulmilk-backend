@@ -22,6 +22,7 @@ import java.util.List;
 
 import static com.seoulmilk.be.tax.domain.QNtsTax.ntsTax;
 
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -36,7 +37,8 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                                                                 String searchSupplierName,
                                                                 ResultType resultType,
                                                                 String isValidated,
-                                                                Pageable pageable) {
+                                                                Pageable pageable,
+                                                                User userInfo) {
 
         return jpaQueryFactory
                 .select(Projections.constructor(OfficeTaxFilterResponse.class,
@@ -53,6 +55,8 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                 .from(ntsTax)
                 .orderBy(ntsTax.id.desc())
                 .where(
+                        filterByTaxOfLoginUser(userInfo.getEmployeeId())
+                                .or(filterByBranchTaxOfLoginUser(userInfo.getBusinessId())),
                         filterByIsValidated(isValidated),
                         filterByRegion(region),
                         filterBySupplierName(searchSupplierName),
@@ -137,4 +141,22 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
             return ntsTax.isValidated.eq(isValidated);
         }
     }
+
+    private BooleanExpression filterByTaxOfLoginUser(String employeeId) {
+        if (employeeId == null) {
+            return null;
+        }
+
+        return ntsTax.user.employeeId.eq(employeeId);
+    }
+
+    private BooleanExpression filterByBranchTaxOfLoginUser(String businessId) {
+        if (businessId == null) {
+            return null;
+        }
+
+        return Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
+                .eq(businessId.replace("-", ""));
+    }
 }
+
