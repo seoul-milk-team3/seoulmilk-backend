@@ -29,46 +29,16 @@ import java.util.List;
 public class NtsTaxService {
 
     private final NtsTaxRepository ntsTaxRepository;
-    private final SimpleStorageService simpleStorageService;
-    private final ClovaOcrClient clovaOcrClient;
-    private final ClovaOcrProperties clovaOcrProperties;
     private final AuthService authService;
+    private final NtsTaxFacadeService ntsTaxFacadeService;
 
     public void analyzeTaxInvoices(List<MultipartFile> files) {
-
-        List<ClovaOcrResponse> responses = files.stream()
-                .map(file ->
-                        clovaOcrClient.getOcrResult(
-                                clovaOcrProperties.secrets(),
-                                ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)
-                        ))
-                .toList();
-
-        saveTaxFromOcr(responses, files);
-    }
-
-    private void saveTaxFromOcr(List<ClovaOcrResponse> responses, List<MultipartFile> files) {
-
-        List<String> imageUrlList = files.stream()
-                .map(file -> simpleStorageService.uploadFile(file, "tax-invoices"))
-                .toList();
-
-        TaxInvoicesSaveRequestList responseList = TaxInvoicesSaveRequestList.of(responses, files);
-
-        responseList.requests()
-                .forEach(request ->
-                        {
-                            String imageUrl = imageUrlList.get(responseList.requests().indexOf(request));
-                            NtsTax ntsTax = request.toNtsTax(request, imageUrl, authService.getLoginUser());
-
-                            ntsTaxRepository.save(ntsTax);
-                        }
-                );
+        ntsTaxFacadeService.analyzeTaxInvoices(files);
     }
 
     @Transactional(readOnly = true)
     public BeforeValidateTaxResponseList findListBeforeValidateTax(int page,
-                                                                     int size) {
+                                                                   int size) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
         List<OfficeTaxFilterResponse> results = ntsTaxRepository.findOfficeTaxByFilters(
@@ -83,11 +53,5 @@ public class NtsTaxService {
         );
 
         return BeforeValidateTaxResponseList.of(results, results.size());
-    }
-
-    // TODO: 지워도 되는 코드인지 확인해주세요
-    @Transactional
-    public void saveNtsTax(NtsTax ntsTax) {
-        ntsTaxRepository.save(ntsTax);
     }
 }
