@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,9 @@ import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_N
 @Service
 @RequiredArgsConstructor
 public class TaxValidationService {
+    private static final String IS_VALIDATED = "1";
     private static final Long REQUEST_TERM = 1_000L;
+    private static final Long VALIDATING_TERM = 1_200L;
 
     @Value("${api.codef.url}")
     private String productUrl;
@@ -46,7 +49,6 @@ public class TaxValidationService {
 
         for (int i = 0; i < ntsTaxes.size(); i++) {
             NtsTax ntsTax = ntsTaxes.get(i);
-            log.info("Before start Thread. Make Thread.");
             CodefRequestThread thread = CodefRequestThread.builder()
                     .codefId(user.getCodefId())
                     .productUrl(productUrl)
@@ -58,7 +60,7 @@ public class TaxValidationService {
                     .build();
 
             thread.start();
-            sleepThread(1);
+            sleepThread(1, REQUEST_TERM);
         }
     }
 
@@ -66,9 +68,10 @@ public class TaxValidationService {
         User user = authService.getLoginUser();
 
         CodefRequestThreadManager.notifyUserThread(user.getCodefId());
-        sleepThread(requests.size() + 2);
+        sleepThread(requests.size(), VALIDATING_TERM);
         codefCacheService.removeTwoWayInfo(user.getCodefId());
-        return findTaxIsNormal(requests);
+
+        return findTaxIsNormal(getTaxes(requests));
     }
 
     private List<NtsTax> getNtsTaxesById(List<InvoiceValidationRequest> taxIds) {
@@ -77,27 +80,37 @@ public class TaxValidationService {
                 .collect(Collectors.toList());
     }
 
-    private void sleepThread(int size) {
+    private void sleepThread(int size, Long term) {
         try {
-            Thread.sleep(REQUEST_TERM * size);
+            Thread.sleep(term * size);
         } catch (InterruptedException e) {
             log.error("error occurred: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
-    public List<InvoiceVerificationResponse> findTaxIsNormal(List<InvoiceValidationRequest> requests) {
-        List<InvoiceVerificationResponse> result = new ArrayList<>();
-
-        List<Long> taxIds = requests.stream()
-                .map(InvoiceValidationRequest::id)
-                .toList();
-        List<NtsTax> ntsTaxes = ntsTaxRepository.findAllById(taxIds);
+    @Transactional
+    public void updateIsValidated(List<InvoiceValidationRequest> requests) {
+        List<NtsTax> ntsTaxes = getTaxes(requests);
         for (NtsTax ntsTax : ntsTaxes) {
+            ntsTax.updateIsValidated(IS_VALIDATED);
+        }
+    }
+
+    public List<InvoiceVerificationResponse> findTaxIsNormal(List<NtsTax> taxes) {
+        List<InvoiceVerificationResponse> result = new ArrayList<>();
+        for (NtsTax ntsTax : taxes) {
             log.info("ntsTaxId: {}, isNormal: {}", ntsTax.getId(), ntsTax.getIsNormal());
             result.add(new InvoiceVerificationResponse(ntsTax.getId(), ntsTax.getIsNormal()));
         }
         return result;
+    }
+
+    private List<NtsTax> getTaxes(List<InvoiceValidationRequest> requests) {
+        List<Long> taxIds = requests.stream()
+                .map(InvoiceValidationRequest::id)
+                .toList();
+        return ntsTaxRepository.findAllById(taxIds);
     }
 }
 
