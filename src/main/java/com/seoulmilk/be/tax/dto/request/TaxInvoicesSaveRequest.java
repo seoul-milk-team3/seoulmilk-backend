@@ -24,6 +24,9 @@ public record TaxInvoicesSaveRequest(
         Map<String, String> fieldMap = request.fields().stream()
                 .collect(Collectors.toMap(Field::name, Field::inferText, (existing, replacement) -> existing));
 
+        long chargeTotal = parseLongOrDefault(fieldMap.get("공급가액"), 0L);
+        long taxTotal = parseLongOrDefault(fieldMap.get("세액"), 1L);
+
         return NtsTax.builder()
                 .user(user)
                 .suName(fieldMap.getOrDefault("공급자명", "empty"))
@@ -41,18 +44,22 @@ public record TaxInvoicesSaveRequest(
                 .isNormal(ResultType.ABNORMAL)
                 .payStatus(PayStatus.PAID_YET)
                 //TODO: 추후에는 실제 데이터로 변경해야 함 : 개발에는 필요없는 회사 데이터 이므로 임시로 dummy 값으로 설정
-                .taxTotal(100L)
-                .grandTotal(100L)
-                .ernam("dummy")
+                .taxTotal(parseLongOrDefault(fieldMap.get("세액"), 0L))
+                .grandTotal(chargeTotal + taxTotal)
+                .ernam("1000")
                 .arap(Arap.AP)
-                .issueDt("dummy")
+                .issueDt("2024-06-10")
                 .build();
     }
 
     private long parseLongOrDefault(String value, long defaultValue) {
         try {
-            return value != null ? Long.parseLong(value.replace(",", "")) : defaultValue;
+            if (value == null || value.isEmpty()) {
+                return defaultValue;
+            }
+            return Long.parseLong(value.replaceAll("[,\\.]", ""));
         } catch (NumberFormatException e) {
+            System.out.println("숫자 변환 오류: " + value);
             return defaultValue;
         }
     }
