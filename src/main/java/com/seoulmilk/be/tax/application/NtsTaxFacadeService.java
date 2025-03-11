@@ -14,7 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Slf4j
 @Service
@@ -27,14 +32,34 @@ public class NtsTaxFacadeService {
     private final ClovaOcrClient clovaOcrClient;
     private final ClovaOcrProperties clovaOcrProperties;
 
+    private final ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+//    public void analyzeTaxInvoices(List<MultipartFile> files) {
+//        Instant start = Instant.now();
+//
+//        List<ClovaOcrResponse> responseList = files.stream()
+//                .map(file -> (clovaOcrClient.getOcrResult(clovaOcrProperties.secrets(),
+//                        ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)))
+//                )
+//                .toList();
+//
+//        Instant end = Instant.now();
+//        log.info("Sequential processing time: {} ms", Duration.between(start, end).toMillis());
+//
+//        saveTaxFromOcr(responseList, files);
+//    }
+
     public void analyzeTaxInvoices(List<MultipartFile> files) {
 
-        List<ClovaOcrResponse> responses = files.stream()
-                .map(file ->
-                        clovaOcrClient.getOcrResult(
-                                clovaOcrProperties.secrets(),
-                                ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)
+        List<CompletableFuture<ClovaOcrResponse>> responseList = files.stream()
+                .map(file -> CompletableFuture.supplyAsync
+                        (() -> clovaOcrClient.getOcrResult(clovaOcrProperties.secrets(),
+                                ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)), executorService
                         ))
+                .toList();
+
+        List<ClovaOcrResponse> responses = responseList.stream()
+                .map(CompletableFuture::join)
                 .toList();
 
         saveTaxFromOcr(responses, files);
@@ -43,19 +68,19 @@ public class NtsTaxFacadeService {
     private void saveTaxFromOcr(List<ClovaOcrResponse> responses, List<MultipartFile> files) {
 
         List<String> imageUrlList = files.stream()
-                .map(file -> simpleStorageService.uploadFile(file, "tax-invoices"))
+                .map(file ->
+                        simpleStorageService.uploadFile(file, "tax-invoices"))
                 .toList();
 
         TaxInvoicesSaveRequestList responseList = TaxInvoicesSaveRequestList.of(responses, files);
 
-        responseList.requests()
-                .forEach(request ->
-                        {
-                            String imageUrl = imageUrlList.get(responseList.requests().indexOf(request));
-                            NtsTax ntsTax = request.toNtsTax(request, imageUrl, authService.getLoginUser());
+        List<NtsTax> ntsTaxes = responseList.requests().stream()
+                .map( request -> {
+                    int index = responseList.requests().indexOf(request);
+                    return request.toNtsTax(request, imageUrlList.get(index), authService.getLoginUser());
+                        })
+                .toList();
 
-                            ntsTaxRepository.save(ntsTax);
-                        }
-                );
+        ntsTaxRepository.saveAll(ntsTaxes);
     }
 }
