@@ -10,6 +10,7 @@ import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponseList;
 import com.seoulmilk.be.tax.dto.response.OfficeValidateAbnormalTaxResponseList;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
+import com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +76,7 @@ public class OfficeTaxService {
     @Transactional
     public void saveTaxInvoicesList(TaxInvoicesSaveRequestList requestList, Long taxId) {
         NtsTax ntsTax = ntsTaxRepository.findById(taxId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 세금 데이터가 없습니다: " + taxId)); //TODO: 예외처리 진행 예정
+                .orElseThrow(() -> new NtsTaxNotFoundException(NTS_TAX_NOT_FOUND));
 
         requestList.requests().forEach(request -> {
             NtsTax updated = request.toNtsTax(request, ntsTax.getImageUrl(), authService.getLoginUser());
