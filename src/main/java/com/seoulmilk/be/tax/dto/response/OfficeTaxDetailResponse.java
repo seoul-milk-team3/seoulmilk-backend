@@ -15,6 +15,7 @@ public record OfficeTaxDetailResponse(
         String issueDate,
         String suId,
         String ipId,
+        String issueId,
         Long chargeTotal,
         Long grandTotal,
         Long taxTotal,
@@ -27,6 +28,7 @@ public record OfficeTaxDetailResponse(
         return OfficeTaxDetailResponse.builder()
                 .id(ntsTax.getId())
                 .arap(ntsTax.getArap())
+                .issueId(ntsTax.getIssueId())
                 .issueDate(ntsTax.getIssueDate())
                 .suId(ntsTax.getSuId())
                 .ipId(ntsTax.getIpId())

@@ -32,37 +32,19 @@ public class NtsTaxFacadeService {
     private final ClovaOcrClient clovaOcrClient;
     private final ClovaOcrProperties clovaOcrProperties;
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(2);
-
-//    public void analyzeTaxInvoices(List<MultipartFile> files) {
-//        Instant start = Instant.now();
-//
-//        List<ClovaOcrResponse> responseList = files.stream()
-//                .map(file -> (clovaOcrClient.getOcrResult(clovaOcrProperties.secrets(),
-//                        ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)))
-//                )
-//                .toList();
-//
-//        Instant end = Instant.now();
-//        log.info("Sequential processing time: {} ms", Duration.between(start, end).toMillis());
-//
-//        saveTaxFromOcr(responseList, files);
-//    }
-
     public void analyzeTaxInvoices(List<MultipartFile> files) {
+        Instant start = Instant.now();
 
-        List<CompletableFuture<ClovaOcrResponse>> responseList = files.stream()
-                .map(file -> CompletableFuture.supplyAsync
-                        (() -> clovaOcrClient.getOcrResult(clovaOcrProperties.secrets(),
-                                ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)), executorService
-                        ))
+        List<ClovaOcrResponse> responseList = files.stream()
+                .map(file -> (clovaOcrClient.getOcrResult(clovaOcrProperties.secrets(),
+                        ClovaOcrRequest.fromMultipartFile(file, clovaOcrProperties)))
+                )
                 .toList();
 
-        List<ClovaOcrResponse> responses = responseList.stream()
-                .map(CompletableFuture::join)
-                .toList();
+        Instant end = Instant.now();
+        log.info("Sequential processing time: {} ms", Duration.between(start, end).toMillis());
 
-        saveTaxFromOcr(responses, files);
+        saveTaxFromOcr(responseList, files);
     }
 
     private void saveTaxFromOcr(List<ClovaOcrResponse> responses, List<MultipartFile> files) {
