@@ -41,13 +41,10 @@ public class OfficeTaxService {
                                                               ResultType resultType,
                                                               int page,
                                                               int size) {
-        User user = authService.getLoginUser();
-//        user.getEmployeeId();   //여기서 로그인한 employeeid 와 세금계산서의 employeeId 가 같은지 확인
-//        user.getBusinessId(); // 여기서 로그인한 businessId와 세금계산서의 suId 와 equal 인지 확인
 
         String isValidated = "1";
         Pageable pageable = PageRequest.of(page - 1, size);
-        List<OfficeTaxFilterResponse> result = ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable, user);
+        List<OfficeTaxFilterResponse> result = ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable, authService.getLoginUser());
 
         return OfficeTaxFilterResponseList.of(result, result.size());
     }
@@ -83,9 +80,10 @@ public class OfficeTaxService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID의 세금 데이터가 없습니다: " + taxId)); //TODO: 예외처리 진행 예정
 
         requestList.requests().forEach(request -> {
-            NtsTax updated = request.toNtsTax(request, ntsTax.getImageUrl());
+            NtsTax updated = request.toNtsTax(request, ntsTax.getImageUrl(), authService.getLoginUser());
             ntsTax.updateNtstax(updated);
         });
+
         ntsTaxRepository.save(ntsTax);
     }
 }

@@ -1,9 +1,11 @@
 package com.seoulmilk.be.tax.dto.request;
 
+import com.seoulmilk.be.auth.service.AuthService;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.Arap;
 import com.seoulmilk.be.tax.domain.type.PayStatus;
 import com.seoulmilk.be.tax.domain.type.ResultType;
+import com.seoulmilk.be.user.domain.User;
 
 import java.util.List;
 import java.util.Map;
@@ -20,11 +22,12 @@ public record TaxInvoicesSaveRequest(
 
     }
 
-    public NtsTax toNtsTax(TaxInvoicesSaveRequest request, String imageUrl) {
+    public NtsTax toNtsTax(TaxInvoicesSaveRequest request, String imageUrl, User user) {
         Map<String, String> fieldMap = request.fields().stream()
                 .collect(Collectors.toMap(Field::name, Field::inferText, (existing, replacement) -> existing));
 
         return NtsTax.builder()
+                .user(user)
                 .suName(fieldMap.getOrDefault("공급자명", "empty"))
                 .suAddr(fieldMap.getOrDefault("공급자 주소", "empty"))
                 .suId(fieldMap.getOrDefault("공급자 등록번호", "empty"))
