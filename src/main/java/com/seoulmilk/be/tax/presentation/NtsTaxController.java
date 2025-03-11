@@ -1,6 +1,7 @@
 package com.seoulmilk.be.tax.presentation;
 
 import com.seoulmilk.be.global.dto.SuccessResponse;
+import com.seoulmilk.be.tax.application.NtsTaxFacadeService;
 import com.seoulmilk.be.tax.application.NtsTaxService;
 import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponseList;
 import com.seoulmilk.be.tax.presentation.api.NtxTaxApi;
@@ -22,7 +23,6 @@ import static com.seoulmilk.be.global.dto.SuccessCode.SAVE_TAX_SUCCESS;
 public class NtsTaxController implements NtxTaxApi {
 
     private final NtsTaxService ntsTaxService;
-
     @Override
     @PostMapping(value = "/ocr", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> analyzeTaxInvoices(
