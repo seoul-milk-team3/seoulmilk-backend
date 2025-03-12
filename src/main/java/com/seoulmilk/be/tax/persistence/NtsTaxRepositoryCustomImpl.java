@@ -55,7 +55,7 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                 .from(ntsTax)
                 .orderBy(ntsTax.id.desc())
                 .where(
-                        filterByTaxOfLoginUser(userInfo.getEmployeeId(), userInfo.getBusinessId()),
+                        filterByTaxOfLoginUserAndBranch(userInfo.getEmployeeId(), userInfo.getBusinessId()),
                         filterByIsValidated(isValidated),
                         filterByRegion(region),
                         filterBySupplierName(searchSupplierName),
@@ -141,7 +141,7 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
         }
     }
 
-    private BooleanExpression filterByTaxOfLoginUser(String employeeId, String businessId) {
+    private BooleanExpression filterByTaxOfLoginUserAndBranch(String employeeId, String businessId) {
         if (employeeId == null && businessId == null) {
             return null;
         }
