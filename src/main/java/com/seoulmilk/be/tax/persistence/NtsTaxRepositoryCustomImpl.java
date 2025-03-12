@@ -7,7 +7,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seoulmilk.be.tax.domain.type.PayStatus;
 import com.seoulmilk.be.tax.domain.type.RegionType;
 import com.seoulmilk.be.tax.domain.type.ResultType;
-import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
 import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.user.domain.User;
@@ -78,7 +77,12 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
     }
 
     @Override
-    public List<BranchTaxFilterResponse> findBranchTaxByFiltersAndUser(BranchTaxFilterRequest filter, User user, Pageable pageable) {
+    public List<BranchTaxFilterResponse> findBranchTaxByFiltersAndUser(LocalDate startDate,
+                                                                       LocalDate endDate,
+                                                                       ResultType resultType,
+                                                                       PayStatus payStatus,
+                                                                       User user,
+                                                                       Pageable pageable) {
         return jpaQueryFactory
                 .select(Projections.constructor(BranchTaxFilterResponse.class,
                         ntsTax.id,
@@ -90,9 +94,9 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                 .from(ntsTax)
                 .orderBy(ntsTax.id.desc())
                 .where(
-                        filterByPayStatus(filter.getPayStatus()),
-                        filterByResultType(filter.getResultType()),
-                        filterByYearAndMonth(filter.getStartDate(), filter.getEndDate()),
+                        filterByPayStatus(payStatus),
+                        filterByResultType(resultType),
+                        filterByYearAndMonth(startDate, endDate),
                         Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
                                 .eq(user.getBusinessId().replace("-", ""))
                 )
