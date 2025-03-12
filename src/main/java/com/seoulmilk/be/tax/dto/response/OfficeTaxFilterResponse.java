@@ -1,5 +1,6 @@
 package com.seoulmilk.be.tax.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.seoulmilk.be.tax.domain.type.ResultType;
 import lombok.Builder;
 
@@ -15,6 +16,7 @@ public record OfficeTaxFilterResponse(
         String suAddr,
         ResultType isNormal,
         String isValidated,
+        @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDateTime createdDate
 ) {
 }

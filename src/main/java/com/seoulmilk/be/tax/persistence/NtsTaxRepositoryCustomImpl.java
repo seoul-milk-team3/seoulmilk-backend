@@ -11,6 +11,7 @@ import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
 import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponse;
 import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
 import com.seoulmilk.be.user.domain.User;
+import com.seoulmilk.be.user.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static com.seoulmilk.be.tax.domain.QNtsTax.ntsTax;
 
@@ -29,6 +31,7 @@ import static com.seoulmilk.be.tax.domain.QNtsTax.ntsTax;
 public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final UserRepository userRepository;
 
     @Override
     public List<OfficeTaxFilterResponse> findOfficeTaxByFilters(LocalDate startYearAndMonth,
@@ -39,6 +42,12 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                                                                 String isValidated,
                                                                 Pageable pageable,
                                                                 User userInfo) {
+
+        Optional<User> users = userRepository.findByBusinessId(userInfo.getBusinessId());
+
+        List<String> employeeIds = users.stream()
+                .map(User::getEmployeeId)
+                .toList();
 
         return jpaQueryFactory
                 .select(Projections.constructor(OfficeTaxFilterResponse.class,
@@ -55,8 +64,8 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                 .from(ntsTax)
                 .orderBy(ntsTax.id.desc())
                 .where(
-                        filterByTaxOfLoginUser(userInfo.getEmployeeId())
-                                .or(filterByBranchTaxOfLoginUser(userInfo.getBusinessId())),
+                        ntsTax.user.employeeId.in(employeeIds).or(Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
+                                .eq(userInfo.getBusinessId().replace("-", ""))),
                         filterByIsValidated(isValidated),
                         filterByRegion(region),
                         filterBySupplierName(searchSupplierName),
@@ -141,22 +150,4 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
             return ntsTax.isValidated.eq(isValidated);
         }
     }
-
-    private BooleanExpression filterByTaxOfLoginUser(String employeeId) {
-        if (employeeId == null) {
-            return null;
-        }
-
-        return ntsTax.user.employeeId.eq(employeeId);
-    }
-
-    private BooleanExpression filterByBranchTaxOfLoginUser(String businessId) {
-        if (businessId == null) {
-            return null;
-        }
-
-        return Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
-                .eq(businessId.replace("-", ""));
-    }
 }
-

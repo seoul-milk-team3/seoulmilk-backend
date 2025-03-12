@@ -37,7 +37,7 @@ public record TaxInvoicesSaveRequest(
                 .ipId(fieldMap.getOrDefault("공급받는자 등록번호", "empty"))
                 .issueDate(fieldMap.getOrDefault("작성일자", "empty").replace("-", ""))
                 .transDate(fieldMap.getOrDefault("거래일자", "empty"))
-                .ipName(fieldMap.getOrDefault("공급받는자명", "empty"))
+                .ipName(fieldMap.getOrDefault("공급받는자 상호", "empty"))
                 .ipAddr(fieldMap.getOrDefault("공급받는자 주소", "empty"))
                 .imageUrl(imageUrl)
                 .isValidated("0")
