@@ -146,9 +146,19 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
             return null;
         }
 
-        return ntsTax.user.employeeId.eq(employeeId)
-                .or(Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
-                        .eq(businessId.replace("-", "")));
+        BooleanExpression isEmployee = ntsTax.user.employeeId.eq(employeeId);
+
+        BooleanExpression isBranch = Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
+                .eq(businessId.replace("-", ""));
+
+        if (isEmployee != null && isBranch != null) {
+            return isEmployee.or(isBranch);
+        } else if (isEmployee != null) {
+            return isEmployee;
+        } else if (isBranch != null) {
+            return isBranch;
+        }
+
+        return null;
     }
 }
-
