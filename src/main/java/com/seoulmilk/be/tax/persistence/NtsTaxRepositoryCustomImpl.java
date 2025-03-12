@@ -150,25 +150,4 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
             return ntsTax.isValidated.eq(isValidated);
         }
     }
-
-    private BooleanExpression filterByTaxOfLoginUserAndBranch(Long id, String businessId) {
-        if (id == null && businessId == null) {
-            return null;
-        }
-
-        BooleanExpression isEmployee = ntsTax.user.id.eq(id);
-
-        BooleanExpression isBranch = Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
-                .eq(businessId.replace("-", ""));
-
-        if (isEmployee != null && isBranch != null) {
-            return isEmployee.or(isBranch);
-        } else if (isEmployee != null) {
-            return isEmployee;
-        } else if (isBranch != null) {
-            return isBranch;
-        }
-
-        return null;
-    }
 }
