@@ -55,8 +55,7 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                 .from(ntsTax)
                 .orderBy(ntsTax.id.desc())
                 .where(
-                        filterByTaxOfLoginUser(userInfo.getEmployeeId())
-                                .or(filterByBranchTaxOfLoginUser(userInfo.getBusinessId())),
+                        filterByTaxOfLoginUser(userInfo.getEmployeeId(), userInfo.getBusinessId()),
                         filterByIsValidated(isValidated),
                         filterByRegion(region),
                         filterBySupplierName(searchSupplierName),
@@ -142,21 +141,14 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
         }
     }
 
-    private BooleanExpression filterByTaxOfLoginUser(String employeeId) {
-        if (employeeId == null) {
+    private BooleanExpression filterByTaxOfLoginUser(String employeeId, String businessId) {
+        if (employeeId == null && businessId == null) {
             return null;
         }
 
-        return ntsTax.user.employeeId.eq(employeeId);
-    }
-
-    private BooleanExpression filterByBranchTaxOfLoginUser(String businessId) {
-        if (businessId == null) {
-            return null;
-        }
-
-        return Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
-                .eq(businessId.replace("-", ""));
+        return ntsTax.user.employeeId.eq(employeeId)
+                .or(Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
+                        .eq(businessId.replace("-", "")));
     }
 }
 
