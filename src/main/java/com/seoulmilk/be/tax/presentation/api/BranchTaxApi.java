@@ -1,16 +1,19 @@
 package com.seoulmilk.be.tax.presentation.api;
 
 import com.seoulmilk.be.global.dto.SuccessResponse;
+import com.seoulmilk.be.tax.domain.type.PayStatus;
+import com.seoulmilk.be.tax.domain.type.ResultType;
 import com.seoulmilk.be.tax.dto.response.BranchTaxDetailResponse;
 import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponseList;
-import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
 
 
 @Tag(name = "Branch", description = "대리점 조회 API")
@@ -27,8 +30,16 @@ public interface BranchTaxApi {
             )
     })
     SuccessResponse<BranchTaxFilterResponseList> findBranchTaxByFilters(
-            @Parameter(description = "대리점 세금 계산서 필터 조건")
-            @ModelAttribute BranchTaxFilterRequest request
+            @Parameter(description = "필터링 시작 날짜")
+            @RequestParam LocalDate startDate,
+            @Parameter(description = "필터링 끝 날짜")
+            @RequestParam LocalDate endDate,
+            @Parameter(description = "검증 결과")
+            @RequestParam ResultType resultType,
+            @Parameter(description = "지급 여부")
+            @RequestParam PayStatus payStatus,
+            @RequestParam int page,
+            @RequestParam int size
     );
 
     @Operation(
@@ -47,6 +58,6 @@ public interface BranchTaxApi {
     })
     SuccessResponse<BranchTaxDetailResponse> findBranchTaxDetail(
             @Parameter(description = "세금계산서 ID")
-            @RequestParam Long taxId
+            @PathVariable Long taxId
     );
 }
