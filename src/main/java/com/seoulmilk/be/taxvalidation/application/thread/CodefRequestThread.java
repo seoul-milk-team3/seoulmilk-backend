@@ -66,6 +66,7 @@ public class CodefRequestThread extends Thread {
                 codefRequest.user(), codefRequest.ntsTax(), codefRequest.loginTypeLevel());
         try {
             response = codefRequest.easyCodef().requestProduct(productUrl, EasyCodefServiceType.DEMO, body);
+            log.info("after taxId: {}, response: {}", codefRequest.ntsTax().getId(), response);
         } catch (UnsupportedEncodingException | InterruptedException | JsonProcessingException e) {
             throw new TaxValidationException(CODEF_API_ERROR);
         }
