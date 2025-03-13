@@ -2,13 +2,14 @@ package com.seoulmilk.be.tax.application;
 
 import com.seoulmilk.be.auth.service.AuthService;
 import com.seoulmilk.be.tax.domain.NtsTax;
+import com.seoulmilk.be.tax.domain.type.PayStatus;
+import com.seoulmilk.be.tax.domain.type.ResultType;
 import com.seoulmilk.be.tax.dto.response.BranchTaxDetailResponse;
 import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponse;
 import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponseList;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.exception.UnauthorizedTaxUserException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
-import com.seoulmilk.be.tax.dto.request.BranchTaxFilterRequest;
 import com.seoulmilk.be.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_NOT_FOUND;
@@ -30,10 +32,10 @@ public class BranchTaxService {
     private final AuthService authService;
     private final NtsTaxRepository ntsTaxRepository;
 
-    public BranchTaxFilterResponseList findBranchTaxByFilters(BranchTaxFilterRequest request) {
+    public BranchTaxFilterResponseList findBranchTaxByFilters(LocalDate startDate, LocalDate endDate, ResultType resultType, PayStatus payStatus, int page, int size) {
         User user = authService.getLoginUser();
-        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize());
-        List<BranchTaxFilterResponse> filteredTax = ntsTaxRepository.findBranchTaxByFiltersAndUser(request, user, pageable);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        List<BranchTaxFilterResponse> filteredTax = ntsTaxRepository.findBranchTaxByFiltersAndUser(startDate, endDate, resultType, payStatus, user, pageable);
         return BranchTaxFilterResponseList.of(filteredTax, filteredTax.size());
     }
 
