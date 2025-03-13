@@ -31,7 +31,7 @@ import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_N
 public class TaxValidationService {
     private static final String IS_VALIDATED = "1";
     private static final Long REQUEST_TERM = 1_000L;
-    private static final Long VALIDATING_TERM = 1_200L;
+    private static final Long VALIDATING_TERM = 10_200L;
 
     @Value("${api.codef.url}")
     private String productUrl;
