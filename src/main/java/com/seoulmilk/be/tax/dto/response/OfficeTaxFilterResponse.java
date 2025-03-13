@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 public record OfficeTaxFilterResponse(
         Long id,
+        String issueId,
         String suId,
         String ipId,
         String transDate,
