@@ -30,8 +30,12 @@ import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_N
 @RequiredArgsConstructor
 public class TaxValidationService {
     private static final String IS_VALIDATED = "1";
-    private static final Long REQUEST_TERM = 1_000L;
-    private static final Long VALIDATING_TERM = 10_200L;
+
+    @Value("${api.codef.request-term}")
+    private Long requestTerm;
+
+    @Value("${api.codef.validating-term}")
+    private Long validatingTerm;
 
     @Value("${api.codef.url}")
     private String productUrl;
@@ -60,7 +64,7 @@ public class TaxValidationService {
                     .build();
 
             thread.start();
-            sleepThread(1, REQUEST_TERM);
+            sleepThread(1, requestTerm);
         }
     }
 
@@ -68,7 +72,7 @@ public class TaxValidationService {
         User user = authService.getLoginUser();
 
         CodefRequestThreadManager.notifyUserThread(user.getCodefId());
-        sleepThread(requests.size(), VALIDATING_TERM);
+        sleepThread(requests.size(), validatingTerm);
         codefCacheService.removeTwoWayInfo(user.getCodefId());
 
         return findTaxIsNormal(getTaxes(requests));
