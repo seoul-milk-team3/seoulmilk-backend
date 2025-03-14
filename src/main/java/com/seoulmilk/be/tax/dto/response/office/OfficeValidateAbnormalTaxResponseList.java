@@ -7,9 +7,9 @@ import java.util.List;
 @Builder
 public record OfficeValidateAbnormalTaxResponseList(
         List<OfficeValidateAbnormalTaxResponse> officeAbnormalTaxValidationResponses,
-        int totalPageSize
+        long totalPageSize
 ) {
-    public static OfficeValidateAbnormalTaxResponseList of(List<OfficeTaxFilterResponse> officeTaxFilterResponseList, int totalPageSize) {
+    public static OfficeValidateAbnormalTaxResponseList of(List<OfficeTaxFilterResponse> officeTaxFilterResponseList, long totalPageSize) {
         return OfficeValidateAbnormalTaxResponseList.builder()
                 .officeAbnormalTaxValidationResponses(
                         officeTaxFilterResponseList.stream()

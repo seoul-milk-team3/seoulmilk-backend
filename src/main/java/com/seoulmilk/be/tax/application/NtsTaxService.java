@@ -9,6 +9,7 @@ import com.seoulmilk.be.tax.dto.response.office.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class NtsTaxService {
                                                                    int size) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
-        List<OfficeTaxFilterResponse> results = ntsTaxRepository.findOfficeTaxByFilters(
+        Page<OfficeTaxFilterResponse> pageResults = ntsTaxRepository.findOfficeTaxByFilters(
                 null,
                 null,
                 RegionType.ALL,
@@ -46,6 +47,9 @@ public class NtsTaxService {
                 authService.getLoginUser()
         );
 
-        return BeforeValidateTaxResponseList.of(results, results.size());
+        List<OfficeTaxFilterResponse> results = pageResults.getContent();
+        long totalElements = pageResults.getTotalElements();
+
+        return BeforeValidateTaxResponseList.of(results, totalElements);
     }
 }

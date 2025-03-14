@@ -13,6 +13,7 @@ import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,16 +43,19 @@ public class OfficeTaxService {
 
         String isValidated = "1";
         Pageable pageable = PageRequest.of(page - 1, size);
-        List<OfficeTaxFilterResponse> result = ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable, authService.getLoginUser());
+        Page<OfficeTaxFilterResponse> pageResults = ntsTaxRepository.findOfficeTaxByFilters(startYearAndMonth, endYearAndMonth, region, searchSupplierName, resultType, isValidated, pageable, authService.getLoginUser());
 
-        return OfficeTaxFilterResponseList.of(result, result.size());
+        List<OfficeTaxFilterResponse> results = pageResults.getContent();
+        long totalElements = pageResults.getTotalElements();
+
+        return OfficeTaxFilterResponseList.of(results, totalElements);
     }
 
     public OfficeValidateAbnormalTaxResponseList validateAbnormalOfficeTax(int page,
                                                                            int size) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
-        List<OfficeTaxFilterResponse> results = ntsTaxRepository.findOfficeTaxByFilters(
+        Page<OfficeTaxFilterResponse> pageResults = ntsTaxRepository.findOfficeTaxByFilters(
                 null,
                 null,
                 RegionType.ALL,
@@ -62,7 +66,10 @@ public class OfficeTaxService {
                 authService.getLoginUser()
         );
 
-        return OfficeValidateAbnormalTaxResponseList.of(results, results.size());
+        List<OfficeTaxFilterResponse> results = pageResults.getContent();
+        long totalElements = pageResults.getTotalElements();
+
+        return OfficeValidateAbnormalTaxResponseList.of(results, totalElements);
     }
 
     public OfficeTaxDetailResponse findOfficeTaxDetail(Long taxId) {

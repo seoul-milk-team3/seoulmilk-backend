@@ -8,9 +8,9 @@ import java.util.List;
 @Builder
 public record BeforeValidateTaxResponseList(
         List<BeforeValidateTaxResponse> beforeValidateTaxResponses,
-        int totalPageSize
+        long totalPageSize
 ) {
-   public static BeforeValidateTaxResponseList of(List<OfficeTaxFilterResponse> officeTaxFilterResponseList, int totalPageSize) {
+   public static BeforeValidateTaxResponseList of(List<OfficeTaxFilterResponse> officeTaxFilterResponseList, long totalPageSize) {
         return BeforeValidateTaxResponseList.builder()
                 .beforeValidateTaxResponses(
                         officeTaxFilterResponseList.stream()

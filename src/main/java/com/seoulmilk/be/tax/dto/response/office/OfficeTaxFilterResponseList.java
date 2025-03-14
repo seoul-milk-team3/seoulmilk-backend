@@ -7,9 +7,9 @@ import java.util.List;
 @Builder
 public record OfficeTaxFilterResponseList(
         List<OfficeTaxFilterResponse> officeTaxFilterResponseList,
-        int totalPageSize
+        long totalPageSize
 ) {
-    public static OfficeTaxFilterResponseList of(List<OfficeTaxFilterResponse> officeTaxFilterResponseList, int totalPageSize) {
+    public static OfficeTaxFilterResponseList of(List<OfficeTaxFilterResponse> officeTaxFilterResponseList, long totalPageSize) {
         return OfficeTaxFilterResponseList.builder()
                 .officeTaxFilterResponseList(officeTaxFilterResponseList)
                 .totalPageSize(totalPageSize)
