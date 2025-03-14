@@ -1,7 +1,7 @@
 package com.seoulmilk.be.tax.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.seoulmilk.be.tax.application.ext.ClovaOcrProperties;
+import com.seoulmilk.be.tax.infrastructure.ClovaOcrProperties;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Base64;

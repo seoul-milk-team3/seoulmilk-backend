@@ -1,6 +1,6 @@
 package com.seoulmilk.be.auth.dto.request;
 
-import com.seoulmilk.be.user.domain.type.Role;
+import com.seoulmilk.be.auth.domain.type.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

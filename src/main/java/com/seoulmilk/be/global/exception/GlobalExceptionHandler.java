@@ -4,7 +4,6 @@ import com.seoulmilk.be.auth.exception.FailEmailEncodingException;
 import com.seoulmilk.be.auth.exception.ExistUserException;
 import com.seoulmilk.be.global.exception.errorcode.ErrorCode;
 import com.seoulmilk.be.global.exception.errorcode.GlobalErrorCode;
-import com.seoulmilk.be.global.exception.errorcode.UserNotFoundException;
 import com.seoulmilk.be.global.exception.response.ErrorResponse;
 import com.seoulmilk.be.tax.exception.UnauthorizedTaxUserException;
 import com.seoulmilk.be.taxvalidation.exception.TaxValidationException;

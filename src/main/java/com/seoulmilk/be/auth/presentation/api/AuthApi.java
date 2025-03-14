@@ -2,7 +2,7 @@ package com.seoulmilk.be.auth.presentation.api;
 
 import com.seoulmilk.be.auth.dto.request.*;
 import com.seoulmilk.be.auth.dto.response.PasswordChangeResponse;
-import com.seoulmilk.be.global.dto.SuccessResponse;
+import com.seoulmilk.be.global.dto.response.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

@@ -1,17 +1,11 @@
 package com.seoulmilk.be.tax.application;
 
-import com.seoulmilk.be.auth.service.AuthService;
-import com.seoulmilk.be.global.application.SimpleStorageService;
-import com.seoulmilk.be.tax.application.ext.ClovaOcrClient;
-import com.seoulmilk.be.tax.application.ext.ClovaOcrProperties;
-import com.seoulmilk.be.tax.domain.NtsTax;
+import com.seoulmilk.be.auth.application.AuthService;
+import com.seoulmilk.be.tax.application.office.NtsTaxFacadeService;
 import com.seoulmilk.be.tax.domain.type.RegionType;
 import com.seoulmilk.be.tax.domain.type.ResultType;
-import com.seoulmilk.be.tax.dto.request.ClovaOcrRequest;
-import com.seoulmilk.be.tax.dto.request.TaxInvoicesSaveRequestList;
 import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponseList;
-import com.seoulmilk.be.tax.dto.response.ClovaOcrResponse;
-import com.seoulmilk.be.tax.dto.response.OfficeTaxFilterResponse;
+import com.seoulmilk.be.tax.dto.response.office.OfficeTaxFilterResponse;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,9 +1,9 @@
 package com.seoulmilk.be.global.security;
 
-import com.seoulmilk.be.user.domain.User;
-import com.seoulmilk.be.user.persistence.UserRepository;
+import com.seoulmilk.be.auth.domain.User;
+import com.seoulmilk.be.auth.persistence.UserRepository;
 import com.seoulmilk.be.global.exception.errorcode.GlobalErrorCode;
-import com.seoulmilk.be.global.exception.errorcode.UserNotFoundException;
+import com.seoulmilk.be.global.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

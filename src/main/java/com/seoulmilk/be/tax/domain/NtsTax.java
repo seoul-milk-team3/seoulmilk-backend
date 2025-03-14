@@ -2,7 +2,7 @@ package com.seoulmilk.be.tax.domain;
 
 import com.seoulmilk.be.global.domain.BaseTimeEntity;
 import com.seoulmilk.be.tax.domain.type.*;
-import com.seoulmilk.be.user.domain.User;
+import com.seoulmilk.be.auth.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
