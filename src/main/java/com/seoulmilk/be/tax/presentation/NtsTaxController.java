@@ -1,7 +1,6 @@
 package com.seoulmilk.be.tax.presentation;
 
-import com.seoulmilk.be.global.dto.SuccessResponse;
-import com.seoulmilk.be.tax.application.NtsTaxFacadeService;
+import com.seoulmilk.be.global.dto.response.SuccessResponse;
 import com.seoulmilk.be.tax.application.NtsTaxService;
 import com.seoulmilk.be.tax.dto.response.BeforeValidateTaxResponseList;
 import com.seoulmilk.be.tax.presentation.api.NtxTaxApi;
@@ -14,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.seoulmilk.be.global.dto.SuccessCode.LIST_BEFRORE_VALIDATE_TAX_SUCCESS;
-import static com.seoulmilk.be.global.dto.SuccessCode.SAVE_TAX_SUCCESS;
+import static com.seoulmilk.be.global.domain.type.SuccessCode.LIST_BEFRORE_VALIDATE_TAX_SUCCESS;
+import static com.seoulmilk.be.global.domain.type.SuccessCode.SAVE_TAX_SUCCESS;
 
 @RequiredArgsConstructor
 @RestController

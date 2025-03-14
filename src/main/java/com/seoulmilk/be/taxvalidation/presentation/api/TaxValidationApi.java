@@ -1,6 +1,6 @@
 package com.seoulmilk.be.taxvalidation.presentation.api;
 
-import com.seoulmilk.be.global.dto.SuccessResponse;
+import com.seoulmilk.be.global.dto.response.SuccessResponse;
 import com.seoulmilk.be.taxvalidation.dto.request.InvoiceValidationRequest;
 import com.seoulmilk.be.taxvalidation.dto.response.InvoiceVerificationResponse;
 import io.swagger.v3.oas.annotations.Operation;

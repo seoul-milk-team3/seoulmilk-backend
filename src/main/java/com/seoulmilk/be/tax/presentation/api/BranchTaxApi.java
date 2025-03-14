@@ -1,10 +1,10 @@
 package com.seoulmilk.be.tax.presentation.api;
 
-import com.seoulmilk.be.global.dto.SuccessResponse;
+import com.seoulmilk.be.global.dto.response.SuccessResponse;
 import com.seoulmilk.be.tax.domain.type.PayStatus;
 import com.seoulmilk.be.tax.domain.type.ResultType;
-import com.seoulmilk.be.tax.dto.response.BranchTaxDetailResponse;
-import com.seoulmilk.be.tax.dto.response.BranchTaxFilterResponseList;
+import com.seoulmilk.be.tax.dto.response.branch.BranchTaxDetailResponse;
+import com.seoulmilk.be.tax.dto.response.branch.BranchTaxFilterResponseList;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

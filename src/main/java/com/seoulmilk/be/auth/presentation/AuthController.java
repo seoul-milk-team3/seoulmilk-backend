@@ -4,15 +4,15 @@ package com.seoulmilk.be.auth.presentation;
 import com.seoulmilk.be.auth.dto.request.*;
 import com.seoulmilk.be.auth.dto.response.PasswordChangeResponse;
 import com.seoulmilk.be.auth.presentation.api.AuthApi;
-import com.seoulmilk.be.auth.service.AuthService;
-import com.seoulmilk.be.auth.service.PasswordManagementService;
-import com.seoulmilk.be.global.dto.SuccessResponse;
+import com.seoulmilk.be.auth.application.AuthService;
+import com.seoulmilk.be.auth.application.PasswordManagementService;
+import com.seoulmilk.be.global.dto.response.SuccessResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import static com.seoulmilk.be.global.dto.SuccessCode.*;
+import static com.seoulmilk.be.global.domain.type.SuccessCode.*;
 
 @RestController
 @RequiredArgsConstructor

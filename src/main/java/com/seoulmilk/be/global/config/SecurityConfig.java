@@ -1,9 +1,9 @@
 package com.seoulmilk.be.global.config;
 
-import com.seoulmilk.be.global.jwt.application.JwtService;
-import com.seoulmilk.be.global.jwt.filter.JwtAuthenticationProcessingFilter;
-import com.seoulmilk.be.global.jwt.refresh.application.RefreshTokenService;
-import com.seoulmilk.be.user.persistence.UserRepository;
+import com.seoulmilk.be.auth.application.JwtService;
+import com.seoulmilk.be.auth.filter.JwtAuthenticationProcessingFilter;
+import com.seoulmilk.be.auth.application.RefreshTokenService;
+import com.seoulmilk.be.auth.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

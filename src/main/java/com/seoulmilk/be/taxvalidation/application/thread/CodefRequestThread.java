@@ -8,7 +8,7 @@ import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import com.seoulmilk.be.taxvalidation.application.CodefCacheService;
 import com.seoulmilk.be.taxvalidation.dto.request.CodefRequest;
 import com.seoulmilk.be.taxvalidation.exception.TaxValidationException;
-import com.seoulmilk.be.taxvalidation.infrastructure.request.EasyCodefRequestFactory;
+import com.seoulmilk.be.taxvalidation.infrastructure.factory.EasyCodefRequestFactory;
 import io.codef.api.EasyCodefServiceType;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;

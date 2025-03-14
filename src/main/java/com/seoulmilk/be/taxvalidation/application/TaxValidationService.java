@@ -1,6 +1,6 @@
 package com.seoulmilk.be.taxvalidation.application;
 
-import com.seoulmilk.be.auth.service.AuthService;
+import com.seoulmilk.be.auth.application.AuthService;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
@@ -10,8 +10,8 @@ import com.seoulmilk.be.taxvalidation.dto.request.CodefRequest;
 import com.seoulmilk.be.taxvalidation.dto.request.InvoiceValidationRequest;
 import com.seoulmilk.be.taxvalidation.dto.response.InvoiceVerificationResponse;
 import com.seoulmilk.be.taxvalidation.infrastructure.codef.EasyCodefProvider;
-import com.seoulmilk.be.taxvalidation.infrastructure.request.EasyCodefRequestFactory;
-import com.seoulmilk.be.user.domain.User;
+import com.seoulmilk.be.taxvalidation.infrastructure.factory.EasyCodefRequestFactory;
+import com.seoulmilk.be.auth.domain.User;
 import io.codef.api.EasyCodef;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

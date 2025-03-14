@@ -4,7 +4,7 @@ import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.domain.type.Arap;
 import com.seoulmilk.be.tax.domain.type.PayStatus;
 import com.seoulmilk.be.tax.domain.type.ResultType;
-import com.seoulmilk.be.user.domain.User;
+import com.seoulmilk.be.auth.domain.User;
 
 import java.util.List;
 import java.util.Map;

@@ -1,5 +1,6 @@
 package com.seoulmilk.be.tax.dto.response;
 
+import com.seoulmilk.be.tax.dto.response.office.OfficeTaxFilterResponse;
 import lombok.Builder;
 
 import java.util.List;

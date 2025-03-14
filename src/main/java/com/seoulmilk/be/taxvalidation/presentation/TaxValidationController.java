@@ -1,6 +1,6 @@
 package com.seoulmilk.be.taxvalidation.presentation;
 
-import com.seoulmilk.be.global.dto.SuccessResponse;
+import com.seoulmilk.be.global.dto.response.SuccessResponse;
 import com.seoulmilk.be.taxvalidation.application.TaxValidationService;
 import com.seoulmilk.be.taxvalidation.dto.request.InvoiceValidationRequest;
 import com.seoulmilk.be.taxvalidation.dto.response.InvoiceVerificationResponse;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.seoulmilk.be.global.dto.SuccessCode.VALIDATE_TAX_INVOICE_SUCCESS;
+import static com.seoulmilk.be.global.domain.type.SuccessCode.VALIDATE_TAX_INVOICE_SUCCESS;
 
 @Slf4j
 @RestController

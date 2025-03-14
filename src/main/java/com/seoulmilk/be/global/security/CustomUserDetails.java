@@ -1,6 +1,6 @@
 package com.seoulmilk.be.global.security;
 
-import com.seoulmilk.be.user.domain.User;
+import com.seoulmilk.be.auth.domain.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

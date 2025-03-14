@@ -65,7 +65,7 @@ dependencies {
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	//jwt
+	//auth
 	implementation 'com.auth0:java-jwt:4.2.1'
 
 	//swagger
@@ -96,7 +96,6 @@ dependencies {
 
 	//mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-
 }
 
 tasks.named('test') {
