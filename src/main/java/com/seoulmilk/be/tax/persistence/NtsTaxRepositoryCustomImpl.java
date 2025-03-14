@@ -13,6 +13,8 @@ import com.seoulmilk.be.auth.domain.User;
 import com.seoulmilk.be.auth.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
@@ -33,7 +35,7 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
     private final UserRepository userRepository;
 
     @Override
-    public List<OfficeTaxFilterResponse> findOfficeTaxByFilters(LocalDate startYearAndMonth,
+    public Page<OfficeTaxFilterResponse> findOfficeTaxByFilters(LocalDate startYearAndMonth,
                                                                 LocalDate endYearAndMonth,
                                                                 RegionType region,
                                                                 String searchSupplierName,
@@ -48,7 +50,7 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                 .map(User::getEmployeeId)
                 .toList();
 
-        return jpaQueryFactory
+        List<OfficeTaxFilterResponse> results = jpaQueryFactory
                 .select(Projections.constructor(OfficeTaxFilterResponse.class,
                         ntsTax.id,
                         ntsTax.issueId,
@@ -75,6 +77,22 @@ public class NtsTaxRepositoryCustomImpl implements NtsTaxRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        long total = jpaQueryFactory
+                .selectFrom(ntsTax)
+                .where(
+                        ntsTax.user.employeeId.in(employeeIds)
+                                .or(Expressions.stringTemplate("REPLACE({0}, '-', '')", ntsTax.suId)
+                                        .eq(userInfo.getBusinessId().replace("-", ""))),
+                        filterByIsValidated(isValidated),
+                        filterByRegion(region),
+                        filterBySupplierName(searchSupplierName),
+                        filterByResultType(resultType),
+                        filterByYearAndMonth(startYearAndMonth, endYearAndMonth)
+                )
+                .fetchCount();
+
+        return new PageImpl<>(results, pageable, total);
     }
 
     @Override
