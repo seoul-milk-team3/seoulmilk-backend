@@ -21,13 +21,11 @@
 
 ### 오류 검토
 ![image](https://github.com/user-attachments/assets/f062c426-33a7-4fd3-b309-cd6980fc1be4)
-![image](https://github.com/user-attachments/assets/61f99842-8dfa-44bf-adb0-a034beaa1611)
 ![image](https://github.com/user-attachments/assets/b092c146-4a48-47c1-af45-4e783087120a)
 ![image](https://github.com/user-attachments/assets/a219c6fa-d037-4c9a-88ef-c295e525c39c)
 
 ### 본사 세금계산서 자료 조회
 ![image](https://github.com/user-attachments/assets/6398cfec-2413-4a3e-82ca-20465643c696)
-![image](https://github.com/user-attachments/assets/c811818a-561a-4357-be11-2f5e8dd80372)
 ![Image](https://github.com/user-attachments/assets/b8d8cccd-4839-49a5-883a-3994514ec8b6)
 
 ### 대리점 세금계산서 자료 조회
