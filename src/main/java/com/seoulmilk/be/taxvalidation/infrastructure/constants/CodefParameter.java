@@ -22,12 +22,15 @@ public enum CodefParameter {
     SUPPLY_VALUE("supplyValue"),
     TWO_WAY_INFO("twoWayInfo"),
     CODE("code"),
+    DATA("data"),
+    RESULT("result"),
     JOB_INDEX("jobIndex"),
     THREAD_INDEX("threadIndex"),
     JTI("jti"),
     TWO_WAY_TIMESTAMP("twoWayTimestamp"),
     SIMPLE_AUTH("simpleAuth"),
     IS_2_WAY("is2Way"),
+    CONTINUE_TWO_WAY("continue2Way"),
     RES_AUTHENTICITY("resAuthenticity"),
     ;
 
