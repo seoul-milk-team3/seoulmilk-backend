@@ -1,4 +1,4 @@
-package com.seoulmilk.be.taxvalidation.infrastructure.factory;
+package com.seoulmilk.be.taxvalidation.infrastructure.codef;
 
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.auth.domain.User;
