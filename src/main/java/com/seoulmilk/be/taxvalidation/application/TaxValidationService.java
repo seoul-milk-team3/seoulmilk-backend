@@ -1,29 +1,42 @@
 package com.seoulmilk.be.taxvalidation.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seoulmilk.be.auth.application.AuthService;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.exception.NtsTaxNotFoundException;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
-import com.seoulmilk.be.taxvalidation.application.thread.CodefRequestThread;
-import com.seoulmilk.be.taxvalidation.application.thread.CodefRequestThreadManager;
 import com.seoulmilk.be.taxvalidation.dto.request.CodefRequest;
 import com.seoulmilk.be.taxvalidation.dto.request.InvoiceValidationRequest;
 import com.seoulmilk.be.taxvalidation.dto.response.InvoiceVerificationResponse;
+import com.seoulmilk.be.taxvalidation.exception.TaxValidationException;
+import com.seoulmilk.be.taxvalidation.infrastructure.codef.CodefCacheService;
 import com.seoulmilk.be.taxvalidation.infrastructure.codef.EasyCodefProvider;
-import com.seoulmilk.be.taxvalidation.infrastructure.factory.EasyCodefRequestFactory;
 import com.seoulmilk.be.auth.domain.User;
 import io.codef.api.EasyCodef;
+import io.codef.api.EasyCodefServiceType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.seoulmilk.be.tax.exception.errorcode.NtsTaxErrorCode.NTS_TAX_NOT_FOUND;
+import static com.seoulmilk.be.taxvalidation.exception.errorcode.TaxValidationErrorCode.CODEF_API_ERROR;
+import static com.seoulmilk.be.taxvalidation.exception.errorcode.TaxValidationErrorCode.JSON_PROCESSING_ERROR;
+import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParameter.*;
 
 @Slf4j
 @Service
@@ -43,8 +56,8 @@ public class TaxValidationService {
     private final AuthService authService;
     private final NtsTaxRepository ntsTaxRepository;
     private final EasyCodefProvider easyCodefProvider;
-    private final EasyCodefRequestFactory easyCodefRequestFactory;
     private final CodefCacheService codefCacheService;
+    private final AsyncTaskService asyncTaskService;
 
     public void validateInvoicesPreVerified(List<InvoiceValidationRequest> request, String loginTypeLevel) {
         User user = authService.getLoginUser();
@@ -53,19 +66,18 @@ public class TaxValidationService {
 
         for (int i = 0; i < ntsTaxes.size(); i++) {
             NtsTax ntsTax = ntsTaxes.get(i);
-            CodefRequestThread thread = CodefRequestThread.builder()
-                    .codefId(user.getCodefId())
-                    .productUrl(productUrl)
-                    .threadNo(i)
-                    .codefRequest(new CodefRequest(easyCodef, user, ntsTax, loginTypeLevel, false))
-                    .easyCodefRequestFactory(easyCodefRequestFactory)
-                    .codefCacheService(codefCacheService)
-                    .ntsTaxRepository(ntsTaxRepository)
-                    .build();
-
-            thread.start();
-            sleepThread(1, requestTerm);
+            CodefRequest codefRequest = new CodefRequest(easyCodef, user, ntsTax, loginTypeLevel, false);
+            asyncTaskService.validateInvoicesPreVerified(productUrl, i, codefRequest);
+            sleepThread(requestTerm);
         }
+    }
+
+    private void sleepThread(Long requestTerm) {
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        scheduler.schedule(() -> future.complete(null), requestTerm, TimeUnit.MILLISECONDS);
+        future.join();
+        scheduler.shutdown();
     }
 
     public List<InvoiceVerificationResponse> validateInvoicePostVerified(List<InvoiceValidationRequest> requests) {
@@ -84,15 +96,6 @@ public class TaxValidationService {
                 .collect(Collectors.toList());
     }
 
-    private void sleepThread(int size, Long term) {
-        try {
-            Thread.sleep(term * size);
-        } catch (InterruptedException e) {
-            log.error("error occurred: {}", e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
-
     @Transactional
     public void updateIsValidated(List<InvoiceValidationRequest> requests) {
         List<NtsTax> ntsTaxes = getTaxes(requests);
@@ -104,7 +107,6 @@ public class TaxValidationService {
     public List<InvoiceVerificationResponse> findTaxIsNormal(List<NtsTax> taxes) {
         List<InvoiceVerificationResponse> result = new ArrayList<>();
         for (NtsTax ntsTax : taxes) {
-            log.info("ntsTaxId: {}, isNormal: {}", ntsTax.getId(), ntsTax.getIsNormal());
             result.add(new InvoiceVerificationResponse(ntsTax.getId(), ntsTax.getIsNormal()));
         }
         return result;
