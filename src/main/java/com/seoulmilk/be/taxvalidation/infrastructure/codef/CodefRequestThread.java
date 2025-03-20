@@ -1,14 +1,12 @@
-package com.seoulmilk.be.taxvalidation.application.thread;
+package com.seoulmilk.be.taxvalidation.infrastructure.codef;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seoulmilk.be.tax.domain.NtsTax;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
-import com.seoulmilk.be.taxvalidation.application.CodefCacheService;
 import com.seoulmilk.be.taxvalidation.dto.request.CodefRequest;
 import com.seoulmilk.be.taxvalidation.exception.TaxValidationException;
-import com.seoulmilk.be.taxvalidation.infrastructure.factory.EasyCodefRequestFactory;
 import io.codef.api.EasyCodefServiceType;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -19,18 +17,10 @@ import java.util.Map;
 
 import static com.seoulmilk.be.taxvalidation.exception.errorcode.TaxValidationErrorCode.*;
 import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParameter.*;
-import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParameter.IS_2_WAY;
 
 @Slf4j
-public class CodefRequestThread extends Thread {
-
-    private static final String RESULT = "result";
-    private static final String DATA = "data";
-    private static final String CONTINUE_TWO_WAY = "continue2Way";
+public class CodefRequestThread implements Runnable {
     private static final String ENTER_AUTHENTICATION_CODE = "CF-03002";
-    private static final String AUTH_COMPLETED = "1";
-
-    private final Object monitor = new Object();
 
     private final EasyCodefRequestFactory easyCodefRequestFactory;
     private final CodefRequest codefRequest;
@@ -51,14 +41,8 @@ public class CodefRequestThread extends Thread {
         this.ntsTaxRepository = ntsTaxRepository;
     }
 
-    public Object getMonitor() {
-        return monitor;
-    }
-
     @Override
     public void run() {
-        log.info("Thread is running!");
-        CodefRequestThreadManager.addThread(codefId, this);
         String response;
         HashMap<String, Object> responseMap;
 
@@ -66,7 +50,6 @@ public class CodefRequestThread extends Thread {
                 codefRequest.user(), codefRequest.ntsTax(), codefRequest.loginTypeLevel());
         try {
             response = codefRequest.easyCodef().requestProduct(productUrl, EasyCodefServiceType.DEMO, body);
-            log.info("after taxId: {}, response: {}", codefRequest.ntsTax().getId(), response);
         } catch (UnsupportedEncodingException | InterruptedException | JsonProcessingException e) {
             throw new TaxValidationException(CODEF_API_ERROR);
         }
@@ -77,54 +60,29 @@ public class CodefRequestThread extends Thread {
             throw new RuntimeException(e);
         }
 
-        HashMap<String, Object> resultMap = (HashMap<String, Object>) responseMap.get(RESULT);
+        HashMap<String, Object> resultMap = (HashMap<String, Object>) responseMap.get(RESULT.getParamName());
         String code = (String)resultMap.get(CODE.getParamName());
-        HashMap<String, Object> dataMap = (HashMap<String, Object>)responseMap.get(DATA);
+        HashMap<String, Object> dataMap = (HashMap<String, Object>)responseMap.get(DATA.getParamName());
 
         boolean isContinue2Way = false;
-        if (dataMap.containsKey(CONTINUE_TWO_WAY)) {
-            isContinue2Way = (boolean) dataMap.get(CONTINUE_TWO_WAY);
+        if (dataMap.containsKey(CONTINUE_TWO_WAY.getParamName())) {
+            isContinue2Way = (boolean) dataMap.get(CONTINUE_TWO_WAY.getParamName());
         }
 
         if (ENTER_AUTHENTICATION_CODE.equals(code) && isContinue2Way) {
-            codefCacheService.saveCodefResponse(codefId, (Map<String, Object>) responseMap.get(DATA));
+            codefCacheService.saveCodefResponse(codefId, (Map<String, Object>) responseMap.get(DATA.getParamName()));
+            codefCacheService.saveFirstTaxBody(codefId, createFirstRequest());
         }
         log.info("taxId: {}, response: {}", codefRequest.ntsTax().getId(), response);
 
         if (threadNo > 0) {
             analyzeResponse(response);
         }
-
-        synchronized (monitor) {
-            try {
-                monitor.wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        if (threadNo < 1) {
-            response = afterAuthenticatedRequest();
-            log.info("after authenticated taxId: {}, response: {}", codefRequest.ntsTax().getId(), response);
-            analyzeResponse(response);
-        }
-
     }
 
-    private String afterAuthenticatedRequest() {
-        HashMap<String, Object> certificatedBody = easyCodefRequestFactory.createValidationRequest(
+    private HashMap<String, Object> createFirstRequest() {
+        return easyCodefRequestFactory.createValidationRequest(
                 codefRequest.user(), codefRequest.ntsTax(), codefRequest.loginTypeLevel());
-
-        certificatedBody.putAll(Map.of(SIMPLE_AUTH.getParamName(), AUTH_COMPLETED, IS_2_WAY.getParamName(), true));
-        certificatedBody.put(TWO_WAY_INFO.getParamName(), codefCacheService.getTwoWayInfo(codefId));
-
-        HashMap<String, Object> requestBody = new HashMap<>(certificatedBody);
-
-        try {
-            return codefRequest.easyCodef().requestCertification(productUrl, EasyCodefServiceType.DEMO, requestBody);
-        } catch (UnsupportedEncodingException | InterruptedException | JsonProcessingException e) {
-            throw new TaxValidationException(CODEF_API_ERROR);
-        }
     }
 
     private void analyzeResponse(String response) {
@@ -137,7 +95,7 @@ public class CodefRequestThread extends Thread {
         } catch (JsonProcessingException e) {
             throw new TaxValidationException(JSON_PROCESSING_ERROR);
         }
-        String resAuthenticity = rootNode.path(DATA).path(RES_AUTHENTICITY.getParamName()).asText();
+        String resAuthenticity = rootNode.path(DATA.getParamName()).path(RES_AUTHENTICITY.getParamName()).asText();
         ntsTax.updateIsNormal(resAuthenticity);
         ntsTaxRepository.save(ntsTax);
     }

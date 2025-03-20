@@ -83,9 +83,11 @@ public class TaxValidationService {
     public List<InvoiceVerificationResponse> validateInvoicePostVerified(List<InvoiceValidationRequest> requests) {
         User user = authService.getLoginUser();
 
-        CodefRequestThreadManager.notifyUserThread(user.getCodefId());
-        sleepThread(requests.size(), validatingTerm);
+        String response = afterAuthenticatedRequest(user.getCodefId());
+        analyzeResponse(response, requests.get(0).id());
+
         codefCacheService.removeTwoWayInfo(user.getCodefId());
+        asyncTaskService.validateInvoicesPostVerified(user.getCodefId());
 
         return findTaxIsNormal(getTaxes(requests));
     }
@@ -117,6 +119,34 @@ public class TaxValidationService {
                 .map(InvoiceValidationRequest::id)
                 .toList();
         return ntsTaxRepository.findAllById(taxIds);
+    }
+
+    private String afterAuthenticatedRequest(String codefId) {
+        EasyCodef easyCodef = easyCodefProvider.getEasyCodef();
+        HashMap<String, Object> certificatedBody = new HashMap<>(codefCacheService.getFirstTaxBody(codefId));
+        certificatedBody.putAll(Map.of(SIMPLE_AUTH.getParamName(), "1", IS_2_WAY.getParamName(), true));
+        certificatedBody.put(TWO_WAY_INFO.getParamName(), codefCacheService.getTwoWayInfo(codefId));
+
+        try {
+            return easyCodef.requestCertification(productUrl, EasyCodefServiceType.DEMO, certificatedBody);
+        } catch (UnsupportedEncodingException | InterruptedException | JsonProcessingException e) {
+            throw new TaxValidationException(CODEF_API_ERROR);
+        }
+    }
+
+    private void analyzeResponse(String response, Long taxId) {
+        NtsTax ntsTax = ntsTaxRepository.findById(taxId).orElseThrow(() -> new NtsTaxNotFoundException(NTS_TAX_NOT_FOUND));
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode;
+        try {
+            rootNode = objectMapper.readTree(response);
+            log.info(rootNode.asText());
+        } catch (JsonProcessingException e) {
+            throw new TaxValidationException(JSON_PROCESSING_ERROR);
+        }
+        String resAuthenticity = rootNode.path(DATA.getParamName()).path(RES_AUTHENTICITY.getParamName()).asText();
+        ntsTax.updateIsNormal(resAuthenticity);
+        ntsTaxRepository.save(ntsTax);
     }
 }
 
