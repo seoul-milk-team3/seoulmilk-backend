@@ -1,4 +1,4 @@
-package com.seoulmilk.be.taxvalidation.application;
+package com.seoulmilk.be.taxvalidation.infrastructure.codef;
 
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,17 +28,24 @@ public class CodefCacheService {
                 JTI.getParamName(), response.get(JTI.getParamName()),
                 TWO_WAY_TIMESTAMP.getParamName(), response.get(TWO_WAY_TIMESTAMP.getParamName())
         );
-        saveData(id, data);
+        saveData(id, convertData(data));
     }
 
-    private void saveData(String id, Map<String, Object> data) {
-        Map<String, Object> convertedData = data.entrySet().stream()
+    public void saveFirstTaxBody(String id, Map<String, Object> fistTaxBody) {
+        saveData(id + "first", convertData(fistTaxBody));
+    }
+
+    private Map<String, Object> convertData(Map<String, Object> data) {
+        return data.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         entry -> entry.getValue().toString()
                 ));
-        hashOperations.putAll(id, convertedData);
-        redisTemplate.expire(id, 5, TimeUnit.MINUTES);
+    }
+
+    public void saveData(String key, Map<String, Object> data) {
+        hashOperations.putAll(key, data);
+        redisTemplate.expire(key, 5, TimeUnit.MINUTES);
     }
 
     public Map<String, Object> getTwoWayInfo(String id) {
@@ -56,6 +63,10 @@ public class CodefCacheService {
                 Long.parseLong((String) info.get(TWO_WAY_TIMESTAMP.getParamName())));
 
         return twoWayInfoResponse;
+    }
+
+    public Map<String, Object> getFirstTaxBody(String id) {
+        return hashOperations.entries(id + "first");
     }
 
     public void removeTwoWayInfo(String codefId) {
