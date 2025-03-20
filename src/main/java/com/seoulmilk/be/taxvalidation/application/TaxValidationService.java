@@ -47,9 +47,6 @@ public class TaxValidationService {
     @Value("${api.codef.request-term}")
     private Long requestTerm;
 
-    @Value("${api.codef.validating-term}")
-    private Long validatingTerm;
-
     @Value("${api.codef.url}")
     private String productUrl;
 
@@ -70,6 +67,7 @@ public class TaxValidationService {
             asyncTaskService.validateInvoicesPreVerified(productUrl, i, codefRequest);
             sleepThread(requestTerm);
         }
+
     }
 
     private void sleepThread(Long requestTerm) {
