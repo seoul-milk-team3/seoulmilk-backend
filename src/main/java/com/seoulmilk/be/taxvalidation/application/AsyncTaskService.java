@@ -46,4 +46,9 @@ public class AsyncTaskService {
         return future;
     }
 
+    public void validateInvoicesPostVerified(String codefId) {
+        List<CompletableFuture<Void>> futures = validateTasks.getOrDefault(codefId, new ArrayList<>());
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        validateTasks.remove(codefId);
+    }
 }
