@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
-public class AsyncTaskService {
+public class AsyncValidateService {
     private final AuthService authService;
     private final EasyCodefRequestFactory easyCodefRequestFactory;
     private final CodefCacheService codefCacheService;

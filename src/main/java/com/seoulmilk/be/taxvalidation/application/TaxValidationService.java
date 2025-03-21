@@ -54,7 +54,7 @@ public class TaxValidationService {
     private final NtsTaxRepository ntsTaxRepository;
     private final EasyCodefProvider easyCodefProvider;
     private final CodefCacheService codefCacheService;
-    private final AsyncTaskService asyncTaskService;
+    private final AsyncValidateService asyncValidateService;
 
     public void validateInvoicesPreVerified(List<InvoiceValidationRequest> request, String loginTypeLevel) {
         User user = authService.getLoginUser();
@@ -64,7 +64,7 @@ public class TaxValidationService {
         for (int i = 0; i < ntsTaxes.size(); i++) {
             NtsTax ntsTax = ntsTaxes.get(i);
             CodefRequest codefRequest = new CodefRequest(easyCodef, user, ntsTax, loginTypeLevel, false);
-            asyncTaskService.validateInvoicesPreVerified(productUrl, i, codefRequest);
+            asyncValidateService.validateInvoicesPreVerified(productUrl, i, codefRequest);
             sleepThread(requestTerm);
         }
 
@@ -85,7 +85,7 @@ public class TaxValidationService {
         analyzeResponse(response, requests.get(0).id());
 
         codefCacheService.removeTwoWayInfo(user.getCodefId());
-        asyncTaskService.validateInvoicesPostVerified(user.getCodefId());
+        asyncValidateService.validateInvoicesPostVerified(user.getCodefId());
 
         return findTaxIsNormal(getTaxes(requests));
     }
