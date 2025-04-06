@@ -19,22 +19,22 @@ import static com.seoulmilk.be.taxvalidation.exception.errorcode.TaxValidationEr
 import static com.seoulmilk.be.taxvalidation.infrastructure.constants.CodefParameter.*;
 
 @Slf4j
-public class CodefRequestThread implements Runnable {
+public class CodefApiRequestHandler implements Runnable {
     private static final String ENTER_AUTHENTICATION_CODE = "CF-03002";
 
     private final EasyCodefRequestFactory easyCodefRequestFactory;
     private final CodefRequest codefRequest;
-    private final int threadNo;
+    private final int handlerId;
     private final String codefId;
     private final String productUrl;
     private final CodefCacheService codefCacheService;
     private final NtsTaxRepository ntsTaxRepository;
 
     @Builder
-    public CodefRequestThread(String productUrl, EasyCodefRequestFactory easyCodefRequestFactory, CodefRequest codefRequest, int threadNo, String codefId, CodefCacheService codefCacheService, NtsTaxRepository ntsTaxRepository) {
+    public CodefApiRequestHandler(String productUrl, EasyCodefRequestFactory easyCodefRequestFactory, CodefRequest codefRequest, int handlerId, String codefId, CodefCacheService codefCacheService, NtsTaxRepository ntsTaxRepository) {
         this.codefId = codefId;
         this.productUrl = productUrl;
-        this.threadNo = threadNo;
+        this.handlerId = handlerId;
         this.easyCodefRequestFactory = easyCodefRequestFactory;
         this.codefRequest = codefRequest;
         this.codefCacheService = codefCacheService;
@@ -75,7 +75,7 @@ public class CodefRequestThread implements Runnable {
         }
         log.info("taxId: {}, response: {}", codefRequest.ntsTax().getId(), response);
 
-        if (threadNo > 0) {
+        if (handlerId > 0) {
             analyzeResponse(response);
         }
     }

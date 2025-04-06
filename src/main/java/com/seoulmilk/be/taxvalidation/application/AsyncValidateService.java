@@ -4,7 +4,7 @@ import com.seoulmilk.be.auth.application.AuthService;
 import com.seoulmilk.be.auth.domain.User;
 import com.seoulmilk.be.tax.persistence.NtsTaxRepository;
 import com.seoulmilk.be.taxvalidation.infrastructure.codef.CodefCacheService;
-import com.seoulmilk.be.taxvalidation.infrastructure.codef.CodefRequestThread;
+import com.seoulmilk.be.taxvalidation.infrastructure.codef.CodefApiRequestHandler;
 import com.seoulmilk.be.taxvalidation.dto.request.CodefRequest;
 import com.seoulmilk.be.taxvalidation.infrastructure.codef.EasyCodefRequestFactory;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +27,12 @@ public class AsyncValidateService {
     private final Map<String, List<CompletableFuture<Void>>> validateTasks = new ConcurrentHashMap<>();
 
     @Async
-    public CompletableFuture<Void> validateInvoicesPreVerified(String productUrl, int threadNo, CodefRequest codefRequest) {
+    public CompletableFuture<Void> validateInvoicesPreVerified(String productUrl, int handlerId, CodefRequest codefRequest) {
         User user = authService.getLoginUser();
-        CodefRequestThread thread = CodefRequestThread.builder()
+        CodefApiRequestHandler thread = CodefApiRequestHandler.builder()
                 .codefId(user.getCodefId())
                 .productUrl(productUrl)
-                .threadNo(threadNo)
+                .handlerId(handlerId)
                 .codefRequest(codefRequest)
                 .easyCodefRequestFactory(easyCodefRequestFactory)
                 .codefCacheService(codefCacheService)
@@ -49,6 +49,7 @@ public class AsyncValidateService {
     public void validateInvoicesPostVerified(String codefId) {
         List<CompletableFuture<Void>> futures = validateTasks.getOrDefault(codefId, new ArrayList<>());
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
         validateTasks.remove(codefId);
     }
 }
